@@ -63,7 +63,7 @@ class Config:
     sampling_temperature: float = 0.7
     top_p: float = 0.95
     max_update_operations: int = 2
-    rl_loss_fn: str = "ppo"
+    rl_loss_fn: str = "importance_sampling"
 
     # Evolution
     max_pool_size: int = 100
@@ -73,6 +73,9 @@ class Config:
 
     test_group_size: int = 10
     test_dataset_size: int = 0  # 0 = use all; set >0 to cap test set size
+    eval_every: int = 10
+    quick_eval_size: int = 1
+    quick_eval_group_size: int = 1
     resume_strategy: str = "best"
 
     mutation_sigma: float = 1.0
@@ -83,12 +86,16 @@ class Config:
 
     # Local backend (replaces Tinker cloud API)
     use_local_backend: bool = False
-    local_model_name: str = "Qwen/Qwen3-7B"
+    local_model_name: str = "Qwen/Qwen3-8B"
     local_lora_rank: int = 32
     local_checkpoint_dir: str = "/tmp/espl_checkpoints"
     local_max_tokens: int = 8192
     local_batch_size: int = 10
     local_group_size: int = 5
+    local_training_microbatch_size: int = 2
+    local_num_gpus: int = 1
+    local_dtype: str = "bfloat16"
+    local_attention_backend: str = "sdpa"
 
     # Shared Memory (ACE-inspired long-term reflection, arXiv:2510.04618)
     enable_shared_memory: bool = False
@@ -1169,6 +1176,10 @@ def main(config: Config):
         service_client = LocalServiceClient(
             base_url=config.base_url,
             checkpoint_dir=config.local_checkpoint_dir,
+            training_microbatch_size=config.local_training_microbatch_size,
+            num_gpus=config.local_num_gpus,
+            dtype=config.local_dtype,
+            attention_backend=config.local_attention_backend,
         )
         logger.info("Using LOCAL backend (no Tinker API)")
         effective_max_tokens = config.local_max_tokens
@@ -1231,6 +1242,9 @@ def main(config: Config):
             if stats_key != f"step_{step_count}":
                 continue
             if "test" not in stats_val:
+                continue
+            if not stats_val["test"].get("full_eval", True):
+                step_count += 1
                 continue
 
             if stats_val["test"]["eval_avg_reward"] > best_test_acc:
@@ -1364,6 +1378,13 @@ def main(config: Config):
             print("     past self-modify:", test_time_program.self_modify_id_list)
 
             # EVAL: send futures first
+            run_full_eval = step % max(config.eval_every, 1) == 0
+            step_test_data = (
+                test_data if run_full_eval else test_data[: max(config.quick_eval_size, 1)]
+            )
+            step_test_group_size = (
+                config.test_group_size if run_full_eval else max(config.quick_eval_group_size, 1)
+            )
             test_time_principles = "\n".join([f"[{i}]. {e}" for i, e in test_time_program.principles.items()])
             if shared_memory is not None and config.shared_memory_in_prompt and len(shared_memory) > 0:
                 test_batch_data = [{
@@ -1373,7 +1394,7 @@ def main(config: Config):
                         shared_memory=shared_memory.get_context_string(),
                     ),
                     **each
-                } for each in test_data]
+                } for each in step_test_data]
             else:
                 test_batch_data = [{
                     "prompt": PROBLEM_WITH_PRINCIPLE_TEMPLATE.format(
@@ -1381,7 +1402,7 @@ def main(config: Config):
                         principles=test_time_principles if test_time_principles else "None",
                     ),
                     **each
-                } for each in test_data]
+                } for each in step_test_data]
 
             test_prompts = []
             test_futures = []
@@ -1390,14 +1411,13 @@ def main(config: Config):
                 model_input = renderer.build_generation_prompt(convo)
                 prompt_tokens = model_input.to_ints()
                 sample_futures = []
-                for _ in range(config.test_group_size):
-                    sample_futures.append(
-                        sampling_client.sample(
-                            prompt=model_input,
-                            num_samples=1,
-                            sampling_params=sampling_params,
-                        )
+                sample_futures.append(
+                    sampling_client.sample(
+                        prompt=model_input,
+                        num_samples=step_test_group_size,
+                        sampling_params=sampling_params,
                     )
+                )
                 test_prompts.append(prompt_tokens)
                 test_futures.append(sample_futures)
             
@@ -1490,14 +1510,13 @@ def main(config: Config):
 
                     # Generate response
                     sample_futures: list[Future[types.SampleResponse]] = []
-                    for _ in range(config.group_size):
-                        sample_futures.append(
-                            sampling_client.sample(
-                                prompt=model_input,
-                                num_samples=1,
-                                sampling_params=sampling_params,
-                            )
+                    sample_futures.append(
+                        sampling_client.sample(
+                            prompt=model_input,
+                            num_samples=config.group_size,
+                            sampling_params=sampling_params,
                         )
+                    )
                     
                     batch_prompts_for_program.append(prompt_tokens)
                     batch_futures_for_program.append(sample_futures)
@@ -1532,21 +1551,23 @@ def main(config: Config):
 
                     for future in sample_futures:
                         sample_result = future.result()
-                        sampled_tokens = sample_result.sequences[0].tokens
-                        sampled_logprobs = sample_result.sequences[0].logprobs
-                        assert sampled_logprobs is not None
+                        for sampled_sequence in sample_result.sequences:
+                            sampled_tokens = sampled_sequence.tokens
+                            sampled_logprobs = sampled_sequence.logprobs
+                            assert sampled_logprobs is not None
 
-                        all_tokens = prompt_tokens + sampled_tokens
-                        group_tokens.append(all_tokens)
-                        group_ob_lens.append(len(prompt_tokens) - 1)
-                        group_logprobs.append(sampled_logprobs)
+                            all_tokens = prompt_tokens + sampled_tokens
+                            group_tokens.append(all_tokens)
+                            group_ob_lens.append(len(prompt_tokens) - 1)
+                            group_logprobs.append(sampled_logprobs)
 
-                        parsed_message, _ = renderer.parse_response(sampled_tokens)
-                        msg_text = parsed_message["content"]
-                        group_completions.append(msg_text)
+                            parsed_message, _ = renderer.parse_response(sampled_tokens)
+                            msg_text = parsed_message["content"]
+                            group_completions.append(msg_text)
 
-                        reward = verify_func(msg_text, answer)
-                        group_rewards.append(reward)
+                            reward = verify_func(msg_text, answer)
+                            group_rewards.append(reward)
+                    assert len(group_rewards) == config.group_size
                     
                     batch_tokens_for_program.append(group_tokens)
                     batch_ob_lens_for_program.append(group_ob_lens)
@@ -1629,29 +1650,31 @@ def main(config: Config):
 
                 for future in sample_futures:
                     sample_result = future.result()
-                    sampled_tokens = sample_result.sequences[0].tokens
-                    parsed_message, _ = renderer.parse_response(sampled_tokens)
-                    msg_text = parsed_message["content"]
-                    group_texts.append(msg_text)
-                    reward = verify_func(msg_text, answer)
-                    group_rewards.append(reward)
+                    for sampled_sequence in sample_result.sequences:
+                        sampled_tokens = sampled_sequence.tokens
+                        parsed_message, _ = renderer.parse_response(sampled_tokens)
+                        msg_text = parsed_message["content"]
+                        group_texts.append(msg_text)
+                        reward = verify_func(msg_text, answer)
+                        group_rewards.append(reward)
+                assert len(group_rewards) == step_test_group_size
                 
                 test_completions.append(group_texts)
                 test_rewards.append(group_rewards)
             
             this_test_acc = np.mean(test_rewards)
-            eval_stats = {"eval_avg_reward": this_test_acc}
+            eval_stats = {"eval_avg_reward": this_test_acc, "full_eval": run_full_eval}
             
             eval_correct_counts = torch.Tensor(test_rewards).sum(dim=-1).tolist()
             eval_pass_at_k_list = []
             for test_q_idx in range(len(test_batch_data)):
                 q_pass_at_k_list = pass_at_k_for_range(
-                    n=config.test_group_size,
+                    n=step_test_group_size,
                     c=eval_correct_counts[test_q_idx],
                 )
                 eval_pass_at_k_list.append(q_pass_at_k_list)
             test_eval_pass_at_k = torch.Tensor(eval_pass_at_k_list).mean(dim=0).tolist()
-            for k_value in range(1, config.test_group_size + 1):
+            for k_value in range(1, step_test_group_size + 1):
                 eval_stats[f"Pass@{k_value}"] = test_eval_pass_at_k[k_value - 1]
             
             for stats_k, stats_v in eval_stats.items():
@@ -1660,8 +1683,8 @@ def main(config: Config):
 
             test_rollouts = []
             for test_q_idx, test_sample in enumerate(test_batch_data):
-                for test_soln_idx in range(config.test_group_size):
-                    runid = test_q_idx * config.test_group_size + test_soln_idx
+                for test_soln_idx in range(step_test_group_size):
+                    runid = test_q_idx * step_test_group_size + test_soln_idx
                     rollout_item = {}
                     rollout_item.update({"runid": runid})
                     rollout_item.update(test_sample)
@@ -1679,8 +1702,9 @@ def main(config: Config):
             # =============================== TEST ENDS ===============================
 
             # Save checkpoint
-            if (step % config.save_every == 0 and step > start_step) or (this_test_acc > best_test_acc):
-                if this_test_acc > best_test_acc:
+            improved_full_eval = run_full_eval and this_test_acc > best_test_acc
+            if (step % config.save_every == 0 and step > start_step) or improved_full_eval:
+                if improved_full_eval:
                     best_test_acc = this_test_acc
                     best_ckpt_step = step
                     print("Finding new best test acc:", this_test_acc, "SAVING CHECKPOINT AT STEP:", best_ckpt_step)
