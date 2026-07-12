@@ -1,6 +1,5 @@
 import logging
 import time
-from concurrent.futures import Future
 
 import os
 import re
@@ -59,6 +58,7 @@ class Config:
     max_length: int = 32768
     lora_rank: int = 32
     save_every: int = 20
+    eval_every: int = 1  # run held-out test eval every N steps (monitoring only, not part of the RL update)
     max_tokens: int = 15000
     sampling_temperature: float = 0.7
     top_p: float = 0.95
@@ -89,6 +89,15 @@ class Config:
     local_max_tokens: int = 8192
     local_batch_size: int = 10
     local_group_size: int = 5
+
+    # vLLM sampling backend (training stays on the HF PEFT path; only sampling
+    # is served by a local vLLM server for throughput). Requires use_local_backend.
+    use_vllm: bool = False
+    vllm_host: str = "127.0.0.1"
+    vllm_port: int = 8000
+    # Gradient checkpointing on the HF training model: saves activation memory for
+    # long sequences (needed at large max_tokens when sharing the GPU with vLLM).
+    use_grad_checkpointing: bool = False
 
     # Shared Memory (ACE-inspired long-term reflection, arXiv:2510.04618)
     enable_shared_memory: bool = False
@@ -1164,7 +1173,17 @@ def main(config: Config):
     logger.info(f"Test set: {len(test_data)} items")
 
     # Setup training client — local or cloud
-    if config.use_local_backend:
+    if config.use_local_backend and config.use_vllm:
+        from tinker_cookbook.local_backend.vllm_client import VLLMServiceClient
+        service_client = VLLMServiceClient(
+            base_url=f"http://{config.vllm_host}:{config.vllm_port}",
+            served_model_name=config.local_model_name,
+            checkpoint_dir=config.local_checkpoint_dir,
+            grad_checkpointing=config.use_grad_checkpointing,
+        )
+        logger.info("Using LOCAL backend with vLLM sampling server")
+        effective_max_tokens = config.local_max_tokens
+    elif config.use_local_backend:
         from tinker_cookbook.local_backend import LocalServiceClient
         service_client = LocalServiceClient(
             base_url=config.base_url,
@@ -1265,7 +1284,14 @@ def main(config: Config):
             resume_info["state_path"], rank=effective_lora_rank
         )
         start_step = resume_info["step"]
-        logger.info(f"Resuming from {config.log_path} at step {start_step}")
+        if resume_info.get("checkpoint_complete"):
+            start_step += 1
+            logger.info(
+                f"Resuming from completed checkpoint at step {resume_info['step']}; "
+                f"next step is {start_step}"
+            )
+        else:
+            logger.info(f"Resuming from pre-update checkpoint at step {start_step}")
     else:
         training_client = service_client.create_lora_training_client(
             base_model=effective_model_name, rank=effective_lora_rank
@@ -1321,6 +1347,10 @@ def main(config: Config):
             print(f"Step {step} (Epoch {epoch}, Batch {batch_idx})")
             cur_step_dir = os.path.join(experiment_dir, f"step_{step}")
             os.makedirs(cur_step_dir, exist_ok=True)
+
+            # Held-out eval is monitoring only (not part of the RL update), so run
+            # it every eval_every steps to save a big chunk of sampling.
+            do_eval = (step % max(1, config.eval_every) == 0)
 
             # Get current batch data
             batch_data = copy.deepcopy(shuffled_data[batch_idx * config.batch_size : (batch_idx + 1) * config.batch_size])
@@ -1385,21 +1415,19 @@ def main(config: Config):
 
             test_prompts = []
             test_futures = []
-            for test_item in test_batch_data:
-                convo = [{"role": "user", "content": test_item["prompt"]}]
-                model_input = renderer.build_generation_prompt(convo)
-                prompt_tokens = model_input.to_ints()
-                sample_futures = []
-                for _ in range(config.test_group_size):
-                    sample_futures.append(
-                        sampling_client.sample(
-                            prompt=model_input,
-                            num_samples=1,
-                            sampling_params=sampling_params,
-                        )
+            if do_eval:
+                for test_item in test_batch_data:
+                    convo = [{"role": "user", "content": test_item["prompt"]}]
+                    model_input = renderer.build_generation_prompt(convo)
+                    prompt_tokens = model_input.to_ints()
+                    # One batched call draws all test_group_size samples at once.
+                    sample_future = sampling_client.sample(
+                        prompt=model_input,
+                        num_samples=config.test_group_size,
+                        sampling_params=sampling_params,
                     )
-                test_prompts.append(prompt_tokens)
-                test_futures.append(sample_futures)
+                    test_prompts.append(prompt_tokens)
+                    test_futures.append(sample_future)
             
             # =============================== TEST ENDS ===============================
 
@@ -1488,19 +1516,15 @@ def main(config: Config):
                     model_input = renderer.build_generation_prompt(convo)
                     prompt_tokens = model_input.to_ints()
 
-                    # Generate response
-                    sample_futures: list[Future[types.SampleResponse]] = []
-                    for _ in range(config.group_size):
-                        sample_futures.append(
-                            sampling_client.sample(
-                                prompt=model_input,
-                                num_samples=1,
-                                sampling_params=sampling_params,
-                            )
-                        )
-                    
+                    # One batched call draws all group_size samples at once.
+                    sample_future = sampling_client.sample(
+                        prompt=model_input,
+                        num_samples=config.group_size,
+                        sampling_params=sampling_params,
+                    )
+
                     batch_prompts_for_program.append(prompt_tokens)
-                    batch_futures_for_program.append(sample_futures)
+                    batch_futures_for_program.append(sample_future)
                 
                 batch_prompts_all_programs.append(batch_prompts_for_program)
                 batch_futures_all_programs.append(batch_futures_for_program)
@@ -1517,7 +1541,7 @@ def main(config: Config):
                 batch_completions_for_program = []
                 batch_rewards_for_program = []
 
-                for batch_item, prompt_tokens, sample_futures in zip(
+                for batch_item, prompt_tokens, sample_future in zip(
                     batch_data_for_program, batch_prompts_for_program, batch_futures_for_program
                 ):
                     sampling_count += 1
@@ -1530,10 +1554,9 @@ def main(config: Config):
                     group_completions = []
                     group_rewards = []
 
-                    for future in sample_futures:
-                        sample_result = future.result()
-                        sampled_tokens = sample_result.sequences[0].tokens
-                        sampled_logprobs = sample_result.sequences[0].logprobs
+                    for sampled_seq in sample_future.result().sequences:
+                        sampled_tokens = sampled_seq.tokens
+                        sampled_logprobs = sampled_seq.logprobs
                         assert sampled_logprobs is not None
 
                         all_tokens = prompt_tokens + sampled_tokens
@@ -1619,63 +1642,63 @@ def main(config: Config):
             
             # EVAL: now collect test evals
             # =============================== TEST BEGINS ===============================
-            print("Getting test eval results ...")
-            test_completions = []
-            test_rewards = []
-            for sample_futures, test_item in zip(test_futures, test_batch_data):
-                answer = test_item["groundtruth"]
-                group_rewards = []
-                group_texts = []
+            if do_eval:
+                print("Getting test eval results ...")
+                test_completions = []
+                test_rewards = []
+                for sample_future, test_item in zip(test_futures, test_batch_data):
+                    answer = test_item["groundtruth"]
+                    group_rewards = []
+                    group_texts = []
 
-                for future in sample_futures:
-                    sample_result = future.result()
-                    sampled_tokens = sample_result.sequences[0].tokens
-                    parsed_message, _ = renderer.parse_response(sampled_tokens)
-                    msg_text = parsed_message["content"]
-                    group_texts.append(msg_text)
-                    reward = verify_func(msg_text, answer)
-                    group_rewards.append(reward)
-                
-                test_completions.append(group_texts)
-                test_rewards.append(group_rewards)
-            
-            this_test_acc = np.mean(test_rewards)
-            eval_stats = {"eval_avg_reward": this_test_acc}
-            
-            eval_correct_counts = torch.Tensor(test_rewards).sum(dim=-1).tolist()
-            eval_pass_at_k_list = []
-            for test_q_idx in range(len(test_batch_data)):
-                q_pass_at_k_list = pass_at_k_for_range(
-                    n=config.test_group_size,
-                    c=eval_correct_counts[test_q_idx],
-                )
-                eval_pass_at_k_list.append(q_pass_at_k_list)
-            test_eval_pass_at_k = torch.Tensor(eval_pass_at_k_list).mean(dim=0).tolist()
-            for k_value in range(1, config.test_group_size + 1):
-                eval_stats[f"Pass@{k_value}"] = test_eval_pass_at_k[k_value - 1]
-            
-            for stats_k, stats_v in eval_stats.items():
-                print(f"- Test: {stats_k}: {stats_v}")
-            stats[f"step_{step}"]["test"] = eval_stats
+                    for sampled_seq in sample_future.result().sequences:
+                        sampled_tokens = sampled_seq.tokens
+                        parsed_message, _ = renderer.parse_response(sampled_tokens)
+                        msg_text = parsed_message["content"]
+                        group_texts.append(msg_text)
+                        reward = verify_func(msg_text, answer)
+                        group_rewards.append(reward)
 
-            test_rollouts = []
-            for test_q_idx, test_sample in enumerate(test_batch_data):
-                for test_soln_idx in range(config.test_group_size):
-                    runid = test_q_idx * config.test_group_size + test_soln_idx
-                    rollout_item = {}
-                    rollout_item.update({"runid": runid})
-                    rollout_item.update(test_sample)
-                    rollout_item.update({
-                        "reward": test_rewards[test_q_idx][test_soln_idx],
-                        "trajectories": [{
-                            "trajectory": [
-                                {"role": "user", "content": test_sample["prompt"]},
-                                {"role": "assistant", "content": test_completions[test_q_idx][test_soln_idx]}
-                            ]
-                        }],
-                    })
-                    test_rollouts.append(rollout_item)
-            save_rollouts(test_rollouts, test_rollout_filename)
+                    test_completions.append(group_texts)
+                    test_rewards.append(group_rewards)
+
+                this_test_acc = np.mean(test_rewards)
+                eval_stats = {"eval_avg_reward": this_test_acc}
+
+                eval_correct_counts = torch.Tensor(test_rewards).sum(dim=-1).tolist()
+                eval_pass_at_k_list = []
+                for test_q_idx in range(len(test_batch_data)):
+                    q_pass_at_k_list = pass_at_k_for_range(
+                        n=config.test_group_size,
+                        c=eval_correct_counts[test_q_idx],
+                    )
+                    eval_pass_at_k_list.append(q_pass_at_k_list)
+                test_eval_pass_at_k = torch.Tensor(eval_pass_at_k_list).mean(dim=0).tolist()
+                for k_value in range(1, config.test_group_size + 1):
+                    eval_stats[f"Pass@{k_value}"] = test_eval_pass_at_k[k_value - 1]
+
+                for stats_k, stats_v in eval_stats.items():
+                    print(f"- Test: {stats_k}: {stats_v}")
+                stats[f"step_{step}"]["test"] = eval_stats
+
+                test_rollouts = []
+                for test_q_idx, test_sample in enumerate(test_batch_data):
+                    for test_soln_idx in range(config.test_group_size):
+                        runid = test_q_idx * config.test_group_size + test_soln_idx
+                        rollout_item = {}
+                        rollout_item.update({"runid": runid})
+                        rollout_item.update(test_sample)
+                        rollout_item.update({
+                            "reward": test_rewards[test_q_idx][test_soln_idx],
+                            "trajectories": [{
+                                "trajectory": [
+                                    {"role": "user", "content": test_sample["prompt"]},
+                                    {"role": "assistant", "content": test_completions[test_q_idx][test_soln_idx]}
+                                ]
+                            }],
+                        })
+                        test_rollouts.append(rollout_item)
+                save_rollouts(test_rollouts, test_rollout_filename)
             # =============================== TEST ENDS ===============================
 
             # Save checkpoint
@@ -1691,7 +1714,7 @@ def main(config: Config):
                         name=f"{step:06d}",
                         log_path=config.log_path,
                         kind="state",
-                        loop_state={"step": step},
+                        loop_state={"step": step, "checkpoint_complete": False},
                     )
 
             # TRAINING step
@@ -2012,8 +2035,21 @@ def main(config: Config):
             # Log metrics[]
             metrics["time/total"] = time.time() - t_start
             metrics.update({f"rollout/{_key}": _val for _key, _val in rollout_stats.items()})
-            metrics.update({f"testing/{_key}": _val for _key, _val in eval_stats.items()})
+            if do_eval:
+                metrics.update({f"testing/{_key}": _val for _key, _val in eval_stats.items()})
             ml_logger.log_metrics(metrics, step=batch_idx)
+
+            # This checkpoint is safe to skip past on resume: it is written only
+            # after sampling, evolution state, forward/backward, optimizer step,
+            # stats, and metrics for this step have all completed.
+            if "rl" in config.train_mode and step % config.save_every == 0:
+                checkpoint_utils.save_checkpoint(
+                    training_client=training_client,
+                    name=f"{step:06d}",
+                    log_path=config.log_path,
+                    kind="state",
+                    loop_state={"step": step, "checkpoint_complete": True},
+                )
 
     # Save final checkpoint
     checkpoint_utils.save_checkpoint(
@@ -2021,7 +2057,7 @@ def main(config: Config):
         name="final",
         log_path=config.log_path,
         kind="both",
-        loop_state={"step": step},
+        loop_state={"step": step, "checkpoint_complete": True},
     )
     ml_logger.close()
     logger.info("Training completed")
