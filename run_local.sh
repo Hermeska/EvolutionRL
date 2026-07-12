@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Run E-SPL Evolution+RL with local LLM backend (no Tinker API needed)
-# Model: Qwen/Qwen3-7B — requires ~16 GB VRAM (A100 40GB+)
+# Model: Qwen/Qwen3-8B — requires ~16 GB VRAM (A100 40GB+)
 # First run: downloads model from HuggingFace (~14 GB) and installs dependencies
 
 set -e
@@ -24,7 +24,7 @@ cd "$SCRIPT_DIR/tinker_cookbook/recipes"
 
 "$VENV/bin/python" system_prompt_learning_rl.py \
     use_local_backend=True \
-    local_model_name=Qwen/Qwen3-7B \
+    local_model_name=Qwen/Qwen3-8B \
     local_lora_rank=32 \
     local_max_tokens=8192 \
     local_batch_size=10 \
@@ -32,7 +32,7 @@ cd "$SCRIPT_DIR/tinker_cookbook/recipes"
     batch_size=10 \
     group_size=5 \
     num_parallel_programs=3 \
-    n_epochs=10 \
+    n_epochs=20 \
     dataset_size=100 \
     test_dataset_size=30 \
     dataset_pair=aimo_beyondaime \
