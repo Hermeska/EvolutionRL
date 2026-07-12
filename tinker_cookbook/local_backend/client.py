@@ -2,7 +2,7 @@
 Local backend replacing the Tinker cloud API.
 
 Uses HuggingFace transformers + PEFT LoRA for local training and inference.
-Loads model in float16, trains only LoRA adapters.
+Loads model in bfloat16, trains only LoRA adapters.
 
 Drop-in replacement for tinker.ServiceClient:
     service_client = LocalServiceClient()
@@ -22,6 +22,11 @@ from tinker import types
 from tinker.types.tensor_data import TensorData
 
 logger = logging.getLogger(__name__)
+
+# Max sequences decoded concurrently in one generate() call. Batching the
+# group_size / test_group_size samples is the main throughput win; cap it so a
+# large group can't blow the KV cache. Override via LOCAL_SAMPLE_MICROBATCH.
+_SAMPLE_MICROBATCH = int(os.environ.get("LOCAL_SAMPLE_MICROBATCH", "16"))
 
 
 # ---------------------------------------------------------------------------
@@ -51,7 +56,8 @@ class _SharedLocalModel:
     Shared between LocalSamplingClient and LocalTrainingClient.
     """
 
-    def __init__(self, model_name: str, lora_rank: int = 16, device: str = "cuda"):
+    def __init__(self, model_name: str, lora_rank: int = 16, device: str = "cuda",
+                 grad_checkpointing: bool = False):
         from transformers import AutoModelForCausalLM, AutoTokenizer
         from peft import LoraConfig, get_peft_model, TaskType
 
@@ -59,10 +65,13 @@ class _SharedLocalModel:
         self.device = device
         self.lora_rank = lora_rank
 
-        logger.info(f"Loading model {model_name} in float16 on {device} ...")
+        # bfloat16, not float16: fp16's ~65504 max overflows as the LoRA drifts,
+        # giving NaN logits and a CUDA device-side assert in multinomial sampling.
+        # bf16 has fp32's range (A100-native) and eliminates that failure mode.
+        logger.info(f"Loading model {model_name} in bfloat16 on {device} ...")
         self.base_model = AutoModelForCausalLM.from_pretrained(
             model_name,
-            torch_dtype=torch.float16,
+            torch_dtype=torch.bfloat16,
             device_map=device,
             trust_remote_code=True,
         )
@@ -81,6 +90,18 @@ class _SharedLocalModel:
             self.model.print_trainable_parameters()
         else:
             self.model = self.base_model
+
+        # Gradient checkpointing: trades ~20% compute for a large activation-memory
+        # saving in the backward pass. Only safe when this model does training only
+        # (e.g. the vLLM path, where sampling is served by vLLM) — it disables the
+        # KV cache, which the HF-sampling path needs. Opt-in via grad_checkpointing.
+        if grad_checkpointing and lora_rank > 0:
+            self.base_model.config.use_cache = False
+            self.model.gradient_checkpointing_enable(
+                gradient_checkpointing_kwargs={"use_reentrant": False}
+            )
+            self.model.enable_input_require_grads()
+            logger.info("Gradient checkpointing enabled on the training model.")
 
         self.optimizer: Optional[torch.optim.Optimizer] = None
         self._pending_loss: Optional[torch.Tensor] = None
@@ -130,14 +151,23 @@ class LocalSamplingClient:
         num_samples: int = 1,
         sampling_params: Optional[types.SamplingParams] = None,
     ) -> LocalFuture:
-        result = self._do_sample(prompt, sampling_params)
+        result = self._do_sample(prompt, sampling_params, num_samples)
         return LocalFuture(result)
 
     def _do_sample(
         self,
         prompt: types.ModelInput,
         sampling_params: Optional[types.SamplingParams],
+        num_samples: int = 1,
     ) -> types.SampleResponse:
+        """Draw num_samples completions for a single prompt.
+
+        The samples are decoded in one (micro-)batched generate() call via
+        num_return_sequences, rather than one at a time — this is the throughput
+        win over the original single-sequence path. Each returned sequence is
+        trimmed at its own stop token (finished sequences are padded by generate)
+        and carries its own per-token logprobs.
+        """
         sp = sampling_params or types.SamplingParams(max_tokens=512, temperature=0.7, top_p=0.95, stop=[])
         max_new_tokens = sp.max_tokens
         temperature = sp.temperature
@@ -145,62 +175,91 @@ class LocalSamplingClient:
         stop = sp.stop  # list of str or list of int
 
         input_ids = torch.tensor(prompt.to_ints(), dtype=torch.long).unsqueeze(0).to(self._sm.device)
+        attention_mask = torch.ones_like(input_ids)
+        input_len = input_ids.shape[1]
 
-        # Determine stop token IDs
-        stop_token_ids = []
-        stop_strings = []
+        # Determine stop token IDs / strings
+        stop_token_ids: list[int] = []
+        stop_strings: list[str] = []
         for s in (stop or []):
             if isinstance(s, int):
                 stop_token_ids.append(s)
             elif isinstance(s, str):
                 stop_strings.append(s)
+        eos_id = self._sm.tokenizer.eos_token_id
+        if eos_id is not None:
+            stop_token_ids.append(eos_id)
+        stop_id_set = set(stop_token_ids)
 
-        if self._sm.tokenizer.eos_token_id is not None:
-            stop_token_ids.append(self._sm.tokenizer.eos_token_id)
-
+        do_sample = temperature > 0
         model = self._sm.model
         context_manager = _lora_context(model, self.use_lora)
 
+        sequences: list[types.SampledSequence] = []
+        remaining = max(1, num_samples)
         with context_manager:
             with torch.no_grad():
-                outputs = model.generate(
-                    input_ids=input_ids,
-                    max_new_tokens=max_new_tokens,
-                    temperature=temperature if temperature > 0 else 1.0,
-                    top_p=top_p,
-                    do_sample=temperature > 0,
-                    eos_token_id=stop_token_ids if stop_token_ids else None,
-                    pad_token_id=self._sm.tokenizer.eos_token_id,
-                    output_scores=True,
-                    return_dict_in_generate=True,
-                )
+                while remaining > 0:
+                    k = min(remaining, _SAMPLE_MICROBATCH)
+                    remaining -= k
+                    # Greedy decoding can't return multiple distinct sequences;
+                    # decode once and replicate below.
+                    n_return = k if do_sample else 1
+                    outputs = model.generate(
+                        input_ids=input_ids,
+                        attention_mask=attention_mask,
+                        num_return_sequences=n_return,
+                        max_new_tokens=max_new_tokens,
+                        temperature=temperature if do_sample else 1.0,
+                        top_p=top_p,
+                        do_sample=do_sample,
+                        eos_token_id=stop_token_ids if stop_token_ids else None,
+                        pad_token_id=eos_id,
+                        output_scores=True,
+                        return_dict_in_generate=True,
+                    )
+                    # outputs.sequences: [n_return, input_len + gen_len]
+                    # outputs.scores: tuple(gen_len) of [n_return, vocab]
+                    built = [
+                        self._build_sequence(outputs, i, input_len, stop_id_set, stop_strings)
+                        for i in range(n_return)
+                    ]
+                    if not do_sample and k > 1:
+                        built = [built[0]] * k
+                    sequences.extend(built)
 
-        # Extract generated tokens (excluding input)
-        input_len = input_ids.shape[1]
-        generated_ids = outputs.sequences[0, input_len:].tolist()
+        return types.SampleResponse(sequences=sequences)
 
-        # Compute per-token log probabilities
-        logprobs = _compute_logprobs_from_scores(outputs.scores, generated_ids, temperature)
+    def _build_sequence(self, outputs, seq_idx, input_len, stop_id_set, stop_strings):
+        """Extract tokens + per-token logprobs for one sequence of a batched generate."""
+        gen_ids = outputs.sequences[seq_idx, input_len:].tolist()
 
-        # Handle string stop sequences
+        # Trim at the first stop token: finished sequences in a batch are padded
+        # out to the batch max with pad_token_id (== eos), which we must drop.
+        cut = len(gen_ids)
+        for j, tok in enumerate(gen_ids):
+            if tok in stop_id_set:
+                cut = j + 1
+                break
+        gen_ids = gen_ids[:cut]
+
+        logprobs = [
+            F.log_softmax(outputs.scores[step][seq_idx].float(), dim=-1)[tok].item()
+            for step, tok in enumerate(gen_ids)
+        ]
+
+        # Handle string stop sequences (truncate at the first match)
         if stop_strings:
-            decoded = self._sm.tokenizer.decode(generated_ids, skip_special_tokens=False)
+            decoded = self._sm.tokenizer.decode(gen_ids, skip_special_tokens=False)
             for stop_str in stop_strings:
                 idx = decoded.find(stop_str)
                 if idx >= 0:
-                    # Truncate at the stop string
-                    truncated = decoded[:idx]
-                    reencoded = self._sm.tokenizer.encode(truncated, add_special_tokens=False)
-                    generated_ids = reencoded
+                    reencoded = self._sm.tokenizer.encode(decoded[:idx], add_special_tokens=False)
+                    gen_ids = reencoded
                     logprobs = logprobs[:len(reencoded)]
                     break
 
-        sequence = types.SampledSequence(
-            tokens=generated_ids,
-            logprobs=logprobs,
-            stop_reason="stop",
-        )
-        return types.SampleResponse(sequences=[sequence])
+        return types.SampledSequence(tokens=gen_ids, logprobs=logprobs, stop_reason="stop")
 
 
 # ---------------------------------------------------------------------------
@@ -336,17 +395,22 @@ class LocalServiceClient:
         base_url: Optional[str] = None,
         device: Optional[str] = None,
         checkpoint_dir: str = "/tmp/espl_checkpoints",
+        grad_checkpointing: bool = False,
     ):
         # base_url is ignored (compatibility shim)
         if device is None:
             device = "cuda" if torch.cuda.is_available() else "cpu"
         self.device = device
         self.checkpoint_dir = checkpoint_dir
+        self.grad_checkpointing = grad_checkpointing
         self._shared_model: Optional[_SharedLocalModel] = None
 
     def _get_or_create_model(self, model_name: str, lora_rank: int = 0) -> _SharedLocalModel:
         if self._shared_model is None:
-            self._shared_model = _SharedLocalModel(model_name, lora_rank=lora_rank, device=self.device)
+            self._shared_model = _SharedLocalModel(
+                model_name, lora_rank=lora_rank, device=self.device,
+                grad_checkpointing=self.grad_checkpointing,
+            )
         elif lora_rank > 0 and self._shared_model.lora_rank == 0:
             # Model was created without LoRA (e.g. by ref sampler), apply LoRA now
             from peft import LoraConfig, get_peft_model, TaskType
@@ -426,25 +490,6 @@ class _lora_context:
         # Always re-enable after (training client expects LoRA enabled)
         if hasattr(self.model, "enable_adapter_layers"):
             self.model.enable_adapter_layers()
-
-
-def _compute_logprobs_from_scores(
-    scores: tuple,
-    generated_ids: list[int],
-    temperature: float,
-) -> list[float]:
-    """
-    Compute log P(token | context) for each generated token.
-    `scores` is the tuple returned by model.generate(output_scores=True).
-    Each element is [batch, vocab_size] unnormalized logits.
-    """
-    logprobs = []
-    for step_idx, (score_t, tok_id) in enumerate(zip(scores, generated_ids)):
-        # score_t: [1, vocab_size] raw logits (before temperature/sampling)
-        log_p = F.log_softmax(score_t[0].float(), dim=-1)
-        lp = log_p[tok_id].item()
-        logprobs.append(lp)
-    return logprobs
 
 
 def _compute_datum_loss(
