@@ -1,0 +1,87 @@
+wandb: WARNING `resume` will be ignored since W&B syncing is set to `offline`. Starting a new run with run id qwen3_8b_real4.
+wandb: Tracking run with wandb version 0.23.1
+wandb: W&B syncing is set to `offline` in this directory. Run `wandb online` or set WANDB_MODE=online to enable cloud syncing.
+wandb: Run data is saved locally in /ibex/user/khangea/espl/qwen3_8b_real4/tinker_logs/wandb/offline-run-20260710_214340-qwen3_8b_real4
+tinker_cookbook.utils.ml_log:475 [[92mINFO[0m] Logging to: /ibex/user/khangea/espl/qwen3_8b_real4/tinker_logs
+/ibex/user/khangea/conda-environments/spl/lib/python3.11/site-packages/transformers/utils/hub.py:110: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
+  warnings.warn(
+__main__:1141 [[92mINFO[0m] Using renderer: qwen3
+__main__:1148 [[92mINFO[0m] Loading dataset...
+__main__:1150 [[92mINFO[0m] Using dataset pair: aimo_beyondaime (train=aimo-validation-aime, test=BeyondAIME)
+__main__:1173 [[92mINFO[0m] Test set: 15 items
+tinker_cookbook.local_backend.vllm_client:215 [[92mINFO[0m] vLLM server healthy at http://127.0.0.1:33808
+__main__:1184 [[92mINFO[0m] Using LOCAL backend with vLLM sampling server
+__main__:1242 [[92mINFO[0m] SharedMemory enabled (max_bullets=50)
+tinker_cookbook.checkpoint_utils:22 [[92mINFO[0m] Reading checkpoints from /ibex/user/khangea/espl/qwen3_8b_real4/tinker_logs/checkpoints.jsonl
+tinker_cookbook.checkpoint_utils:42 [[92mINFO[0m] Found 69 valid checkpoints with key 'state_path' in /ibex/user/khangea/espl/qwen3_8b_real4/tinker_logs
+tinker_cookbook.checkpoint_utils:45 [[92mINFO[0m] Using last checkpoint: {'name': '000041', 'step': 41, 'checkpoint_complete': True, 'state_path': '/ibex/user/khangea/espl/qwen3_8b_real4/checkpoints/state_000041'}
+tinker_cookbook.local_backend.client:71 [[92mINFO[0m] Loading model Qwen/Qwen3-8B in bfloat16 on cuda ...
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading checkpoint shards:   0%|          | 0/5 [00:00<?, ?it/s]Loading checkpoint shards:  20%|██        | 1/5 [00:00<00:03,  1.09it/s]Loading checkpoint shards:  40%|████      | 2/5 [00:01<00:02,  1.08it/s]Loading checkpoint shards:  60%|██████    | 3/5 [00:02<00:01,  1.04it/s]Loading checkpoint shards:  80%|████████  | 4/5 [00:03<00:00,  1.11it/s]Loading checkpoint shards: 100%|██████████| 5/5 [00:03<00:00,  1.46it/s]Loading checkpoint shards: 100%|██████████| 5/5 [00:03<00:00,  1.26it/s]
+tinker_cookbook.local_backend.client:104 [[92mINFO[0m] Gradient checkpointing enabled on the training model.
+__main__:1289 [[92mINFO[0m] Resuming from completed checkpoint at step 41; next step is 42
+tinker_cookbook.local_backend.vllm_client:184 [[92mINFO[0m] vLLM loaded policy adapter 'policy_current' from /ibex/user/khangea/espl/qwen3_8b_real4/checkpoints/adapter_current
+shared_memory:328 [[92mINFO[0m] SharedMemory updated: 27 bullets total
+tinker_cookbook.utils.ml_log:143 [[92mINFO[0m] Wrote metrics to /ibex/user/khangea/espl/qwen3_8b_real4/tinker_logs/metrics.jsonl
+tinker_cookbook.utils.ml_log:195 [[92mINFO[0m] 
+                     Step 6                     
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━┓
+┃ Metric                         ┃ Value       ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━┩
+│ optim/lr                       │ 0.000040    │
+│ progress/batch                 │ 6           │
+│ progress/done_frac             │ 0.777778    │
+│ rollout/Agg_Pass@5             │ 0.500000    │
+│ rollout/Agg_avg_reward         │ 0.433333    │
+│ rollout/avg_PROGRAM_Pass@1     │ 0.433333    │
+│ rollout/avg_PROGRAM_Pass@5     │ 0.500000    │
+│ rollout/avg_question_Pass@1    │ 0.433333    │
+│ rollout/avg_question_Pass@5    │ 0.500000    │
+│ rollout/max_PROGRAM_Pass@1     │ 0.440000    │
+│ rollout/max_PROGRAM_Pass@5     │ 0.500000    │
+│ rollout/max_question_Pass@1    │ 1.000000    │
+│ rollout/max_question_Pass@5    │ 1.000000    │
+│ rollout/min_PROGRAM_Pass@1     │ 0.420000    │
+│ rollout/min_PROGRAM_Pass@5     │ 0.500000    │
+│ rollout/min_question_Pass@1    │ 0.000000    │
+│ rollout/min_question_Pass@5    │ 0.000000    │
+│ time/total                     │ 1261.324602 │
+└────────────────────────────────┴─────────────┘
+wandb: WARNING URL not available in offline run
+tinker_cookbook.utils.ml_log:236 [[92mINFO[0m] Logging to: None
+tinker_cookbook.local_backend.client:366 [[92mINFO[0m] Saved checkpoint to /ibex/user/khangea/espl/qwen3_8b_real4/checkpoints/state_000042
+tinker_cookbook.checkpoint_utils:75 [[92mINFO[0m] Saved checkpoints: {'state_path': '/ibex/user/khangea/espl/qwen3_8b_real4/checkpoints/state_000042'}
+tinker_cookbook.local_backend.vllm_client:184 [[92mINFO[0m] vLLM loaded policy adapter 'policy_current' from /ibex/user/khangea/espl/qwen3_8b_real4/checkpoints/adapter_current
+tinker_cookbook.local_backend.client:366 [[92mINFO[0m] Saved checkpoint to /ibex/user/khangea/espl/qwen3_8b_real4/checkpoints/state_000043
+tinker_cookbook.checkpoint_utils:75 [[92mINFO[0m] Saved checkpoints: {'state_path': '/ibex/user/khangea/espl/qwen3_8b_real4/checkpoints/state_000043'}
+shared_memory:328 [[92mINFO[0m] SharedMemory updated: 28 bullets total
+tinker_cookbook.utils.ml_log:143 [[92mINFO[0m] Wrote metrics to /ibex/user/khangea/espl/qwen3_8b_real4/tinker_logs/metrics.jsonl
+tinker_cookbook.utils.ml_log:195 [[92mINFO[0m] 
+                     Step 7                     
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━┓
+┃ Metric                         ┃ Value       ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━┩
+│ optim/lr                       │ 0.000040    │
+│ progress/batch                 │ 7           │
+│ progress/done_frac             │ 0.888889    │
+│ rollout/Agg_Pass@5             │ 0.600000    │
+│ rollout/Agg_avg_reward         │ 0.306667    │
+│ rollout/avg_PROGRAM_Pass@1     │ 0.306667    │
+│ rollout/avg_PROGRAM_Pass@5     │ 0.533333    │
+│ rollout/avg_question_Pass@1    │ 0.306667    │
+│ rollout/avg_question_Pass@5    │ 0.533333    │
+│ rollout/max_PROGRAM_Pass@1     │ 0.360000    │
+│ rollout/max_PROGRAM_Pass@5     │ 0.600000    │
+│ rollout/max_question_Pass@1    │ 1.000000    │
+│ rollout/max_question_Pass@5    │ 1.000000    │
+│ rollout/min_PROGRAM_Pass@1     │ 0.280000    │
+│ rollout/min_PROGRAM_Pass@5     │ 0.500000    │
+│ rollout/min_question_Pass@1    │ 0.000000    │
+│ rollout/min_question_Pass@5    │ 0.000000    │
+│ time/total                     │ 1556.856451 │
+└────────────────────────────────┴─────────────┘
+wandb: WARNING URL not available in offline run
+tinker_cookbook.utils.ml_log:236 [[92mINFO[0m] Logging to: None
+tinker_cookbook.local_backend.client:366 [[92mINFO[0m] Saved checkpoint to /ibex/user/khangea/espl/qwen3_8b_real4/checkpoints/state_000043
+tinker_cookbook.checkpoint_utils:75 [[92mINFO[0m] Saved checkpoints: {'state_path': '/ibex/user/khangea/espl/qwen3_8b_real4/checkpoints/state_000043'}
+tinker_cookbook.local_backend.vllm_client:184 [[92mINFO[0m] vLLM loaded policy adapter 'policy_current' from /ibex/user/khangea/espl/qwen3_8b_real4/checkpoints/adapter_current
