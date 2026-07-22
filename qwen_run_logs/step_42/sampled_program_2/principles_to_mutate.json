@@ -1,0 +1,22 @@
+{
+  "G0": "When applying specific theorems (e.g., trigonometric Ceva's theorem), explicitly validate their necessity against problem constraints to avoid over-reliance on unverified assumptions.",
+  "G1": "In prime factorization scenarios, cross-validate each component's contribution to the total sum of exponents to ensure accuracy in calculations involving perfect squares or divisibility conditions, particularly in simplification and reduction of fractions.",
+  "G2": "In problems involving cyclic quadrilaterals, ensure all geometric constraints are explicitly verified relative to the circle's center and given conditions to prevent invalid solutions.",
+  "G3": "In problems involving maximizing or minimizing expressions under constraints, always consider symmetry assumptions and validate their necessity by cross-checking against alternative configurations.",
+  "G4": "When calculating expected values for problems involving optimal strategies, cross-validate recursive steps with small test cases to ensure alignment with problem constraints and prevent miscalculations.",
+  "G5": "In problems involving midpoint conditions within composite regions, always cross-validate the derived probabilities with explicit integration over the entire region to ensure no overlapping conditions are missed.",
+  "G6": "In geometric probability, ensure tangency conditions between curves and target lines are validated to confirm solution uniqueness in parametric cases.",
+  "G7": "G19: In solving Diophantine equations with multiple variables, systematically apply modular arithmetic reductions and substitutions to simplify the problem, cross-validating each transformation with small test cases.",
+  "G8": "When solving for products of distances from a point on a circle to vertices of a square, use coordinate geometry and derive equations based on the circle's equation and distance formulas, rather than relying on unverified identities.",
+  "G9": "Verify signs in logarithmic equations to prevent contradictions by ensuring intermediate steps align with problem constraints.",
+  "G10": "In problems involving families of lines or curves, explicitly verify the tangency condition when identifying unique intersection points, as this ensures the solution is not overlapped by other members of the family.",
+  "G11": "For fraction simplification, verify GCD calculations using denominator-specific reductions to ensure fully reduced forms without miscalculations.",
+  "G12": "When excluding elements from a set, validate parity and sum consistency to ensure alignment with problem constraints and prevent calculation errors.",
+  "G13": "In geometric constraint validation, explicitly verify symmetry and parity assumptions against derived configurations to avoid invalid spatial relationships.",
+  "G14": "When solving with symmetry, prioritize cases where variables are fixed based on constraints and systematically count permutations under remaining conditions.",
+  "G15": "Cross-validate algebraic and geometric constraints through test cases to ensure consistency across numerical and spatial requirements.",
+  "G16": "In modular arithmetic, reduce variables at each step and verify transformations with small test cases to prevent overflow and ensure accuracy.",
+  "G17": "Validate residue distributions across modular ranges and cross-check with parity checks and test cases to ensure all valid combinations are accounted for in congruence-based solutions.",
+  "G18": "Ensure equations derived from constraints are necessary and consistent with total counts, avoiding redundant or conflicting relationships.",
+  "G19": "G18"
+}

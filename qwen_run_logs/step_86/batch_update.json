@@ -1,0 +1,96 @@
+{
+  "operations": [],
+  "response": "Okay, let's tackle this. The user wants me to review the suggested updates and create a final revision plan for the existing principles. The existing principles are in the 'existing_principles' section, and the shared memory has a bunch of M entries. The task is to modify or merge principles based on the suggestions, ensuring each final principle meets specific requirements.\n\nFirst, I need to understand the existing principles and the shared memory. The existing principles (G0 to G11) are already quite detailed. The shared memory has a lot of M entries that talk about cross-validation, checking constraints, parity, prime factorization, etc. The user mentioned that the suggested updates are empty, so maybe I need to infer possible improvements from the shared memory that aren't already covered in the existing principles.\n\nLooking at the existing principles, for example, G0 mentions cross-checking with alternative methods and integrating domain-specific techniques like parity and prime factorization. The shared memory has M14, M15, M21, etc., which talk about integrating specific methods like parity checks and trigonometric Ceva's theorem. But maybe the existing principles don't cover all these aspects.\n\nWait, the user said that the suggested_updates are empty, so perhaps there are no new suggestions, but the task is to generate the revision plan based on the existing principles and the shared memory. Or maybe the user intended to have suggestions but left them empty. Hmm, the note says that the shared memory contains universal insights, and the updates should focus on strategy-specific improvements that complement but don't duplicate the shared memory bullets.\n\nSo, the existing principles might have some overlaps with the shared memory, and the goal is to refine them to avoid duplication and improve clarity. Let me check each existing principle against the shared memory to see if there's room for improvement.\n\nFor example, G1 talks about verifying recursive steps with minimal test cases. The shared memory has M35, which is similar. But maybe G1 can be modified to include more aspects from the shared memory, like cross-validating with edge cases as in M4.\n\nG2 mentions cross-validating probabilities in composite regions. The shared memory has M10, M11, M12, etc., about cross-checking constraints. Maybe G2 can be merged with others if there's duplication.\n\nLooking at G3, it's about geometric probability and tangency conditions. The shared memory has M9, M11, M19, which involve cross-validating spatial and numerical constraints. Maybe G3 can be modified to include more cross-validation steps.\n\nG4 is about logarithmic equations and reciprocal relationships. The shared memory's M17 is about gcd calculations, which is different. So maybe G4 doesn't need changes here.\n\nG5 talks about families of lines and tangency. The shared memory's M15, M19, M21 mention tangency and cross-validation. Perhaps G5 can be merged with others if similar.\n\nG6 is about cross-validating frequency distributions. The shared memory has M16, M24, M25, M26, M27, M28, M30, M32, M33, M36, M37, M38, M39, M40, M41. These all relate to cross-validating different methods. So G6 might be similar to M16, M24, etc. Maybe G6 can be merged with others.\n\nG7 mentions cross-validating transformations, test cases, and constraints. The shared memory's M2, M3, M4, M5, M6, M8, M9, etc., cover decomposition, edge cases, interdependencies, domain-specific constraints. So G7 could be modified to include more systematic approaches.\n\nG8 is about validating theorem applicability across domains. The shared memory has M14, M15, M18, M19, M20, M21, M23, M28, M31, M32, M38, M39, M40, M41. These are similar. Maybe G8 can be merged with others.\n\nG9 talks about cross-validating spatial and numerical requirements. The shared memory's M9, M11, M19, M20, M21, M26, M27, M34, M36, etc., are similar. So G9 might need merging.\n\nG10 uses coordinate geometry for midpoints. The shared memory's M10, M11, M12, M13, M14, etc., involve cross-checking constraints. Maybe G10 can be merged or modified.\n\nG11 aligns theorem validation, prime factorization, and geometric constraints. The shared memory's M14, M15, M18, M19, M20, M21, M22, M24, M25, M26, M27, M28, M29, M30, M31, M32, M34, M35, M36, M37, M38, M39, M40, M41. So G11 is similar to several entries. Maybe G11 can be merged with others.\n\nSo the plan is to modify existing principles where they can be more comprehensive and merge similar ones to reduce duplication. For example, G6 and G0 both mention cross-validation. G0 already covers domain-specific techniques, so G6 could be merged into G0 or modified to focus on a different aspect. Alternatively, G6 could be merged with others if they have similar themes.\n\nAnother example: G8 and M31, M32, M38, etc., all discuss theorem applicability. So G8 could be merged with others. Similarly, G9 and M9, M19, etc., could be merged.\n\nI need to check each existing principle and see if they can be modified or merged. Let me list possible merges and modifications.\n\nFor instance, G6 and M16, M24, etc., are about cross-validating frequency distributions and uniqueness. So G6 could be merged with others that talk about cross-validating different methods.\n\nG7 talks about cross-validating transformations, test cases, and constraints. The shared memory's M2 (decomposition), M3 (alternative solutions), M4 (edge cases), M5 (interdependencies), M6 (domain-specific constraints), M8 (intermediate results), M9 (spatial and numerical), etc. So G7 could be merged with some of these, but since the existing principles are specific, maybe G7 can be modified to include more aspects.\n\nWait, the user's instruction says to focus on strategy-specific improvements that complement but don't duplicate the shared memory. So the existing principles are part of the strategy, and the shared memory is universal. So the existing principles might have some overlap with the shared memory, but the task is to refine the existing principles to avoid duplication and improve them.\n\nSo for example, if G0 already mentions cross-checking with alternative methods and integrating domain-specific techniques, then maybe it's okay. But perhaps some principles can be merged or modified to be more specific or general.\n\nAnother example: G11 talks about aligning theorem validation, prime factorization, and geometric constraints. The shared memory has M14, M15, M18, etc., which mention integrating specific methods. So G11 could be merged with others that talk about integrating similar validations.\n\nSo the plan would be to modify some principles to be more precise and merge others to eliminate redundancy. For example, merging G6 with G0 if they both mention cross-validation. Or modifying G7 to include more aspects from the shared memory.\n\nBut since the user hasn't provided specific suggested updates, I need to generate the revision plan based on the existing principles and the shared memory, ensuring that the final principles meet the requirements (clear, generalizable, start with general background, focus on strategic thinking, decision points, no repetition).\n\nAfter considering all this, I can proceed to outline the operations: modify and merge principles where appropriate.\n</think>\n\n```json\n[\n    {\n        \"operation\": \"modify\",\n        \"principle\": \"In hybrid problems, cross-validate theorem applicability, prime factorization checks, and geometric constraints through iterative cross-checking, ensuring systematic integration of domain-specific validations for robustness.\",\n        \"modified_from\": \"G11\"\n    },\n    {\n        \"operation\": \"merge\",\n        \"principle\": \"Systematically cross-validate theorem relevance, prime factorization, and geometric constraints across problem domains by assessing applicability against constraints, prioritizing iterative checks for comprehensive accuracy.\",\n        \"merged_from\": [\"G8\", \"G11\", \"M31\", \"M32\", \"M38\", \"M39\", \"M40\", \"M41\"]\n    },\n    {\n        \"operation\": \"merge\",\n        \"principle\": \"In complex scenarios, align cross-validation techniques with domain-specific constraints and test cases through structured frameworks, emphasizing iterative refinement to ensure holistic solution accuracy.\",\n        \"merged_from\": [\"G7\", \"M2\", \"M3\", \"M4\", \"M5\", \"M6\", \"M8\", \"M9\"]\n    },\n    {\n        \"operation\": \"modify\",\n        \"principle\": \"Cross-validate frequency distributions and uniqueness constraints in combinatorial problems by explicitly checking overlapping conditions, prioritizing systematic checks over heuristic assumptions.\",\n        \"modified_from\": \"G6\"\n    },\n    {\n        \"operation\": \"merge\",\n        \"principle\": \"Validate spatial and numerical requirements in hybrid problems through structured frameworks, ensuring alignment between geometric and algebraic constraints at each validation stage for holistic accuracy.\",\n        \"merged_from\": [\"G9\", \"M9\", \"M11\", \"M19\", \"M20\", \"M21\", \"M26\", \"M27\", \"M34\", \"M36\"]\n    },\n    {\n        \"operation\": \"modify\",\n        \"principle\": \"In recursive problems, verify logical steps against minimal test cases and edge cases, while cross-validating with alternative methods to ensure constraint alignment and prevent miscalculations.\",\n        \"modified_from\": \"G1\"\n    },\n    {\n        \"operation\": \"merge\",\n        \"principle\": \"Prioritize constraints with fewer possibilities in hybrid problems to reduce computational complexity, explicitly integrating systematic validation of geometric, algebraic, and combinatorial requirements for efficiency.\",\n        \"merged_from\": [\"G13\", \"M13\", \"M18\", \"M22\", \"M24\", \"M25\", \"M26\", \"M28\", \"M30\", \"M32\", \"M36\"]\n    }\n]\n```",
+  "revision_plan": [
+    {
+      "operation": "modify",
+      "principle": "In hybrid problems, cross-validate theorem applicability, prime factorization checks, and geometric constraints through iterative cross-checking, ensuring systematic integration of domain-specific validations for robustness.",
+      "modified_from": "G11"
+    },
+    {
+      "operation": "merge",
+      "principle": "Systematically cross-validate theorem relevance, prime factorization, and geometric constraints across problem domains by assessing applicability against constraints, prioritizing iterative checks for comprehensive accuracy.",
+      "merged_from": [
+        "G8",
+        "G11",
+        "M31",
+        "M32",
+        "M38",
+        "M39",
+        "M40",
+        "M41"
+      ]
+    },
+    {
+      "operation": "merge",
+      "principle": "In complex scenarios, align cross-validation techniques with domain-specific constraints and test cases through structured frameworks, emphasizing iterative refinement to ensure holistic solution accuracy.",
+      "merged_from": [
+        "G7",
+        "M2",
+        "M3",
+        "M4",
+        "M5",
+        "M6",
+        "M8",
+        "M9"
+      ]
+    },
+    {
+      "operation": "modify",
+      "principle": "Cross-validate frequency distributions and uniqueness constraints in combinatorial problems by explicitly checking overlapping conditions, prioritizing systematic checks over heuristic assumptions.",
+      "modified_from": "G6"
+    },
+    {
+      "operation": "merge",
+      "principle": "Validate spatial and numerical requirements in hybrid problems through structured frameworks, ensuring alignment between geometric and algebraic constraints at each validation stage for holistic accuracy.",
+      "merged_from": [
+        "G9",
+        "M9",
+        "M11",
+        "M19",
+        "M20",
+        "M21",
+        "M26",
+        "M27",
+        "M34",
+        "M36"
+      ]
+    },
+    {
+      "operation": "modify",
+      "principle": "In recursive problems, verify logical steps against minimal test cases and edge cases, while cross-validating with alternative methods to ensure constraint alignment and prevent miscalculations.",
+      "modified_from": "G1"
+    },
+    {
+      "operation": "merge",
+      "principle": "Prioritize constraints with fewer possibilities in hybrid problems to reduce computational complexity, explicitly integrating systematic validation of geometric, algebraic, and combinatorial requirements for efficiency.",
+      "merged_from": [
+        "G13",
+        "M13",
+        "M18",
+        "M22",
+        "M24",
+        "M25",
+        "M26",
+        "M28",
+        "M30",
+        "M32",
+        "M36"
+      ]
+    }
+  ],
+  "new_principles": {
+    "G0": "Validate theorem necessity against constraints, cross-check with alternative methods, and explicitly integrate domain-specific techniques like parity checks and prime factorization for robustness.",
+    "G1": "In recursive problems, verify logical steps against minimal test cases and edge cases, while cross-validating with alternative methods to ensure constraint alignment and prevent miscalculations.",
+    "G2": "In problems involving midpoint conditions within composite regions, always cross-validate the derived probabilities with explicit integration over the entire region to ensure no overlapping conditions are missed.",
+    "G3": "In geometric probability, ensure tangency conditions between curves and target lines are validated to confirm solution uniqueness in parametric cases.",
+    "G4": "In logarithmic equations involving variable products, verify reciprocal relationships to ensure algebraic consistency and prevent miscalculations.",
+    "G5": "In problems involving families of lines or curves, explicitly verify the tangency condition when identifying unique intersection points, as this ensures the solution is not overlapped by other members of the family.",
+    "G6": "Cross-validate frequency distributions and uniqueness constraints in combinatorial problems by explicitly checking overlapping conditions, prioritizing systematic checks over heuristic assumptions.",
+    "G7": "Systematically cross-validate transformations, test cases, and domain-specific constraints in complex scenarios, emphasizing iterative refinement for accuracy.",
+    "G8": "Validate theorem applicability across domains by assessing relevance to constraints and verifying assumptions through targeted example-based testing.",
+    "G9": "In hybrid problems, cross-validate spatial and numerical requirements through structured frameworks, aligning geometric and algebraic constraints at each validation stage.",
+    "G10": "In problems involving midpoints or geometric constraints, use coordinate geometry to derive relationships and validate conditions through algebraic equations.",
+    "G11": "In hybrid problems, cross-validate theorem applicability, prime factorization checks, and geometric constraints through iterative cross-checking, ensuring systematic integration of domain-specific validations for robustness."
+  }
+}

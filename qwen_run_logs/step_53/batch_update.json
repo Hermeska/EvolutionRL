@@ -1,0 +1,51 @@
+{
+  "operations": [
+    {
+      "operation": "modify",
+      "principle": "Prioritize analytical solutions over numerical approximations, cross-validating equations at each step, especially when applying sum formulas for arithmetic sequences.",
+      "modified_from": "G16"
+    },
+    {
+      "operation": "add",
+      "principle": "Validate symmetry assumptions in arithmetic sequences by explicitly verifying the relationship between terms and total constraints before solving for variables."
+    }
+  ],
+  "response": "Okay, let's tackle this. The user wants me to review the suggested updates and create a final Revision Plan for the existing principles. The existing principles are in the 'existing_principles' section, and there's a suggested update to modify principle G16.\n\nFirst, I need to understand what the existing principles are. Let me go through them. There's G0 to G26 and C0. The suggested update is modifying G16. The original G16 says: \"Prioritize analytical solutions over numerical approximations, cross-validating equations at each step to ensure consistency with problem constraints.\" The suggested modification adds \"especially when applying sum formulas for arithmetic sequences.\"\n\nSo, the modification is making the principle more specific by adding a focus on arithmetic sequences when using sum formulas. The user wants to ensure that this update is helpful and doesn't duplicate existing principles. I need to check if there's any existing principle that already covers this. Looking at the shared memory, M3 mentions decomposing problems, but not specifically about arithmetic sequences. The existing principles include C0 which talks about validating symmetry in arithmetic sequences. Wait, C0 says: \"Validate symmetry assumptions in arithmetic sequences by explicitly verifying the relationship between terms and total constraints before solving for variables.\" That's related but not exactly the same as the modified G16.\n\nThe modified principle now adds a focus on sum formulas for arithmetic sequences. Since C0 is about symmetry in arithmetic sequences, and the modified G16 is about using sum formulas, they are different aspects. Therefore, modifying G16 to include this specific case is acceptable. The original G16 was general, and the modification makes it more targeted. This seems like a valid 'modify' operation.\n\nNow, the user also mentioned that the final principles must meet certain requirements: clear, generalizable, start with a general background, focus on strategic thinking, decision points, and avoid repetition. The modified principle should fit these. The original G16 already starts with a general background, and adding the specific case about sum formulas in arithmetic sequences adds a strategic decision point (when to apply sum formulas). It doesn't repeat any existing principles, so it's okay.\n\nI need to check if there are other principles that might be similar. For example, M16 talks about cross-validating frequency distributions, but that's different. M23 is about theorem applicability. So, the modified G16 doesn't conflict with others.\n\nTherefore, the suggested modification is valid. The operation is 'modify' on G16. The user's suggested update is to modify G16, so the JSON should reflect that. Also, the user mentioned that the existing principles have some duplicates, like G12 and G18, which are references to other principles. But in the suggested updates, there's only the modification to G16. So the final Revision Plan would include that modification.\n</think>\n\n```json\n[\n    {\n        \"operation\": \"modify\",\n        \"principle\": \"Prioritize analytical solutions over numerical approximations, cross-validating equations at each step, especially when applying sum formulas for arithmetic sequences to ensure consistency with problem constraints.\",\n        \"modified_from\": \"G16\"\n    }\n]\n``` \n\n**Reasoning:**  \nThe suggested modification to **G16** adds specificity about applying sum formulas for arithmetic sequences, which aligns with the shared memory's emphasis on systematic validation (e.g., M0, M1) and complements existing principles like **C0** (symmetry in arithmetic sequences). This update strengthens the principle by targeting a common pitfall in arithmetic sequence problems (over-reliance on numerical approximations) while avoiding duplication with broader principles like **M2** (decomposition) or **M4** (edge cases). The revised principle maintains generality by focusing on strategic decision points (when to use analytical vs. numerical methods) and explicitly ties to constraint alignment, satisfying all requirements. No merges are needed as the principle is distinct from others.",
+  "revision_plan": [
+    {
+      "operation": "modify",
+      "principle": "Prioritize analytical solutions over numerical approximations, cross-validating equations at each step, especially when applying sum formulas for arithmetic sequences to ensure consistency with problem constraints.",
+      "modified_from": "G16"
+    }
+  ],
+  "new_principles": {
+    "G0": "When applying specific theorems (e.g., trigonometric Ceva's theorem), explicitly validate their necessity against problem constraints to avoid over-reliance on unverified assumptions.",
+    "G1": "In problems involving cyclic quadrilaterals, ensure all geometric constraints are explicitly verified relative to the circle's center and given conditions to prevent invalid solutions.",
+    "G2": "In problems involving maximizing or minimizing expressions under constraints, always consider symmetry assumptions and validate their necessity by cross-checking against alternative configurations.",
+    "G3": "When calculating expected values for problems involving optimal strategies, cross-validate recursive steps with small test cases to ensure alignment with problem constraints and prevent miscalculations.",
+    "G4": "In problems involving midpoint conditions within composite regions, always cross-validate the derived probabilities with explicit integration over the entire region to ensure no overlapping conditions are missed.",
+    "G5": "In geometric probability, ensure tangency conditions between curves and target lines are validated to confirm solution uniqueness in parametric cases.",
+    "G6": "When solving for products of distances from a point on a circle to vertices of a square, use coordinate geometry and derive equations based on the circle's equation and distance formulas, rather than relying on unverified identities.",
+    "G7": "Verify signs in logarithmic equations to prevent contradictions by ensuring intermediate steps align with problem constraints.",
+    "G8": "In problems involving families of lines or curves, explicitly verify the tangency condition when identifying unique intersection points, as this ensures the solution is not overlapped by other members of the family.",
+    "G9": "When excluding elements from a set, validate parity and sum consistency to ensure alignment with problem constraints and prevent calculation errors.",
+    "G10": "When variables are fixed based on constraints, verify mode uniqueness by ensuring no other number shares the same frequency, preventing ambiguous solutions in data-driven problems.",
+    "G11": "Ensure equations derived from constraints are necessary and consistent with total counts, explicitly allowing monochromatic pairs as long as they do not form rectangles with other pairs.",
+    "G12": "G18",
+    "G13": "Validate Fibonacci-based counts for edge cases (e.g., segments of length 0) to ensure accuracy in combinatorial calculations.",
+    "G14": "When applying trigonometric identities in geometric problems, verify their necessity and consistency with spatial relationships to avoid algebraic errors.",
+    "G15": "G21",
+    "G16": "Prioritize analytical solutions over numerical approximations, cross-validating equations at each step, especially when applying sum formulas for arithmetic sequences to ensure consistency with problem constraints.",
+    "G17": "ensure the median is an integer not in the list by choosing even-length configurations and verifying the average of central elements",
+    "G18": "In optimization problems, explicitly validate variable interactions with constraints to avoid algebraic inconsistencies and ensure robust solution alignment.",
+    "G19": "When considering monochromatic pairs in geometric constraints, prioritize configurations where no two such pairs form a rectangle, allowing single monochromatic pairs as valid solutions.",
+    "G20": "G28",
+    "G21": "In prime factorization scenarios, cross-validate exponent contributions and GCD calculations to ensure accuracy in divisibility and simplification tasks across problem domains.",
+    "G22": "Cross-validate geometric constraints against symmetry, parity, and variable ranges to prevent invalid spatial relationships and ensure alignment with problem-specific conditions.",
+    "G23": "Systematically cross-validate transformations (e.g., modular reductions, substitutions) with small test cases to ensure consistency in complex problem-solving strategies.",
+    "G24": "Ensure equations derived from constraints are cross-validated against problem-specific requirements to prevent incomplete or inconsistent solutions in hybrid scenarios.",
+    "G25": "For arithmetic sequences derived from modular constraints, cross-validate counts using formulae and manual enumeration to prevent undercounting or overcounting in edge cases.",
+    "G26": "When solving for a unique mode, prioritize configurations where the mode appears more frequently than any other number, even if not the maximum possible frequency.",
+    "C0": "Validate symmetry assumptions in arithmetic sequences by explicitly verifying the relationship between terms and total constraints before solving for variables."
+  }
+}

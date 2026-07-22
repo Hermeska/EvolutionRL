@@ -1,0 +1,10 @@
+{
+  "G0": "When validating median constraints, ensure calculations exclude list elements by verifying parity and sum consistency to maintain accuracy.",
+  "G1": "When solving geometric problems with multiple angle constraints, prioritize trigonometric identities and symmetry to simplify equations before complex algebraic manipulations, ensuring strategic simplification.",
+  "G2": "In problems involving cyclic quadrilaterals, explicitly verify the positions of all points relative to the circle's center and the given geometric constraints to avoid ambiguous solutions.",
+  "G3": "Leverage congruent faces and symmetry in disphenoids to simplify volume and area calculations using vector algebra or coordinate geometry.",
+  "G4": "When computing large numbers modulo 1000, break down the computation into smaller steps by reducing intermediate results modulo 1000 at each stage. This minimizes the risk of arithmetic errors when dealing with large exponents or products.",
+  "G5": "In problems involving isosceles right triangles and internal points with equal angle conditions, consider applying trigonometric Ceva's theorem directly to relate the angles and side lengths.",
+  "G6": "In prime factorization scenarios, cross-verify each component's contribution to the total sum of exponents to ensure accuracy in calculations involving perfect squares or divisibility conditions.",
+  "G7": "For overlapping set problems, cross-validate inclusion-exclusion equations against total population constraints to ensure logical consistency and prevent under/overcounting."
+}

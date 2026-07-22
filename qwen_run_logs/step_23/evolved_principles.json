@@ -1,0 +1,23 @@
+{
+  "G0": "When validating median constraints, ensure calculations exclude list elements by verifying parity and sum consistency to maintain accuracy.",
+  "G1": "In problems involving isosceles right triangles and internal points with equal angle conditions, consider applying trigonometric Ceva's theorem directly to relate the angles and side lengths.",
+  "G2": "In prime factorization scenarios, cross-validate each component's contribution to the total sum of exponents to ensure accuracy in calculations involving perfect squares or divisibility conditions, particularly in simplification and reduction of fractions.",
+  "G3": "For overlapping set problems, cross-validate inclusion-exclusion equations against total population constraints to ensure logical consistency and prevent under/overcounting.",
+  "G4": "In problems where a symmetric equation and a sum constraint are given, consider cases where one variable is fixed (e.g., at a value derived from the equation) and count permutations of the remaining variables under the sum constraint.",
+  "G5": "In problems involving generating functions and coefficient extraction, always verify that higher-degree terms in the numerator do not interfere with the target coefficient by explicitly confirming that their exponents exceed the target value.",
+  "G6": "Use modular arithmetic reduction at every computational step to prevent overflow and ensure intermediate results align with the target modulus, while cross-checking against small test cases to validate consistency.",
+  "G7": "When solving optimization problems with multiple constraints, ensure all derived equations are simultaneously satisfied by explicitly validating each subcase against the full problem's constraints, including symmetry assumptions and edge cases.",
+  "G8": "In problems with multiple constraints, explicitly verify that each subcase's solutions adhere to all digit bounds and sum conditions to prevent invalid or incomplete counts.",
+  "G9": "Use parametric equations for angle bisectors, solving for intersection points by equating parameters and validating solutions against geometric constraints.",
+  "G10": "In problems involving cyclic quadrilaterals, explicitly verify the positions of all points relative to the circle's center and the given geometric constraints to avoid ambiguous solutions.",
+  "G11": "G14",
+  "G12": "G14",
+  "G13": "In problems involving maximizing or minimizing expressions under constraints, always consider symmetry assumptions and validate their necessity by cross-checking against alternative configurations.",
+  "G14": "In problems involving modular arithmetic and algebraic steps, cross-validate with small test cases to detect errors early, ensuring alignment with problem constraints and preventing overflow through systematic reductions, and verifying that derived equations are consistent with digit ranges (0-9), and systematically check all valid roots modulo p before lifting to p\u00b2 to ensure minimal solutions are not overlooked.",
+  "G15": "In problems involving multiple constraints (e.g., row and column sums), use substitution and variable grouping to simplify the problem, then validate each derived equation against the original constraints.",
+  "G16": "prioritize parametric equations for angle bisectors in trapezoidal problems",
+  "G17": "In geometric configurations, systematically evaluate all valid cases and cross-validate symmetry assumptions against problem constraints to prevent ambiguous solutions and ensure comprehensive coverage.",
+  "G18": "In geometric configurations, explicitly verify symmetry assumptions and validate their necessity by cross-checking against alternative configurations to ensure alignment with problem constraints and avoid biased solutions.",
+  "G19": "In combinatorial problems, use small cases to identify patterns and generalize them to larger ranges, ensuring the pattern holds for all edge cases and aligns with the problem's constraints.",
+  "G20": "In problems involving modular arithmetic and lifting solutions, cross-validate all candidate roots modulo p to avoid missing smaller solutions that satisfy the final constraints, and systematically check all valid roots modulo p before lifting to p\u00b2 to ensure minimal solutions are not overlooked."
+}

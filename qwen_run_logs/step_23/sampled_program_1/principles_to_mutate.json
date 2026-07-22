@@ -1,0 +1,19 @@
+{
+  "G0": "When validating median constraints, ensure calculations exclude list elements by verifying parity and sum consistency to maintain accuracy.",
+  "G1": "In problems involving isosceles right triangles and internal points with equal angle conditions, consider applying trigonometric Ceva's theorem directly to relate the angles and side lengths.",
+  "G2": "In prime factorization scenarios, cross-validate each component's contribution to the total sum of exponents to ensure accuracy in calculations involving perfect squares or divisibility conditions, particularly in simplification and reduction of fractions.",
+  "G3": "In problems with multiple constraints (e.g., fixed pairs and non-consecutive elements), validate all subcases against total population constraints to prevent under/overcounting, ensuring alignment with problem-specific requirements.",
+  "G4": "In problems where a symmetric equation and a sum constraint are given, consider cases where one variable is fixed (e.g., at a value derived from the equation) and count permutations of the remaining variables under the sum constraint.",
+  "G5": "In problems involving generating functions and coefficient extraction, always verify that higher-degree terms in the numerator do not interfere with the target coefficient by explicitly confirming that their exponents exceed the target value.",
+  "G6": "Use modular arithmetic reduction at every computational step to prevent overflow and ensure intermediate results align with the target modulus, while cross-checking against small test cases to validate consistency.",
+  "G7": "When solving optimization problems with multiple constraints, ensure all derived equations are simultaneously satisfied by explicitly validating each subcase against the full problem's constraints, including symmetry assumptions and edge cases.",
+  "G8": "In problems with multiple constraints, explicitly verify that each subcase's solutions adhere to all digit bounds and sum conditions to prevent invalid or incomplete counts.",
+  "G9": "Use parametric equations for angle bisectors, solving for intersection points by equating parameters and validating solutions against geometric constraints.",
+  "G10": "In problems involving cyclic quadrilaterals, explicitly verify the positions of all points relative to the circle's center and the given geometric constraints to avoid ambiguous solutions.",
+  "G11": "G14",
+  "G12": "G14",
+  "G13": "In problems involving maximizing or minimizing expressions under constraints, always consider symmetry assumptions and validate their necessity by cross-checking against alternative configurations.",
+  "G14": "In problems with symmetric structures or probabilistic assumptions, explicitly validate symmetry assumptions and ensure all cases are weighted equally, aligning with problem constraints and avoiding biased solutions.",
+  "G15": "G16",
+  "G16": "Cross-validate modular arithmetic and algebraic steps with small test cases to detect errors early, ensuring alignment with problem constraints and preventing overflow through systematic reductions."
+}

@@ -1,0 +1,18 @@
+{
+  "G0": "When validating median constraints, ensure calculations exclude list elements by verifying parity and sum consistency to maintain accuracy.",
+  "G1": "In combinatorial problems with parity constraints, validate parity conditions for all pairs and cross-check derived congruences against the original problem's requirements to ensure alignment and prevent invalid configurations.",
+  "G2": "In problems involving cyclic quadrilaterals, explicitly verify the positions of all points relative to the circle's center and the given geometric constraints to avoid ambiguous solutions.",
+  "G3": "Leverage congruent faces and symmetry in disphenoids to simplify volume and area calculations using vector algebra or coordinate geometry.",
+  "G4": "When applying logarithmic identities, ensure transformed equations maintain the original constraints and relationships between variables. Cross-check derived results against the problem's requirements to prevent invalid configurations.",
+  "G5": "In problems involving isosceles right triangles and internal points with equal angle conditions, consider applying trigonometric Ceva's theorem directly to relate the angles and side lengths.",
+  "G6": "In prime factorization scenarios, cross-verify each component's contribution to the total sum of exponents to ensure accuracy in calculations involving perfect squares or divisibility conditions.",
+  "G7": "For overlapping set problems, cross-validate inclusion-exclusion equations against total population constraints to ensure logical consistency and prevent under/overcounting.",
+  "G8": "In problems involving large exponents and modular constraints, systematically decompose the problem into residue classes and validate counts through cross-checking to ensure accuracy.",
+  "G9": "For products over roots of unity, recognize that the product of a polynomial evaluated at all roots of a cyclotomic polynomial can often be simplified by exploiting the polynomial's symmetry and known identities, such as the resultant of the polynomials involved.",
+  "G10": "In combinatorial case analysis, ensure all mutually exclusive and collectively exhaustive cases are considered, especially when constraints involve overlapping or interdependent conditions. Cross-validate intermediate steps using smaller test cases to ensure consistency and correctness.",
+  "G11": "In problems involving binomial coefficients and large factorials, explicitly verify the co-primality of the numerator and denominator before simplifying to ensure the fraction is in its lowest terms.",
+  "G12": "In combinatorial problems involving unstructured pairings, always enumerate all valid pairings and verify their probabilities are equally distributed.",
+  "G13": "In problems involving periodic cycles (e.g., LCM-based repetitions), explicitly verify the remaining partial cycle after accounting for full cycles to prevent undercounting or overcounting.",
+  "G14": "When addressing combinatorial problems with geometric constraints, explicitly model the geometric structure (e.g., diameters, rectangles) and translate constraints into combinatorial rules to avoid missing valid configurations.",
+  "G15": "In problems involving reciprocal logarithmic relationships, explicitly express variables in terms of a single parameter to simplify algebraic manipulation."
+}

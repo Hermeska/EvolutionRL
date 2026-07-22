@@ -1,0 +1,55 @@
+{
+  "max_bullets": 50,
+  "_next_id": 7,
+  "bullets": {
+    "M0": {
+      "bullet_id": "M0",
+      "content": "Failing to verify intermediate steps can lead to cumulative errors; cross-checking solutions with alternative methods improves reliability across strategies.",
+      "helpful_count": 0,
+      "harmful_count": 0,
+      "created_at": 0
+    },
+    "M1": {
+      "bullet_id": "M1",
+      "content": "Overlooking problem constraints may result in invalid solutions; explicitly validating inputs against requirements ensures alignment across strategies.",
+      "helpful_count": 0,
+      "harmful_count": 0,
+      "created_at": 0
+    },
+    "M2": {
+      "bullet_id": "M2",
+      "content": "Neglecting to decompose complex problems into manageable sub-problems can hinder progress; systematic breakdowns enhance clarity and strategy adaptability.",
+      "helpful_count": 0,
+      "harmful_count": 0,
+      "created_at": 0
+    },
+    "M3": {
+      "bullet_id": "M3",
+      "content": "Failing to consider alternative solution paths limits adaptability; exploring multiple approaches increases robustness across problem types.",
+      "helpful_count": 0,
+      "harmful_count": 0,
+      "created_at": 1
+    },
+    "M4": {
+      "bullet_id": "M4",
+      "content": "Neglecting to test edge cases may result in solutions failing under unexpected conditions; systematic boundary testing ensures robustness.",
+      "helpful_count": 0,
+      "harmful_count": 0,
+      "created_at": 1
+    },
+    "M5": {
+      "bullet_id": "M5",
+      "content": "Overlooking interdependencies between sub-problems can lead to fragmented solutions; ensuring holistic integration of components improves effectiveness.",
+      "helpful_count": 0,
+      "harmful_count": 0,
+      "created_at": 1
+    },
+    "M6": {
+      "bullet_id": "M6",
+      "content": "Failing to validate domain-specific constraints (e.g., symmetry, parity, approximations) can introduce errors; explicitly check problem-specific properties to ensure alignment with solution requirements.",
+      "helpful_count": 0,
+      "harmful_count": 0,
+      "created_at": 6
+    }
+  }
+}

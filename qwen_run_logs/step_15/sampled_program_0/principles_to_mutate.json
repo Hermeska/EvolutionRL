@@ -1,0 +1,22 @@
+{
+  "G0": "When solving problems with multiple base constraints, prioritize generating candidates in the base with fewer palindromic possibilities to reduce computational overhead.",
+  "G1": "In geometric problems involving segment constraints, explicitly validate relationships between segments and their coverage regions to prevent misinterpretation.",
+  "G2": "In problems involving cyclic quadrilaterals, explicitly verify the positions of all points relative to the circle's center and the given geometric constraints to avoid ambiguous solutions.",
+  "G3": "Leverage congruent faces and symmetry in disphenoids to simplify volume and area calculations using vector algebra or coordinate geometry.",
+  "G4": "When solving geometric angle constraints, validate derived angle relationships against each other to ensure consistency with the problem's symmetry and constraints.",
+  "G5": "In prime factorization scenarios, cross-verify each component's contribution to the total sum of exponents to ensure accuracy in calculations involving perfect squares or divisibility conditions.",
+  "G6": "For overlapping set problems, cross-validate inclusion-exclusion equations against total population constraints to ensure logical consistency and prevent under/overcounting.",
+  "G7": "For modular arithmetic with large numbers, validate intermediate steps for divisibility by the modulus to prevent incorrect reductions and maintain accuracy.",
+  "G8": "For products over roots of unity, recognize that the product of a polynomial evaluated at all roots of a cyclotomic polynomial can often be simplified by exploiting the polynomial's symmetry and known identities, such as the resultant of the polynomials involved.",
+  "G9": "In combinatorial selections with overlapping constraints, explicitly account for all permutations of distinct elements to ensure comprehensive coverage of favorable outcomes.",
+  "G10": "In symmetric optimization problems, cross-validate solutions against non-symmetric cases to confirm the global maximum and avoid premature convergence.",
+  "G11": "For prime difference problems, systematically explore all valid prime combinations rather than restricting to specific patterns or edge cases.",
+  "G12": "In problems with numerical constraints, cross-validate co-primality checks and modular reductions using alternative methods to ensure robustness.",
+  "G13": "For problems requiring dual-base palindromicity, cross-validate intermediate conversions using modular arithmetic to ensure accuracy and prevent premature elimination of valid candidates.",
+  "G14": "In problems involving circular arrangements with geometric constraints, always verify that rotational symmetries are properly addressed to avoid overcounting or undercounting configurations.",
+  "G15": "In problems requiring division within modular arithmetic, always verify that the divisor and modulus are coprime to ensure the existence of a modular inverse.",
+  "G16": "In constrained optimization, systematically explore all possible variable configurations (including asymmetric ones) to prevent premature termination of the solution process.",
+  "G17": "In problems involving multiple angle conditions (e.g., equal angles from different cevians), systematically cross-validate the derived relationships using both coordinate geometry and vector analysis to ensure consistency across all constraints.",
+  "G18": "When solving problems with parity constraints in combinatorial arrangements, explicitly model the constraints as assignments to distinct parity classes (odd/even positions) to ensure valid configurations.",
+  "G19": "To prevent undercounting, ensure that all possible configurations of prime differences are evaluated systematically, including wrap-around cases and non-linear sequences, to capture the full range of valid triangles."
+}

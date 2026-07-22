@@ -1,0 +1,4 @@
+{
+  "G0": "When approximating values in sums with floor functions, always verify the impact of fractional parts on the total sum to ensure the approximation remains valid.",
+  "G1": "Clarify assumptions about labeled vs. unlabeled positions in circular arrangements to avoid misinterpretation of total permutations."
+}

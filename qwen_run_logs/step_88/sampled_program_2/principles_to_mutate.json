@@ -1,0 +1,14 @@
+{
+  "G0": "Validate theorem necessity against constraints, cross-check with alternative methods, and explicitly integrate domain-specific techniques like parity checks and prime factorization for robustness.",
+  "G1": "In recursive problems, verify logical steps against minimal test cases and edge cases to ensure constraint alignment and prevent miscalculations.",
+  "G2": "In problems involving midpoint conditions within composite regions, always cross-validate the derived probabilities with explicit integration over the entire region to ensure no overlapping conditions are missed.",
+  "G3": "In geometric probability, ensure tangency conditions between curves and target lines are validated to confirm solution uniqueness in parametric cases.",
+  "G4": "In logarithmic equations involving variable products, verify reciprocal relationships to ensure algebraic consistency and prevent miscalculations.",
+  "G5": "In problems involving families of lines or curves, explicitly verify the tangency condition when identifying unique intersection points, as this ensures the solution is not overlapped by other members of the family.",
+  "G6": "Cross-validate frequency distributions to ensure uniqueness constraints in combinatorial problems, prioritizing explicit checks for overlapping conditions in discrete cases.",
+  "G7": "Systematically cross-validate transformations, test cases, and domain-specific constraints in complex scenarios, emphasizing iterative refinement for accuracy.",
+  "G8": "Validate theorem applicability across domains by assessing relevance to constraints and verifying assumptions through targeted example-based testing.",
+  "G9": "In hybrid problems, cross-validate spatial and numerical requirements through structured frameworks, aligning geometric and algebraic constraints at each validation stage.",
+  "G10": "In problems involving midpoints or geometric constraints, use coordinate geometry to derive relationships and validate conditions through algebraic equations.",
+  "G11": "Align theorem validation, prime factorization checks, and geometric constraints through iterative cross-checking, ensuring systematic integration in hybrid domains."
+}

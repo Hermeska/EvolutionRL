@@ -1,0 +1,15 @@
+{
+  "G0": "When validating median constraints, ensure calculations exclude list elements by verifying parity and sum consistency to maintain accuracy.",
+  "G1": "In geometric problems involving segment constraints, explicitly validate relationships between segments and their coverage regions to prevent misinterpretation.",
+  "G2": "In problems involving cyclic quadrilaterals, explicitly verify the positions of all points relative to the circle's center and the given geometric constraints to avoid ambiguous solutions.",
+  "G3": "Leverage congruent faces and symmetry in disphenoids to simplify volume and area calculations using vector algebra or coordinate geometry.",
+  "G4": "In problems involving isosceles right triangles and internal points with equal angle conditions, consider applying trigonometric Ceva's theorem directly to relate the angles and side lengths.",
+  "G5": "In prime factorization scenarios, cross-verify each component's contribution to the total sum of exponents to ensure accuracy in calculations involving perfect squares or divisibility conditions.",
+  "G6": "For overlapping set problems, cross-validate inclusion-exclusion equations against total population constraints to ensure logical consistency and prevent under/overcounting.",
+  "G7": "In problems involving large exponents and modular constraints, systematically decompose the problem into residue classes and validate counts through cross-checking to ensure accuracy.",
+  "G8": "For products over roots of unity, recognize that the product of a polynomial evaluated at all roots of a cyclotomic polynomial can often be simplified by exploiting the polynomial's symmetry and known identities, such as the resultant of the polynomials involved.",
+  "G9": "In problems requiring the calculation of probabilities with multiple constraints, cross-validate intermediate steps using smaller test cases to ensure consistency and correctness.",
+  "G10": "Systematically solve complex equations by isolating variables and cross-validating intermediate results to avoid premature termination of the solution process.",
+  "G11": "In problems involving minimal fractions with distinct integers, systematically explore all possible splits to ensure no configuration with a smaller numerator difference and larger denominator is overlooked.",
+  "G12": "In problems with numerical constraints, cross-validate co-primality checks and modular reductions using alternative methods to ensure robustness."
+}

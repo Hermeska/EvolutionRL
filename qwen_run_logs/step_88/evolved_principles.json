@@ -1,0 +1,13 @@
+{
+  "G0": "Validate theorem necessity against constraints, cross-check with alternative methods, prioritize constraints with fewer possibilities, and explicitly integrate domain-specific techniques like parity checks and prime factorization for robustness.",
+  "G1": "For recursive strategies, cross-validate base cases and intermediate steps against minimal test cases, while aligning with alternative solution paths to ensure constraint consistency and adaptability.",
+  "G2": "In problems involving composite regions or midpoint conditions, explicitly integrate coordinate geometry with probabilistic cross-checks to validate derived relationships against overlapping constraints.",
+  "G3": "In geometric probability, ensure tangency conditions between curves and target lines are validated to confirm solution uniqueness in parametric cases.",
+  "G4": "In logarithmic equations involving variable products, verify reciprocal relationships to ensure algebraic consistency and prevent miscalculations.",
+  "G5": "In problems involving families of lines or curves, explicitly verify the tangency condition when identifying unique intersection points, as this ensures the solution is not overlapped by other members of the family.",
+  "G6": "Systematically cross-validate transformations, test cases, domain-specific constraints, and edge cases, emphasizing iterative refinement for accuracy.",
+  "G7": "In hybrid problems, cross-validate spatial and numerical requirements through structured frameworks, aligning geometric and algebraic constraints at each validation stage.",
+  "G8": "In problems involving midpoints or geometric constraints, use coordinate geometry to derive relationships and validate conditions through algebraic equations.",
+  "G9": "In hybrid problems, cross-validate theorem applicability, prime factorization checks, and geometric constraints through iterative cross-checking, ensuring systematic integration of domain-specific validations for robustness.",
+  "G10": "Cross-validate frequency distributions, uniqueness constraints, and theorem applicability against problem requirements, ensuring systematic checks against domain-specific properties for consistency."
+}

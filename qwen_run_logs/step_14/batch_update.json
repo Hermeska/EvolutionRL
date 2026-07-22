@@ -1,0 +1,117 @@
+{
+  "operations": [
+    {
+      "operation": "modify",
+      "principle": "When solving problems with multiple base constraints, prioritize generating candidates in the base with fewer palindromic possibilities to reduce computational overhead.",
+      "modified_from": "G0"
+    },
+    {
+      "operation": "add",
+      "principle": "For problems requiring dual-base palindromicity, cross-validate intermediate conversions using modular arithmetic to ensure accuracy and prevent premature elimination of valid candidates."
+    },
+    {
+      "operation": "modify",
+      "principle": "When calculating combinatorial selections for favorable outcomes, ensure that all permutations of distinct elements are explicitly accounted for, especially when dealing with multiple constraints and overlapping sets.",
+      "modified_from": "G9"
+    },
+    {
+      "operation": "add",
+      "principle": "In problems involving circular arrangements with geometric constraints, always verify that rotational symmetries are properly addressed to avoid overcounting or undercounting configurations."
+    },
+    {
+      "operation": "modify",
+      "principle": "When solving modular arithmetic problems involving large numbers, ensure that intermediate steps are validated for divisibility by the modulus to prevent incorrect reductions.",
+      "modified_from": "G7"
+    },
+    {
+      "operation": "add",
+      "principle": "In problems requiring division within modular arithmetic, always verify that the divisor and modulus are coprime to ensure the existence of a modular inverse."
+    },
+    {
+      "operation": "modify",
+      "principle": "When solving optimization problems with symmetry assumptions, always cross-validate the derived solution against non-symmetric cases to ensure it is the global maximum.",
+      "modified_from": "G10"
+    },
+    {
+      "operation": "add",
+      "principle": "In constrained optimization, systematically explore all possible variable configurations (including asymmetric ones) to prevent premature termination of the solution process."
+    },
+    {
+      "operation": "modify",
+      "principle": "When solving geometric problems with angle constraints, explicitly validate all derived angle relationships against each other to prevent misinterpretation of the problem's symmetry or constraints.",
+      "modified_from": "G4"
+    },
+    {
+      "operation": "add",
+      "principle": "In problems involving multiple angle conditions (e.g., equal angles from different cevians), systematically cross-validate the derived relationships using both coordinate geometry and vector analysis to ensure consistency across all constraints."
+    },
+    {
+      "operation": "add",
+      "principle": "When solving problems with parity constraints in combinatorial arrangements, explicitly model the constraints as assignments to distinct parity classes (odd/even positions) to ensure valid configurations."
+    },
+    {
+      "operation": "modify",
+      "principle": "In problems involving prime differences, systematically consider all valid combinations of primes rather than restricting to restrictive patterns such as twin primes or specific edge cases.",
+      "modified_from": "G11"
+    },
+    {
+      "operation": "add",
+      "principle": "To prevent undercounting, ensure that all possible configurations of prime differences are evaluated systematically, including wrap-around cases and non-linear sequences, to capture the full range of valid triangles."
+    }
+  ],
+  "response": "Okay, let me try to work through this step by step. The user has provided existing principles and suggested updates, and I need to create a revision plan by either modifying or merging principles. \n\nFirst, I need to understand the existing principles and the suggested updates. The existing principles are labeled G0-G12 and C0-C6, each with specific strategies for different problem types. The suggested updates are modifications to some of these principles, and there's also the shared memory with general insights that the existing principles already cover.\n\nThe task is to review the suggested updates, which are modifications to existing principles, and decide whether to modify them or merge similar ones. The final principles must meet specific requirements: clear, generalizable, start with background, focus on strategic thinking, decision points, and avoid repetition.\n\nLooking at the suggested updates:\n\n1. Modify G0: When solving problems with multiple base constraints, prioritize generating candidates in the base with fewer palindromic possibilities to reduce computational overhead. This seems to be about efficiency in generating candidates, which isn't covered in the shared memory. The original G0 was about median constraints and parity. So modifying G0 to focus on base constraints and computational efficiency makes sense here.\n\n2. Modify G9: Ensure all permutations of distinct elements are accounted for, especially with multiple constraints and overlapping sets. The original G9 was about cross-validating intermediate steps with test cases. This update adds a focus on permutations and overlapping sets, which might be a good addition.\n\n3. Modify G7: Validate intermediate steps for divisibility by modulus in modular arithmetic. The original G7 was about decomposing problems into residue classes. This new principle adds a check for divisibility, which could prevent errors in modular reductions.\n\n4. Modify G10: Cross-validate solutions against non-symmetric cases to ensure global maximum. The original G10 was about exploring variable configurations. This update emphasizes checking non-symmetric cases, which is a strategic decision point.\n\n5. Modify G4: Validate all derived angle relationships against each other. Original G4 was about trigonometric Ceva's theorem. This update adds validation of angle relationships, which could prevent misinterpretation.\n\n6. Modify G11: Consider all valid prime combinations, not just restrictive ones. Original G11 was about minimal fractions with distinct integers. This new approach is about prime differences, so it's a different angle but related to considering all possibilities.\n\nNow, considering the shared memory principles (M0-M8), which are general insights. The existing principles are more specific to certain problem types. The suggested updates are about improving these specific principles by adding strategic checks or broader considerations.\n\nI need to check if any of the suggested updates are similar to the shared memory. For example, M0 is about cross-checking solutions with alternative methods, which might relate to some of the modifications. But the existing principles are strategy-specific, so the modifications are adding to them rather than duplicating shared memory.\n\nNow, the operations are either modify or merge. For each suggested update, I need to decide if modifying the existing principle is better, or if merging similar principles would reduce duplication.\n\nFor example, the suggested modification to G0 (multiple base constraints) is a new strategic point not covered in the shared memory. So modifying G0 is appropriate here. Similarly, the modification to G9 adds a specific step about permutations, which isn't in the shared memory. So modifying G9 makes sense.\n\nLooking at the existing principles, maybe some are similar. For instance, C1 is about circular arrangements and rotational symmetries. The suggested update to G10 about cross-validating against non-symmetric cases might relate to C1, but since C1 is about circular arrangements specifically, and G10 is about optimization with symmetry, maybe they are different enough. However, if there are multiple principles about symmetry, merging them could be useful.\n\nWait, the user also mentioned that the existing principles include C0-C6, and the suggested updates are modifying G0-G12. The existing principles have a mix of general and specific strategies. The suggested updates are about improving specific principles by adding strategic checks.\n\nSo the plan would be to apply the suggested modifications, ensuring that each modified principle is clear, generalizable, and meets the requirements. Also, check if any of the modified principles are similar and need merging.\n\nFor example, if two modified principles are about cross-validating against different cases, maybe they can be merged. But looking at the suggested updates, each seems to address a different aspect. So perhaps the best approach is to apply all the modifications as per the suggested updates, and check for any duplicates or overlaps.\n\nWait, the user also says that the existing principles are already using the shared memory insights, so the suggested updates should complement without duplicating. Therefore, the modifications should add new strategic points that aren't already covered in the shared memory.\n\nIn the end, the final Revision Plan would list each modification, specifying the operation and the new principle. Also, check if any of the existing principles can be merged. For instance, if two principles are about cross-validating against different cases, maybe they can be merged into a more general principle.\n\nBut based on the suggested updates, each is a separate modification. So the answer would be to apply all the suggested modifications, possibly with some merges if needed. However, the user's example in the JSON shows merging principles, so maybe some of the existing principles can be merged.\n\nWait, looking at the existing principles, C0 and C1 and C2 and others might have overlapping themes. For example, C1 is about circular arrangements and rotational symmetries, C3 is about constrained optimization and exploring variable configurations, and C4 is about cross-validating using different methods. The suggested update to G10 (about non-symmetric cases) might relate to C3 or C1. However, without seeing all the existing principles, it's a bit tricky, but the user's example shows merging C1, C3, and S4 (though S4 isn't in the existing principles).\n\nIn the given case, the suggested updates don't mention merging, but the user allows for merging similar principles. So maybe some of the existing principles can be merged. For instance, if two principles are about cross-validating against different cases, they could be merged.\n\nHowever, the user's instruction is to collect and review the suggested updates and create a final Revision Plan. The suggested updates are modifications, and the existing principles are already in place. The user wants the final principles to be a list of operations (modify or merge) based on the suggested updates and the existing principles.\n\nSo the answer would be to apply each of the suggested modifications as \"modify\" operations, and check if any of the existing principles can be merged. However, the user's example in the JSON shows merging, so perhaps some principles can be merged. But since the suggested updates are specific, maybe the answer is to apply all the modifications and not merge anything.\n\nAlternatively, maybe some of the existing principles are similar to the suggested updates and can be merged. For example, if the suggested update to G0 is about generating candidates in bases with fewer palindromic possibilities, and there's an existing principle in the shared memory (M0) about cross-checking with alternative methods, but that's already covered. However, the existing principles are strategy-specific, so the modifications are adding new strategic points.\n\nIn conclusion, the final Revision Plan would involve applying all the suggested modifications as \"modify\" operations, each with their new principle, and possibly merging if there are duplicates. But based on the given information, the answer would list each modification as per the suggested updates.\n</think>\n\n```json\n[\n    {\n        \"operation\": \"modify\",\n        \"principle\": \"When solving problems with multiple base constraints, prioritize generating candidates in the base with fewer palindromic possibilities to reduce computational overhead.\",\n        \"modified_from\": \"G0\"\n    },\n    {\n        \"operation\": \"modify\",\n        \"principle\": \"In combinatorial selections with overlapping constraints, explicitly account for all permutations of distinct elements to ensure comprehensive coverage of favorable outcomes.\",\n        \"modified_from\": \"G9\"\n    },\n    {\n        \"operation\": \"modify\",\n        \"principle\": \"For modular arithmetic with large numbers, validate intermediate steps for divisibility by the modulus to prevent incorrect reductions and maintain accuracy.\",\n        \"modified_from\": \"G7\"\n    },\n    {\n        \"operation\": \"modify\",\n        \"principle\": \"In symmetric optimization problems, cross-validate solutions against non-symmetric cases to confirm the global maximum and avoid premature convergence.\",\n        \"modified_from\": \"G10\"\n    },\n    {\n        \"operation\": \"modify\",\n        \"principle\": \"When solving geometric angle constraints, validate derived angle relationships against each other to ensure consistency with the problem's symmetry and constraints.\",\n        \"modified_from\": \"G4\"\n    },\n    {\n        \"operation\": \"modify\",\n        \"principle\": \"For prime difference problems, systematically explore all valid prime combinations rather than restricting to specific patterns or edge cases.\",\n        \"modified_from\": \"G11\"\n    }\n]\n```",
+  "revision_plan": [
+    {
+      "operation": "modify",
+      "principle": "When solving problems with multiple base constraints, prioritize generating candidates in the base with fewer palindromic possibilities to reduce computational overhead.",
+      "modified_from": "G0"
+    },
+    {
+      "operation": "modify",
+      "principle": "In combinatorial selections with overlapping constraints, explicitly account for all permutations of distinct elements to ensure comprehensive coverage of favorable outcomes.",
+      "modified_from": "G9"
+    },
+    {
+      "operation": "modify",
+      "principle": "For modular arithmetic with large numbers, validate intermediate steps for divisibility by the modulus to prevent incorrect reductions and maintain accuracy.",
+      "modified_from": "G7"
+    },
+    {
+      "operation": "modify",
+      "principle": "In symmetric optimization problems, cross-validate solutions against non-symmetric cases to confirm the global maximum and avoid premature convergence.",
+      "modified_from": "G10"
+    },
+    {
+      "operation": "modify",
+      "principle": "When solving geometric angle constraints, validate derived angle relationships against each other to ensure consistency with the problem's symmetry and constraints.",
+      "modified_from": "G4"
+    },
+    {
+      "operation": "modify",
+      "principle": "For prime difference problems, systematically explore all valid prime combinations rather than restricting to specific patterns or edge cases.",
+      "modified_from": "G11"
+    }
+  ],
+  "new_principles": {
+    "G0": "When solving problems with multiple base constraints, prioritize generating candidates in the base with fewer palindromic possibilities to reduce computational overhead.",
+    "G1": "In geometric problems involving segment constraints, explicitly validate relationships between segments and their coverage regions to prevent misinterpretation.",
+    "G2": "In problems involving cyclic quadrilaterals, explicitly verify the positions of all points relative to the circle's center and the given geometric constraints to avoid ambiguous solutions.",
+    "G3": "Leverage congruent faces and symmetry in disphenoids to simplify volume and area calculations using vector algebra or coordinate geometry.",
+    "G4": "When solving geometric angle constraints, validate derived angle relationships against each other to ensure consistency with the problem's symmetry and constraints.",
+    "G5": "In prime factorization scenarios, cross-verify each component's contribution to the total sum of exponents to ensure accuracy in calculations involving perfect squares or divisibility conditions.",
+    "G6": "For overlapping set problems, cross-validate inclusion-exclusion equations against total population constraints to ensure logical consistency and prevent under/overcounting.",
+    "G7": "For modular arithmetic with large numbers, validate intermediate steps for divisibility by the modulus to prevent incorrect reductions and maintain accuracy.",
+    "G8": "For products over roots of unity, recognize that the product of a polynomial evaluated at all roots of a cyclotomic polynomial can often be simplified by exploiting the polynomial's symmetry and known identities, such as the resultant of the polynomials involved.",
+    "G9": "In combinatorial selections with overlapping constraints, explicitly account for all permutations of distinct elements to ensure comprehensive coverage of favorable outcomes.",
+    "G10": "In symmetric optimization problems, cross-validate solutions against non-symmetric cases to confirm the global maximum and avoid premature convergence.",
+    "G11": "For prime difference problems, systematically explore all valid prime combinations rather than restricting to specific patterns or edge cases.",
+    "G12": "In problems with numerical constraints, cross-validate co-primality checks and modular reductions using alternative methods to ensure robustness.",
+    "C0": "For problems requiring dual-base palindromicity, cross-validate intermediate conversions using modular arithmetic to ensure accuracy and prevent premature elimination of valid candidates.",
+    "C1": "In problems involving circular arrangements with geometric constraints, always verify that rotational symmetries are properly addressed to avoid overcounting or undercounting configurations.",
+    "C2": "In problems requiring division within modular arithmetic, always verify that the divisor and modulus are coprime to ensure the existence of a modular inverse.",
+    "C3": "In constrained optimization, systematically explore all possible variable configurations (including asymmetric ones) to prevent premature termination of the solution process.",
+    "C4": "In problems involving multiple angle conditions (e.g., equal angles from different cevians), systematically cross-validate the derived relationships using both coordinate geometry and vector analysis to ensure consistency across all constraints.",
+    "C5": "When solving problems with parity constraints in combinatorial arrangements, explicitly model the constraints as assignments to distinct parity classes (odd/even positions) to ensure valid configurations.",
+    "C6": "To prevent undercounting, ensure that all possible configurations of prime differences are evaluated systematically, including wrap-around cases and non-linear sequences, to capture the full range of valid triangles."
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "G0": "When validating median constraints, ensure calculations exclude list elements by verifying parity and sum consistency to maintain accuracy.",
+  "G1": "In problems involving isosceles right triangles and internal points with equal angle conditions, consider applying trigonometric Ceva's theorem directly to relate the angles and side lengths.",
+  "G2": "In prime factorization scenarios, cross-validate each component's contribution to the total sum of exponents to ensure accuracy in calculations involving perfect squares or divisibility conditions, particularly in simplification and reduction of fractions.",
+  "G3": "When verifying higher-degree terms do not interfere with the target coefficient, apply modular arithmetic constraints to reduce variables and ensure intermediate steps align with problem constraints.",
+  "G4": "Use modular arithmetic reduction at every computational step to prevent overflow and ensure intermediate results align with the target modulus, while cross-checking against small test cases to validate consistency.",
+  "G5": "When validating geometric constraints, ensure calculations exclude list elements by verifying parity and sum consistency to maintain accuracy.",
+  "G6": "When solving problems with angle bisectors and midpoints, prioritize symmetry assumptions and validate their necessity by cross-checking against geometric constraints to avoid invalid configurations.",
+  "G7": "In problems involving cyclic quadrilaterals, explicitly verify the positions of all points relative to the circle's center and the given geometric constraints to avoid ambiguous solutions.",
+  "G8": "In problems involving maximizing or minimizing expressions under constraints, always consider symmetry assumptions and validate their necessity by cross-checking against alternative configurations.",
+  "G9": "Ensure that all equations derived from problem constraints are necessary and consistent with the total count, avoiding redundant or conflicting equations that may arise from misinterpretation of incidence relationships.",
+  "G10": "In problems where a symmetric equation and a sum constraint are given, consider cases where one variable is fixed (e.g., at a value derived from the equation) and count permutations of the remaining variables under the sum constraint.",
+  "G11": "Cross-validate modular arithmetic and algebraic steps with small test cases to detect errors early, ensuring alignment with problem constraints and preventing overflow through systematic reductions.",
+  "G12": "In problems involving midpoint conditions within composite regions, always cross-validate the derived probabilities with explicit integration over the entire region to ensure no overlapping conditions are missed.",
+  "G13": "In problems involving complex equations or envelope intersections, cross-validate algebraic steps with explicit test cases to prevent miscalculations.",
+  "G14": "Explicitly clarify whether given counts include or exclude the universal set, and systematically validate subcases against total population constraints to account for overlaps and ensure derived equations are consistent.",
+  "G15": "When solving geometric probability problems with multiple constraints, cross-validate integration steps with explicit test cases to ensure alignment with the region's boundaries and avoid miscalculations in mixed subregion cases.",
+  "G16": "In problems involving cyclic quadrilaterals and angle bisectors, explicitly verify the positions of all points relative to the circle's center and given constraints to prevent ambiguous solutions.",
+  "G17": "In problems involving minimizing fractions, systematically explore all possible splits with the smallest possible numerator differences and largest denominators, ensuring no valid triplet combinations are overlooked.",
+  "G18": "G19: In solving Diophantine equations with multiple variables, systematically apply modular arithmetic reductions and substitutions to simplify the problem, cross-validating each transformation with small test cases.",
+  "G19": "Ensure all subcases are explicitly validated against geometric constraints and digit bounds to prevent under/overcounting, particularly in composite regions with overlapping boundaries and numeric constraints.",
+  "G20": "In problems with symmetric structures or probabilistic assumptions, explicitly validate symmetry assumptions and ensure all cases are weighted equally, aligning with problem constraints and avoiding biased solutions."
+}

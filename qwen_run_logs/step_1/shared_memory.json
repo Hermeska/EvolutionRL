@@ -1,0 +1,27 @@
+{
+  "max_bullets": 50,
+  "_next_id": 3,
+  "bullets": {
+    "M0": {
+      "bullet_id": "M0",
+      "content": "Failing to verify intermediate steps can lead to cumulative errors; cross-checking solutions with alternative methods improves reliability across strategies.",
+      "helpful_count": 0,
+      "harmful_count": 0,
+      "created_at": 0
+    },
+    "M1": {
+      "bullet_id": "M1",
+      "content": "Overlooking problem constraints may result in invalid solutions; explicitly validating inputs against requirements ensures alignment across strategies.",
+      "helpful_count": 0,
+      "harmful_count": 0,
+      "created_at": 0
+    },
+    "M2": {
+      "bullet_id": "M2",
+      "content": "Neglecting to decompose complex problems into manageable sub-problems can hinder progress; systematic breakdowns enhance clarity and strategy adaptability.",
+      "helpful_count": 0,
+      "harmful_count": 0,
+      "created_at": 0
+    }
+  }
+}

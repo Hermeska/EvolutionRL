@@ -1,0 +1,79 @@
+{
+  "operations": [],
+  "response": "Okay, let's tackle this problem. The user wants me to review the suggested updates and create a final Revision Plan for the existing principles. But wait, the suggested_updates is empty. Hmm, maybe I need to generate the updates based on the existing principles and shared memory?\n\nWait, the note says that the shared memory contains universal insights, and the updates should focus on strategy-specific improvements that complement but don't duplicate the shared memory bullets. So I need to look at the existing principles and see where they can be improved or merged.\n\nLooking at the existing principles, some of them might be redundant. For example, G19 and G25 both mention cross-validating equations and constraints. Also, G22 and G28 both talk about cross-validating arithmetic sequences. Maybe those can be merged.\n\nLet me check each principle. G1 and G11 both involve verifying GCD calculations. G11 says to verify GCD using denominator-specific reductions, while G1 is about cross-validating components' contributions to exponents. Maybe they can be merged into a more general principle about prime factorization checks.\n\nAlso, G20 and G27 both mention cross-validating geometric constraints against symmetry and parity. G27 is more about variables aligning with problem ranges, while G20 is about symmetry and parity. Maybe merging them into a principle that combines both aspects.\n\nLooking at G24 and G25, G25 talks about validation of interplay between variables and constraints in optimization, and G24 is about ensuring the median is an integer. These might not be directly related, so maybe leave them as is.\n\nAnother thing: some principles have similar wording. For example, G7 and G16 both mention cross-validating with small test cases. G7 is about Diophantine equations, and G16 is about arithmetic progressions. Maybe merging them into a general principle about cross-validating transformations with test cases.\n\nAlso, G18 and G23 both mention cross-validating equations against problem-specific conditions. G18 is about geometric area calculations, G23 is about equations derived from constraints. Merging these into a principle about cross-validating equations with problem constraints.\n\nI need to make sure each principle is unique and covers different aspects. Let me list possible merges and modifications:\n\n1. Merge G1 and G11 into a principle about prime factorization checks, focusing on exponents and GCD.\n2. Merge G20 and G27 into a principle about cross-validating constraints with symmetry, parity, and variable ranges.\n3. Merge G7 and G16 into a principle about cross-validating transformations with test cases.\n4. Merge G18 and G23 into a principle about cross-validating equations against problem constraints.\n5. Modify G25 to be more general, perhaps about validation of variable interactions in constraints.\n\nAlso, check if any principles are redundant. For example, G28 and G29 both talk about cross-validating arithmetic sequences. Maybe merge them into one.\n\nAfter considering all these, I can structure the operations accordingly. Each merge should combine similar principles into a more general one, and any modifications should enhance existing principles without duplication.\n</think>\n\n```json\n[\n    {\n        \"operation\": \"merge\",\n        \"principle\": \"In prime factorization scenarios, cross-validate exponent contributions and GCD calculations to ensure accuracy in divisibility and simplification tasks across problem domains.\",\n        \"merged_from\": [\"G1\", \"G11\"]\n    },\n    {\n        \"operation\": \"merge\",\n        \"principle\": \"Cross-validate geometric constraints against symmetry, parity, and variable ranges to prevent invalid spatial relationships and ensure alignment with problem-specific conditions.\",\n        \"merged_from\": [\"G20\", \"G27\"]\n    },\n    {\n        \"operation\": \"merge\",\n        \"principle\": \"Systematically cross-validate transformations (e.g., modular reductions, substitutions) with small test cases to ensure consistency in complex problem-solving strategies.\",\n        \"merged_from\": [\"G7\", \"G16\"]\n    },\n    {\n        \"operation\": \"merge\",\n        \"principle\": \"Ensure equations derived from constraints are cross-validated against problem-specific requirements to prevent incomplete or inconsistent solutions in hybrid scenarios.\",\n        \"merged_from\": [\"G18\", \"G23\"]\n    },\n    {\n        \"operation\": \"modify\",\n        \"principle\": \"In optimization problems, explicitly validate variable interactions with constraints to avoid algebraic inconsistencies and ensure robust solution alignment.\",\n        \"modified_from\": \"G25\"\n    },\n    {\n        \"operation\": \"merge\",\n        \"principle\": \"For arithmetic sequences derived from modular constraints, cross-validate counts using formulae and manual enumeration to prevent undercounting or overcounting in edge cases.\",\n        \"merged_from\": [\"G28\", \"G29\"]\n    }\n]\n```",
+  "revision_plan": [
+    {
+      "operation": "merge",
+      "principle": "In prime factorization scenarios, cross-validate exponent contributions and GCD calculations to ensure accuracy in divisibility and simplification tasks across problem domains.",
+      "merged_from": [
+        "G1",
+        "G11"
+      ]
+    },
+    {
+      "operation": "merge",
+      "principle": "Cross-validate geometric constraints against symmetry, parity, and variable ranges to prevent invalid spatial relationships and ensure alignment with problem-specific conditions.",
+      "merged_from": [
+        "G20",
+        "G27"
+      ]
+    },
+    {
+      "operation": "merge",
+      "principle": "Systematically cross-validate transformations (e.g., modular reductions, substitutions) with small test cases to ensure consistency in complex problem-solving strategies.",
+      "merged_from": [
+        "G7",
+        "G16"
+      ]
+    },
+    {
+      "operation": "merge",
+      "principle": "Ensure equations derived from constraints are cross-validated against problem-specific requirements to prevent incomplete or inconsistent solutions in hybrid scenarios.",
+      "merged_from": [
+        "G18",
+        "G23"
+      ]
+    },
+    {
+      "operation": "modify",
+      "principle": "In optimization problems, explicitly validate variable interactions with constraints to avoid algebraic inconsistencies and ensure robust solution alignment.",
+      "modified_from": "G25"
+    },
+    {
+      "operation": "merge",
+      "principle": "For arithmetic sequences derived from modular constraints, cross-validate counts using formulae and manual enumeration to prevent undercounting or overcounting in edge cases.",
+      "merged_from": [
+        "G28",
+        "G29"
+      ]
+    }
+  ],
+  "new_principles": {
+    "G0": "When applying specific theorems (e.g., trigonometric Ceva's theorem), explicitly validate their necessity against problem constraints to avoid over-reliance on unverified assumptions.",
+    "G2": "In problems involving cyclic quadrilaterals, ensure all geometric constraints are explicitly verified relative to the circle's center and given conditions to prevent invalid solutions.",
+    "G3": "In problems involving maximizing or minimizing expressions under constraints, always consider symmetry assumptions and validate their necessity by cross-checking against alternative configurations.",
+    "G4": "When calculating expected values for problems involving optimal strategies, cross-validate recursive steps with small test cases to ensure alignment with problem constraints and prevent miscalculations.",
+    "G5": "In problems involving midpoint conditions within composite regions, always cross-validate the derived probabilities with explicit integration over the entire region to ensure no overlapping conditions are missed.",
+    "G6": "In geometric probability, ensure tangency conditions between curves and target lines are validated to confirm solution uniqueness in parametric cases.",
+    "G8": "When solving for products of distances from a point on a circle to vertices of a square, use coordinate geometry and derive equations based on the circle's equation and distance formulas, rather than relying on unverified identities.",
+    "G9": "Verify signs in logarithmic equations to prevent contradictions by ensuring intermediate steps align with problem constraints.",
+    "G10": "In problems involving families of lines or curves, explicitly verify the tangency condition when identifying unique intersection points, as this ensures the solution is not overlapped by other members of the family.",
+    "G12": "When excluding elements from a set, validate parity and sum consistency to ensure alignment with problem constraints and prevent calculation errors.",
+    "G13": "When solving with symmetry, prioritize cases where variables are fixed based on constraints and systematically count permutations under remaining conditions.",
+    "G14": "Ensure equations derived from constraints are necessary and consistent with total counts, explicitly allowing monochromatic pairs as long as they do not form rectangles with other pairs.",
+    "G15": "G18",
+    "G17": "Validate Fibonacci-based counts for edge cases (e.g., segments of length 0) to ensure accuracy in combinatorial calculations.",
+    "G19": "When applying trigonometric identities in geometric problems, verify their necessity and consistency with spatial relationships to avoid algebraic errors.",
+    "G21": "G21",
+    "G22": "Prioritize analytical solutions over numerical approximations, cross-validating equations at each step to ensure consistency with problem constraints.",
+    "G24": "ensure the median is an integer not in the list by choosing even-length configurations and verifying the average of central elements",
+    "G25": "In optimization problems, explicitly validate variable interactions with constraints to avoid algebraic inconsistencies and ensure robust solution alignment.",
+    "G26": "When considering monochromatic pairs in geometric constraints, prioritize configurations where no two such pairs form a rectangle, allowing single monochromatic pairs as valid solutions.",
+    "G30": "G28",
+    "C0": "In prime factorization scenarios, cross-validate exponent contributions and GCD calculations to ensure accuracy in divisibility and simplification tasks across problem domains.",
+    "C1": "Cross-validate geometric constraints against symmetry, parity, and variable ranges to prevent invalid spatial relationships and ensure alignment with problem-specific conditions.",
+    "C2": "Systematically cross-validate transformations (e.g., modular reductions, substitutions) with small test cases to ensure consistency in complex problem-solving strategies.",
+    "C3": "Ensure equations derived from constraints are cross-validated against problem-specific requirements to prevent incomplete or inconsistent solutions in hybrid scenarios.",
+    "C4": "For arithmetic sequences derived from modular constraints, cross-validate counts using formulae and manual enumeration to prevent undercounting or overcounting in edge cases."
+  }
+}

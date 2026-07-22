@@ -1,0 +1,14 @@
+{
+  "G0": "When validating median constraints, ensure calculations exclude list elements by verifying parity and sum consistency to maintain accuracy.",
+  "G1": "In combinatorial problems with parity constraints, validate parity conditions for all pairs to ensure alignment with problem requirements and prevent invalid configurations.",
+  "G2": "In problems involving cyclic quadrilaterals, explicitly verify the positions of all points relative to the circle's center and the given geometric constraints to avoid ambiguous solutions.",
+  "G3": "Leverage congruent faces and symmetry in disphenoids to simplify volume and area calculations using vector algebra or coordinate geometry.",
+  "G4": "When computing large numbers modulo any value, break down the computation into smaller steps by reducing intermediate results modulo that value at each stage to minimize arithmetic errors.",
+  "G5": "In problems involving isosceles right triangles and internal points with equal angle conditions, consider applying trigonometric Ceva's theorem directly to relate the angles and side lengths.",
+  "G6": "In prime factorization scenarios, cross-verify each component's contribution to the total sum of exponents to ensure accuracy in calculations involving perfect squares or divisibility conditions.",
+  "G7": "For overlapping set problems, cross-validate inclusion-exclusion equations against total population constraints to ensure logical consistency and prevent under/overcounting.",
+  "G8": "In problems involving large exponents and modular constraints, systematically decompose the problem into residue classes and validate counts through cross-checking to ensure accuracy.",
+  "G9": "For products over roots of unity, recognize that the product of a polynomial evaluated at all roots of a cyclotomic polynomial can often be simplified by exploiting the polynomial's symmetry and known identities, such as the resultant of the polynomials involved.",
+  "G10": "In problems requiring the calculation of probabilities with multiple constraints, cross-validate intermediate steps using smaller test cases to ensure consistency and correctness.",
+  "G11": "In problems involving binomial coefficients and large factorials, explicitly verify the co-primality of the numerator and denominator before simplifying to ensure the fraction is in its lowest terms."
+}

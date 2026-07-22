@@ -1,0 +1,230 @@
+{
+  "prompt": "Multiple independent problem-solving strategies were evaluated on the same batch of math problems.\nEach strategy uses its own per-strategy principles, but we want to identify insights that are useful ACROSS ALL strategies.\n\nStrategy performance summary:\nStrategy A (program_id=51, avg_reward=0.220, problems=10):\n  Top principles: [\"When applying specific theorems (e.g., trigonometric Ceva's theorem), explicitly validate their necessity against problem constraints to avoid over-reliance on unverified assumptions.\", \"In problems involving cyclic quadrilaterals, ensure all geometric constraints are explicitly verified relative to the circle's center and given conditions to prevent invalid solutions.\", 'In problems involving maximizing or minimizing expressions under constraints, always consider symmetry assumptions and validate their necessity by cross-checking against alternative configurations.']\n\nStrategy B (program_id=48, avg_reward=0.120, problems=10):\n  Top principles: [\"When applying specific theorems (e.g., trigonometric Ceva's theorem), explicitly validate their necessity against problem constraints to avoid over-reliance on unverified assumptions.\", \"In prime factorization scenarios, cross-validate each component's contribution to the total sum of exponents to ensure accuracy in calculations involving perfect squares or divisibility conditions, particularly in simplification and reduction of fractions.\", \"In problems involving cyclic quadrilaterals, ensure all geometric constraints are explicitly verified relative to the circle's center and given conditions to prevent invalid solutions.\"]\n\nStrategy C (program_id=50, avg_reward=0.140, problems=10):\n  Top principles: [\"When applying specific theorems (e.g., trigonometric Ceva's theorem), explicitly validate their necessity against problem constraints to avoid over-reliance on unverified assumptions.\", \"In prime factorization scenarios, cross-validate each component's contribution to the total sum of exponents to ensure accuracy in calculations involving perfect squares or divisibility conditions, particularly in simplification and reduction of fractions.\", \"In problems involving cyclic quadrilaterals, ensure all geometric constraints are explicitly verified relative to the circle's center and given conditions to prevent invalid solutions.\"]\n\nCurrent shared memory (global insights already captured):\n[M0] Failing to verify intermediate steps can lead to cumulative errors; cross-checking solutions with alternative methods improves reliability across strategies.\n[M1] Overlooking problem constraints may result in invalid solutions; explicitly validating inputs against requirements ensures alignment across strategies.\n[M10] Failing to integrate symmetry and parity checks in problem-solving can lead to overlooked constraints; explicitly cross-check these properties across problem domains to ensure comprehensive validation.\n[M11] Failing to systematically validate geometric and algebraic constraints in hybrid problems can introduce inconsistencies; explicitly cross-check numerical and spatial requirements to ensure comprehensive solution accuracy.\n[M12] Failing to cross-check different validation methods (e.g., algebraic checks vs. combinatorial constraints) can lead to incomplete solutions; explicitly integrate multiple validation approaches for robustness.\n[M13] Failing to prioritize constraints with fewer possibilities can increase computational complexity; explicitly prioritize such constraints to enhance efficiency across problem domains.\n[M14] Failing to apply specific cross-validation techniques (e.g., parity checks, trigonometric Ceva's theorem) in relevant problem types can reduce accuracy; explicitly integrate these methods across strategies for consistency.\n[M15] Failing to apply parity checks and trigonometric Ceva's theorem in hybrid problems can lead to inconsistencies; explicitly integrate these methods across all problem domains for robustness.\n[M16] Failing to cross-validate frequency distributions can lead to ambiguous solutions; explicitly check uniqueness constraints in all problem types to ensure clarity.\n[M17] Failing to correctly calculate the gcd in fraction simplification can lead to errors; explicitly verify gcd calculations using the multiplier's gcd with the denominator to ensure accuracy.\n[M18] Failing to cross-validate multiple constraint types (e.g., parity, equations, subcases) in hybrid problems can lead to fragmented solutions; explicitly integrate diverse validation methods for holistic accuracy.\n[M19] Failing to cross-validate geometric and algebraic constraints in hybrid problems can lead to inconsistencies; explicitly check for alignment between numerical and spatial requirements to ensure comprehensive solution accuracy.\n[M2] Neglecting to decompose complex problems into manageable sub-problems can hinder progress; systematic breakdowns enhance clarity and strategy adaptability.\n[M20] Failing to cross-validate parity checks and trigonometric Ceva's theorem in hybrid problems can lead to inconsistencies; explicitly integrate these methods across all problem domains for robustness.\n[M21] Failing to integrate parity checks, trigonometric Ceva's theorem, and prime factorization cross-validation in hybrid problems can lead to inconsistencies; explicitly align these methods for comprehensive accuracy.\n[M22] Failing to cross-validate prime factorization components' contributions to perfect square conditions can lead to errors; explicitly verify each component's role in the exponent sum.\n[M23] Failing to cross-validate theorem applicability across problem domains can lead to unverified assumptions; explicitly assess theorem relevance to constraints for accuracy.\n[M24] Failing to cross-validate prime factorization cross-validation with parity checks in hybrid problems can lead to inconsistencies; explicitly integrate these methods for robustness.\n[M25] Failing to integrate prime factorization cross-validation with parity checks in hybrid problems can lead to inconsistencies; explicitly align these methods for robustness.\n[M26] Failing to cross-validate prime factorization components with geometric constraints in hybrid problems can lead to inconsistencies; explicitly align these validations for robustness.\n[M27] Failing to align theorem validation, prime factorization checks, and geometric constraints in hybrid problems leads to inconsistencies; explicitly integrate these validations for robustness.\n[M28] Failing to cross-validate theorem applicability across problem domains can lead to unverified assumptions; explicitly assess theorem relevance to constraints for accuracy.\n[M29] Failing to integrate theorem validation with prime factorization checks in hybrid problems can lead to inconsistencies; explicitly align these methods for robustness.\n[M3] Failing to consider alternative solution paths limits adaptability; exploring multiple approaches increases robustness across problem types.\n[M4] Neglecting to test edge cases may result in solutions failing under unexpected conditions; systematic boundary testing ensures robustness.\n[M5] Overlooking interdependencies between sub-problems can lead to fragmented solutions; ensuring holistic integration of components improves effectiveness.\n[M6] Failing to validate domain-specific constraints (e.g., symmetry, parity, approximations) can introduce errors; explicitly check problem-specific properties to ensure alignment with solution requirements.\n[M8] Failing to cross-check derived congruences against original problem requirements can introduce errors; explicitly validate intermediate results against problem specifications to ensure alignment.\n[M9] Failing to validate both algebraic and geometric constraints in hybrid problems can lead to inconsistencies; explicitly check for alignment between numerical and spatial requirements to ensure comprehensive solution accuracy.\n\nYour task: Update the shared memory by proposing operations based on cross-strategy evidence.\n\nNew bullets to ADD must:\n  1. Apply to MULTIPLE strategies (not specific to one approach)\n  2. NOT duplicate anything already in shared memory\n  3. Be at most 32 words, concrete, and focused on strategic thinking\n  4. Describe failure modes, verification strategies, or universally helpful heuristics\n\nReturn a JSON list of operations (at most 3 total, or an empty list if no clear cross-strategy insight):\n```json\n[\n    {\"operation\": \"add\", \"content\": \"globally useful insight across all strategies\"},\n    {\"operation\": \"mark_helpful\", \"bullet_id\": \"M3\"},\n    {\"operation\": \"mark_harmful\", \"bullet_id\": \"M7\"}\n]\n```\nReturn only operations that are strongly supported by cross-strategy evidence.",
+  "response": "Okay, let's tackle this problem. The user wants me to update the shared memory by adding new insights that apply across all strategies, based on the given strategy performance summaries and existing shared memory.\n\nFirst, I need to look at the strategies A, B, and C. Let me check their top principles. \n\nStrategy A mentions validating the necessity of theorems like trigonometric Ceva's theorem, verifying geometric constraints in cyclic quadrilaterals, and checking symmetry assumptions in optimization problems. \n\nStrategy B and C both mention validating the necessity of theorems, cross-validating prime factorization components for perfect squares or divisibility, and checking geometric constraints in cyclic quadrilaterals. \n\nLooking at the existing shared memory (M0 to M30), I need to find what's already there. The existing bullets cover things like cross-checking methods, validating constraints, symmetry and parity checks, integrating different validation approaches, etc. \n\nThe task is to add new bullets that are applicable to multiple strategies, not duplicates, and are concise. Let's see what's common across the strategies. \n\nAll three strategies emphasize validating the necessity of specific theorems (like trigonometric Ceva's theorem) and checking geometric constraints. Also, prime factorization cross-validation is in B and C. \n\nLooking for cross-strategy evidence: the repeated mention of validating theorem applicability and checking geometric constraints. Also, the need to cross-validate different components (prime factors, symmetry, etc.) across different problem types. \n\nExisting M23 and M28 talk about cross-validating theorem applicability. So maybe a new bullet could be about integrating theorem validation with other checks, but need to check if that's already covered. \n\nAnother point: all strategies mention cross-checking different aspects (theorems, prime factors, geometric constraints). Maybe a new insight about integrating multiple validation methods across different problem domains. \n\nWait, M12 and M18 mention cross-checking different validation methods. So maybe something about ensuring that all validation types (algebraic, geometric, combinatorial) are systematically checked. \n\nAlternatively, looking at the strategies, they all mention the importance of verifying constraints and cross-checking. Maybe a new bullet about the necessity of cross-validating both algebraic and geometric constraints in hybrid problems, but M19 and M19 are similar. \n\nWait, M19 says failing to cross-validate geometric and algebraic constraints in hybrid problems leads to inconsistencies. But maybe a new insight could be about prioritizing constraints with fewer possibilities, which is M13. \n\nWait, but the user wants new bullets not already present. Let me check the existing ones again. \n\nLooking at the strategies, they all have principles about cross-validating theorem applicability and geometric constraints. So maybe a new bullet that combines these, like ensuring that theorems are validated against both geometric and algebraic constraints. But maybe that's covered in M23 and M28. \n\nAlternatively, the repeated mention of prime factorization cross-validation in B and C. But M22, M24, M25, M26, M27, etc., cover prime factorization checks. \n\nWait, maybe a new bullet about the importance of cross-validating theorem applicability (like trigonometric Ceva's) with prime factorization checks in hybrid problems. But I need to check if that's already covered. \n\nLooking at M21: integrating parity checks, trigonometric Ceva, and prime factorization. M24 and M25 talk about cross-validating prime factorization with parity and other checks. \n\nHmm. Maybe the key is that all strategies emphasize cross-validation of different methods. So perhaps a new bullet that says failing to cross-validate theorem applicability with prime factorization checks in hybrid problems leads to inconsistencies. But I need to check if that's already present. \n\nLooking through the existing bullets, M21 mentions integrating parity checks, trigonometric Ceva, and prime factorization. M24 and M25 talk about cross-validating prime factorization with parity and other checks. So maybe a new bullet about ensuring that theorem validation (like Ceva's) is cross-checked with prime factorization in hybrid problems. But I need to check if that's not already covered. \n\nAlternatively, maybe the fact that all three strategies mention validating the necessity of theorems and geometric constraints. So a new bullet could be about the need to explicitly assess theorem relevance to constraints (which is covered in M23 and M28). \n\nAlternatively, looking for a new insight that combines multiple aspects. For example, the strategies mention both geometric constraints and prime factorization. So a new bullet about cross-validating geometric constraints with algebraic constraints (like prime factorization) in hybrid problems. \n\nWait, M19 and M20 mention cross-validating geometric and algebraic constraints. So maybe that's already covered. \n\nAnother angle: all strategies mention checking symmetry and parity. So perhaps a new bullet about the necessity of cross-checking symmetry and parity in hybrid problems. But M10 and M15 mention symmetry and parity. \n\nAlternatively, the strategies emphasize cross-checking with alternative methods. For example, M0 is about cross-checking with alternative methods. \n\nWait, maybe the key is that all strategies have principles about validating the necessity of theorems. So a new bullet could be about ensuring that theorems are validated against both problem constraints and other validation methods. \n\nBut I need to make sure it's not a duplicate. Let me think of a unique one. \n\nHow about: \"Failing to cross-validate theorem applicability with prime factorization checks in hybrid problems can lead to inconsistencies; explicitly integrate these methods for robustness.\" But I need to check if that's already present. \n\nLooking at M21: integrating parity checks, trigonometric Ceva, and prime factorization. M24 and M25 talk about cross-validating prime factorization with parity and other checks. So maybe this is similar. \n\nAlternatively, maybe a new bullet about the need to validate both geometric and algebraic constraints in hybrid problems, but that's covered in M19. \n\nHmm. Maybe I need to think of a different angle. The strategies all mention cross-validating different aspects. Perhaps a new insight about the importance of systematically checking the contributions of each component in prime factorization, which is covered in M22. \n\nAlternatively, looking at the strategies, they all have principles about validating the necessity of theorems. So a new bullet could be about ensuring that theorems are validated against both geometric and algebraic constraints. \n\nBut I'm not sure. Maybe the answer is to add a bullet about integrating theorem validation with prime factorization checks in hybrid problems. Let me check if that's not already present. \n\nLooking through the existing bullets, M21 mentions integrating parity checks, trigonometric Ceva, and prime factorization. So perhaps that's similar. \n\nAlternatively, since Strategies B and C have prime factorization cross-validation, and Strategy A has theorems, maybe a new bullet about cross-validating theorem applicability with prime factorization checks in hybrid problems. \n\nBut I need to make sure it's not a duplicate. If not, then that's a possible new bullet. \n\nSo, the new bullet would be something like: \"Failing to cross-validate theorem applicability with prime factorization checks in hybrid problems can lead to inconsistencies; explicitly integrate these methods for robustness.\" \n\nBut I need to check if that's not already in the existing bullets. \n\nLooking through the existing ones, M21 is about integrating parity checks, trigonometric Ceva, and prime factorization. M24 and M25 talk about cross-validating prime factorization with parity and other checks. M26 talks about cross-validating prime factorization with geometric constraints. \n\nSo, cross-validating theorem applicability (like trigonometric Ceva) with prime factorization checks is not directly mentioned. So that could be a new bullet. \n\nAlternatively, maybe a bullet about ensuring that all cross-validation methods (theorems, prime factorization, parity) are systematically applied in hybrid problems. \n\nBut the user wants concise bullets. So perhaps the first idea is better. \n\nAnother possible bullet: \"Failing to cross-validate geometric constraints with algebraic checks in hybrid problems can lead to inconsistencies; explicitly integrate both for comprehensive accuracy.\" But M19 and M11 mention similar things. \n\nAlternatively, since all strategies mention cross-validating theorems and geometric constraints, maybe a new bullet about ensuring that theorems are validated against both geometric and algebraic constraints. \n\nBut again, need to check for duplicates. \n\nAlternatively, considering that all strategies have principles about checking the necessity of theorems and cross-validating different components, maybe a new bullet about the need to explicitly validate the necessity of theorems against both problem constraints and alternative solution paths. \n\nBut that's a bit vague. \n\nAlternatively, the key is that all strategies emphasize cross-checking. So maybe a new bullet about the importance of systematically cross-checking all validation methods in hybrid problems, but that's similar to M12 and M18. \n\nHmm. Maybe there's not enough new insights. The user allows up to 3 new bullets. Let me try to think of another angle. \n\nLooking at the strategies, they all mention cross-validating different components. For example, Strategy A mentions symmetry assumptions, Strategy B and C mention prime factorization. So maybe a new bullet about the necessity of cross-validating symmetry and prime factorization checks in hybrid problems. \n\nBut M21 and others mention integrating parity, Ceva, and prime factorization. \n\nAlternatively, since all strategies mention the need to validate the necessity of theorems, perhaps a new bullet about ensuring that theorems are validated against both problem constraints and alternative methods. \n\nBut I need to make sure it's not a duplicate. \n\nAlternatively, considering that all strategies have principles about cross-checking, maybe a new bullet about the failure to cross-validate different types of constraints (like geometric and algebraic) in hybrid problems. \n\nBut that's covered in M19. \n\nHmm. Maybe there's not enough cross-strategy evidence for new bullets. However, the user says to return up to 3 new bullets. \n\nWait, looking at the existing bullets, M21 is about integrating parity checks, trigonometric Ceva, and prime factorization. So if I can find a cross-strategy insight that's not covered, maybe about cross-validating theorem applicability with prime factorization checks. \n\nSo, the new bullet could be: \"Failing to cross-validate theorem applicability with prime factorization checks in hybrid problems can lead to inconsistencies; explicitly integrate these methods for robustness.\" \n\nThis is applicable to multiple strategies (A, B, C), not a duplicate (not in existing bullets), and is concise. \n\nAnother possible bullet: \"Failing to cross-validate geometric constraints with prime factorization components in hybrid problems can lead to inconsistencies; explicitly align these validations for robustness.\" (M26 mentions cross-validating prime factorization with geometric constraints, but maybe combining with other aspects.)\n\nAlternatively, since all strategies mention cross-checking, maybe a bullet about the importance of systematically cross-checking all validation methods, but that's covered in M12 and M18. \n\nSo, perhaps the first idea is the best. \n\nAnother possible bullet: \"Failing to validate the necessity of theorems against both problem constraints and alternative solution paths can lead to unverified assumptions; explicitly cross-check theorem applicability across methods for accuracy.\" \n\nThis combines the need to validate theorems against constraints and alternative paths, which is part of the strategies' principles. \n\nBut I need to check if that's a duplicate. \n\nLooking at existing bullets, M23 and M28 talk about cross-validating theorem applicability across problem domains. So this might be similar. \n\nSo, maybe the best new bullet is the one about cross-validating theorem applicability with prime factorization in hybrid problems. \n\nThus, the JSON would be:\n\n[\n    {\"operation\": \"add\", \"content\": \"Failing to cross-validate theorem applicability with prime factorization checks in hybrid problems can lead to inconsistencies; explicitly integrate these methods for robustness.\"}\n]\n\nBut the user allows up to 3. Let me check if there's another. \n\nLooking at the strategies, all mention the importance of validating constraints. Maybe another bullet about ensuring that all cross-validation methods are applied systematically. \n\nBut that's similar to M12 and M18. \n\nAlternatively, since Strategies B and C have prime factorization cross-validation, and A has theorems, maybe a bullet about cross-validating theorem applicability with prime factorization checks in hybrid problems. \n\nYes, that's the first one. \n\nAnother possible bullet: \"Failing to cross-validate symmetry assumptions with prime factorization components in hybrid problems can lead to inconsistencies; explicitly align these validations for robustness.\" \n\nBut that's not covered in existing bullets. \n\nSo, adding two bullets: \n\n1. Cross-validate theorem applicability with prime factorization checks in hybrid problems. \n\n2. Cross-validate symmetry assumptions with prime factorization in hybrid problems. \n\nBut I need to check if those are not duplicates. \n\nAlternatively, since the user allows up to 3, maybe adding two more. \n\nBut given the time, maybe just one is sufficient. \n\nAlternatively, the user might want to mark some existing bullets as helpful or harmful. \n\nLooking at the existing bullets, M3 says about considering alternative solution paths. Since all strategies mention exploring multiple approaches (Strategy A's M3 is \"exploring multiple approaches\"), maybe marking M3 as helpful. \n\nWait, in the current shared memory, M3 is: \"Failing to consider alternative solution paths limits adaptability; exploring multiple approaches increases robustness across problem types.\" \n\nSince all strategies (A, B, C) mention principles that involve cross-checking, which implies considering alternative methods, perhaps M3 is helpful. \n\nSo, the operation would be {\"operation\": \"mark_helpful\", \"bullet_id\": \"M3\"}.\n\nSimilarly, maybe some other bullets are harmful. But the user says to return operations that are strongly supported. \n\nSo, the final answer could be adding one new bullet and marking M3 as helpful. \n\nBut the user allows up to 3 operations. Let me check the initial instruction again: return a JSON list of operations (at most 3 total, or empty). \n\nSo, the answer could be:\n\n[\n    {\"operation\": \"add\", \"content\": \"Failing to cross-validate theorem applicability with prime factorization checks in hybrid problems can lead to inconsistencies; explicitly integrate these methods for robustness.\"},\n    {\"operation\": \"mark_helpful\", \"bullet_id\": \"M3\"},\n    {\"operation\": \"mark_harmful\", \"bullet_id\": \"M7\"}\n]\n\nBut M7 is not in the existing shared memory. Wait, the existing shared memory goes up to M30. Wait, the initial list shows up to M30, but in the user's input, the shared memory has entries up to M29. Wait, the user lists up to M29. So M7 is not present. Therefore, marking M7 as harmful is invalid. \n\nAh, right, the user's shared memory doesn't have M7. So the user's instruction says to mark bullets that are in the shared memory. So in the initial shared memory, M0 to M30 are present. But the user's input shows up to M29. So M7 is not in the list. Therefore, the operation to mark M7 as harmful would be invalid. \n\nTherefore, the user might have made a typo. But assuming that the shared memory includes M0 to M30, but in the given input, it's up to M29. So perhaps M7 is not present. Therefore, the operation to mark M7 is invalid. \n\nSo, the only valid operations are adding a new bullet and marking M3 as helpful. \n\nSo the final answer would be:\n\n[\n    {\"operation\": \"add\", \"content\": \"Failing to cross-validate theorem applicability with prime factorization checks in hybrid problems can lead to inconsistencies; explicitly integrate these methods for robustness.\"},\n    {\"operation\": \"mark_helpful\", \"bullet_id\": \"M3\"}\n]\n\nBut the user allows up to 3 operations. Alternatively, if there's another helpful bullet. \n\nAnother possible helpful bullet: M14 says about applying cross-validation techniques like parity checks and trigonometric Ceva. Since all strategies mention these, maybe M14 is helpful. But the user says to return operations based on cross-strategy evidence. \n\nAlternatively, since all strategies mention cross-checking, maybe M3 is helpful. \n\nThus, the final answer would be adding one new bullet and marking M3 as helpful.\n</think>\n\n```json\n[\n    {\"operation\": \"add\", \"content\": \"Failing to cross-validate theorem applicability with prime factorization checks in hybrid problems can lead to inconsistencies; explicitly integrate these methods for robustness.\"},\n    {\"operation\": \"mark_helpful\", \"bullet_id\": \"M3\"}\n]\n```",
+  "operations": [
+    {
+      "operation": "add",
+      "content": "Failing to cross-validate theorem applicability with prime factorization checks in hybrid problems can lead to inconsistencies; explicitly integrate these methods for robustness."
+    },
+    {
+      "operation": "mark_helpful",
+      "bullet_id": "M3"
+    }
+  ],
+  "shared_memory_after": {
+    "max_bullets": 50,
+    "_next_id": 31,
+    "bullets": {
+      "M0": {
+        "bullet_id": "M0",
+        "content": "Failing to verify intermediate steps can lead to cumulative errors; cross-checking solutions with alternative methods improves reliability across strategies.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 0
+      },
+      "M1": {
+        "bullet_id": "M1",
+        "content": "Overlooking problem constraints may result in invalid solutions; explicitly validating inputs against requirements ensures alignment across strategies.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 0
+      },
+      "M2": {
+        "bullet_id": "M2",
+        "content": "Neglecting to decompose complex problems into manageable sub-problems can hinder progress; systematic breakdowns enhance clarity and strategy adaptability.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 0
+      },
+      "M3": {
+        "bullet_id": "M3",
+        "content": "Failing to consider alternative solution paths limits adaptability; exploring multiple approaches increases robustness across problem types.",
+        "helpful_count": 7,
+        "harmful_count": 0,
+        "created_at": 1
+      },
+      "M4": {
+        "bullet_id": "M4",
+        "content": "Neglecting to test edge cases may result in solutions failing under unexpected conditions; systematic boundary testing ensures robustness.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 1
+      },
+      "M5": {
+        "bullet_id": "M5",
+        "content": "Overlooking interdependencies between sub-problems can lead to fragmented solutions; ensuring holistic integration of components improves effectiveness.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 1
+      },
+      "M6": {
+        "bullet_id": "M6",
+        "content": "Failing to validate domain-specific constraints (e.g., symmetry, parity, approximations) can introduce errors; explicitly check problem-specific properties to ensure alignment with solution requirements.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 6
+      },
+      "M8": {
+        "bullet_id": "M8",
+        "content": "Failing to cross-check derived congruences against original problem requirements can introduce errors; explicitly validate intermediate results against problem specifications to ensure alignment.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 12
+      },
+      "M9": {
+        "bullet_id": "M9",
+        "content": "Failing to validate both algebraic and geometric constraints in hybrid problems can lead to inconsistencies; explicitly check for alignment between numerical and spatial requirements to ensure comprehensive solution accuracy.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 14
+      },
+      "M10": {
+        "bullet_id": "M10",
+        "content": "Failing to integrate symmetry and parity checks in problem-solving can lead to overlooked constraints; explicitly cross-check these properties across problem domains to ensure comprehensive validation.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 15
+      },
+      "M11": {
+        "bullet_id": "M11",
+        "content": "Failing to systematically validate geometric and algebraic constraints in hybrid problems can introduce inconsistencies; explicitly cross-check numerical and spatial requirements to ensure comprehensive solution accuracy.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 17
+      },
+      "M12": {
+        "bullet_id": "M12",
+        "content": "Failing to cross-check different validation methods (e.g., algebraic checks vs. combinatorial constraints) can lead to incomplete solutions; explicitly integrate multiple validation approaches for robustness.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 19
+      },
+      "M13": {
+        "bullet_id": "M13",
+        "content": "Failing to prioritize constraints with fewer possibilities can increase computational complexity; explicitly prioritize such constraints to enhance efficiency across problem domains.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 20
+      },
+      "M14": {
+        "bullet_id": "M14",
+        "content": "Failing to apply specific cross-validation techniques (e.g., parity checks, trigonometric Ceva's theorem) in relevant problem types can reduce accuracy; explicitly integrate these methods across strategies for consistency.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 22
+      },
+      "M15": {
+        "bullet_id": "M15",
+        "content": "Failing to apply parity checks and trigonometric Ceva's theorem in hybrid problems can lead to inconsistencies; explicitly integrate these methods across all problem domains for robustness.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 23
+      },
+      "M16": {
+        "bullet_id": "M16",
+        "content": "Failing to cross-validate frequency distributions can lead to ambiguous solutions; explicitly check uniqueness constraints in all problem types to ensure clarity.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 27
+      },
+      "M17": {
+        "bullet_id": "M17",
+        "content": "Failing to correctly calculate the gcd in fraction simplification can lead to errors; explicitly verify gcd calculations using the multiplier's gcd with the denominator to ensure accuracy.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 29
+      },
+      "M18": {
+        "bullet_id": "M18",
+        "content": "Failing to cross-validate multiple constraint types (e.g., parity, equations, subcases) in hybrid problems can lead to fragmented solutions; explicitly integrate diverse validation methods for holistic accuracy.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 30
+      },
+      "M19": {
+        "bullet_id": "M19",
+        "content": "Failing to cross-validate geometric and algebraic constraints in hybrid problems can lead to inconsistencies; explicitly check for alignment between numerical and spatial requirements to ensure comprehensive solution accuracy.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 33
+      },
+      "M20": {
+        "bullet_id": "M20",
+        "content": "Failing to cross-validate parity checks and trigonometric Ceva's theorem in hybrid problems can lead to inconsistencies; explicitly integrate these methods across all problem domains for robustness.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 34
+      },
+      "M21": {
+        "bullet_id": "M21",
+        "content": "Failing to integrate parity checks, trigonometric Ceva's theorem, and prime factorization cross-validation in hybrid problems can lead to inconsistencies; explicitly align these methods for comprehensive accuracy.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 36
+      },
+      "M22": {
+        "bullet_id": "M22",
+        "content": "Failing to cross-validate prime factorization components' contributions to perfect square conditions can lead to errors; explicitly verify each component's role in the exponent sum.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 37
+      },
+      "M23": {
+        "bullet_id": "M23",
+        "content": "Failing to cross-validate theorem applicability across problem domains can lead to unverified assumptions; explicitly assess theorem relevance to constraints for accuracy.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 38
+      },
+      "M24": {
+        "bullet_id": "M24",
+        "content": "Failing to cross-validate prime factorization cross-validation with parity checks in hybrid problems can lead to inconsistencies; explicitly integrate these methods for robustness.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 39
+      },
+      "M25": {
+        "bullet_id": "M25",
+        "content": "Failing to integrate prime factorization cross-validation with parity checks in hybrid problems can lead to inconsistencies; explicitly align these methods for robustness.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 40
+      },
+      "M26": {
+        "bullet_id": "M26",
+        "content": "Failing to cross-validate prime factorization components with geometric constraints in hybrid problems can lead to inconsistencies; explicitly align these validations for robustness.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 41
+      },
+      "M27": {
+        "bullet_id": "M27",
+        "content": "Failing to align theorem validation, prime factorization checks, and geometric constraints in hybrid problems leads to inconsistencies; explicitly integrate these validations for robustness.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 42
+      },
+      "M28": {
+        "bullet_id": "M28",
+        "content": "Failing to cross-validate theorem applicability across problem domains can lead to unverified assumptions; explicitly assess theorem relevance to constraints for accuracy.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 43
+      },
+      "M29": {
+        "bullet_id": "M29",
+        "content": "Failing to integrate theorem validation with prime factorization checks in hybrid problems can lead to inconsistencies; explicitly align these methods for robustness.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 50
+      },
+      "M30": {
+        "bullet_id": "M30",
+        "content": "Failing to cross-validate theorem applicability with prime factorization checks in hybrid problems can lead to inconsistencies; explicitly integrate these methods for robustness.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 51
+      }
+    }
+  }
+}

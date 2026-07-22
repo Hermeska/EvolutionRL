@@ -1,0 +1,91 @@
+{
+  "max_pool_size": 100,
+  "max_program_id": 3,
+  "evolution_pool": [
+    {
+      "principles": {},
+      "program_id": 0,
+      "timestep": -1,
+      "self_modified_from": -1,
+      "self_modify_id_list": [
+        1,
+        2
+      ],
+      "parents_list": null,
+      "children_list": [],
+      "past_score_history": [
+        0.4399999976158142,
+        0.41999998688697815,
+        0.3800000250339508,
+        0.35999998450279236,
+        0.4000000059604645,
+        0.41999998688697815,
+        0.5
+      ],
+      "rating": {
+        "mu": 22.446238181824462,
+        "sigma": 5.986501766780878
+      }
+    },
+    {
+      "principles": {
+        "G0": "Cross-check different representations or bases to ensure consistency in problem-solving approaches.",
+        "G1": "Decompose complex problems into manageable components for strategic analysis and solution synthesis.",
+        "G2": "Validate solutions against all constraints at critical decision points to ensure consistency across problem stages."
+      },
+      "program_id": 1,
+      "timestep": 0,
+      "self_modified_from": 0,
+      "self_modify_id_list": [
+        3
+      ],
+      "parents_list": null,
+      "children_list": [],
+      "past_score_history": [
+        0.5200000405311584
+      ],
+      "rating": {
+        "mu": 30.156959417179664,
+        "sigma": 6.775156560940946
+      }
+    },
+    {
+      "principles": {
+        "G0": "When approximating values in sums with floor functions, always verify the impact of fractional parts on the total sum to ensure the approximation remains valid.",
+        "G1": "Clarify assumptions about labeled vs. unlabeled positions in circular arrangements to avoid misinterpretation of total permutations."
+      },
+      "program_id": 2,
+      "timestep": 1,
+      "self_modified_from": 0,
+      "self_modify_id_list": [],
+      "parents_list": null,
+      "children_list": [],
+      "past_score_history": [
+        0.5
+      ],
+      "rating": {
+        "mu": 22.433572894128286,
+        "sigma": 5.998168240536865
+      }
+    },
+    {
+      "principles": {
+        "G0": "Decompose complex problems into manageable components for strategic analysis and solution synthesis.",
+        "G1": "When no specific probability is given for a match between two players, assume equal likelihood for both outcomes unless stated otherwise.",
+        "G2": "When solving for multiple variables, validate the product of all variables against initial constraints at critical decision points to ensure holistic integration.",
+        "G3": "Cross-check intermediate steps against original equations and different representations to ensure consistency and prevent errors in strategic analysis."
+      },
+      "program_id": 3,
+      "timestep": 2,
+      "self_modified_from": 1,
+      "self_modify_id_list": [],
+      "parents_list": null,
+      "children_list": [],
+      "past_score_history": [],
+      "rating": {
+        "mu": 30.156959417179664,
+        "sigma": 6.848557981448441
+      }
+    }
+  ]
+}

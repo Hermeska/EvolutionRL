@@ -1,0 +1,124 @@
+{
+  "operations": [
+    {
+      "operation": "modify",
+      "principle": "When applying symmetry and coordinate geometry principles, explicitly verify symmetry assumptions to ensure alignment with problem constraints.",
+      "modified_from": "G1"
+    },
+    {
+      "operation": "modify",
+      "principle": "In prime factorization scenarios, cross-validate each component's contribution to the total sum of exponents to ensure accuracy in calculations involving perfect squares or divisibility conditions.",
+      "modified_from": "G3"
+    },
+    {
+      "operation": "modify",
+      "principle": "G10",
+      "modified_from": "G10"
+    },
+    {
+      "operation": "add",
+      "principle": "G14"
+    },
+    {
+      "operation": "modify",
+      "principle": "G6",
+      "modified_from": "G6",
+      "description": "When validating problem-solving approaches with smaller cases, ensure all algebraic steps are cross-validated to catch errors early, particularly in simplification and reduction of fractions."
+    },
+    {
+      "operation": "add",
+      "principle": "G14",
+      "description": "In problems involving large fractions and modular arithmetic, explicitly reduce intermediate results to their lowest terms at each step to prevent propagation of errors and ensure accuracy in final calculations."
+    },
+    {
+      "operation": "modify",
+      "principle": "When solving optimization problems with multiple constraints, ensure that all derived equations are simultaneously satisfied by explicitly validating each subcase against the full problem's constraints.",
+      "modified_from": "G10"
+    },
+    {
+      "operation": "add",
+      "principle": "In problems involving maximizing or minimizing expressions under constraints, always consider symmetry assumptions and validate their necessity by cross-checking against alternative configurations."
+    },
+    {
+      "operation": "modify",
+      "principle": "Use modular arithmetic reduction at every computational step to prevent overflow and ensure intermediate results align with the target modulus.",
+      "modified_from": "G9"
+    },
+    {
+      "operation": "add",
+      "principle": "Cross-validate modular arithmetic calculations by re-evaluating key components (e.g., polynomial expansions, combinatorial identities) against small test cases to catch errors early."
+    },
+    {
+      "operation": "modify",
+      "principle": "In problems with random pairings and multiple cases, ensure that all cases are considered and weighted equally, especially when the problem structure inherently allows for symmetric scenarios.",
+      "modified_from": "G1"
+    },
+    {
+      "operation": "add",
+      "principle": "When assumptions are required for unprovided probabilities (e.g., symmetry between players), explicitly state the assumption and verify its validity against the problem's constraints to avoid ambiguity."
+    }
+  ],
+  "response": "Okay, let's tackle this problem step by step. First, I need to understand the user's request. They have provided existing principles and suggested updates, and they want me to create a final Revision Plan by modifying or merging these principles. The key points are to ensure each final principle meets specific requirements: clear, generalizable, starts with a general background, focuses on strategic thinking, emphasizes decision points, and avoids repetition.\n\nLooking at the existing principles and the suggested updates, I need to check each suggested update to see if it's a modification or a merge. The user also mentioned that the shared memory contains universal insights, so the updates should focus on strategy-specific improvements that don't duplicate those.\n\nStarting with the first suggested update: modifying G1. The original G1 says to leverage symmetry and coordinate geometry, verifying symmetry assumptions. The suggested modification adds \"explicitly verify symmetry assumptions\" again. Wait, but the original already mentions that. Maybe the modification is redundant? Or perhaps the user wants to emphasize it more. Wait, the original G1 is \"Leverage symmetry and coordinate geometry, and explicitly verify symmetry assumptions to ensure alignment with problem constraints.\" The suggested modification is almost the same. Maybe it's a minor tweak, but since the user says to focus on strategy-specific improvements, perhaps this is a duplicate of M10 or M11 from shared memory. But the user said not to duplicate those. Hmm, maybe the existing principles already have similar ideas, so this might need to be merged or modified.\n\nNext, the second suggested update modifies G3. The original G3 is about prime factorization and cross-validating components. The suggested modification is similar but adds \"particularly in simplification and reduction of fractions.\" So this might be a good modification to add more specific context. But need to check if that's necessary.\n\nThird, modifying G10. The original G10 says to cross-validate subcases against full constraints. The suggested modification says to ensure all derived equations are satisfied by validating each subcase. Maybe this is a refinement. But need to check if it's redundant with other principles.\n\nFourth, modifying G6. The original G6 is about validating approaches with smaller cases. The suggested modification adds cross-validating algebraic steps, especially in simplification and fractions. That seems like a good addition to specify where errors might occur.\n\nFifth, modifying G10 again. The user mentions \"when solving optimization problems with multiple constraints, ensure all derived equations are simultaneously satisfied...\" This seems similar to the previous G10 modification, so maybe it's a merge or another modification.\n\nSixth, modifying G9. The original G9 is about reducing intermediate results modulo the target value. The suggested modification adds \"prevent overflow and ensure intermediate results align with the target modulus.\" That's a bit redundant, but maybe the user wants to clarify or combine it with other principles.\n\nSeventh, modifying G1 again with a new suggestion about random pairings and symmetric scenarios. The original G1 was about symmetry and coordinate geometry. The new suggestion is about random pairings and considering all cases symmetrically. This might be a new principle that's not covered in shared memory, so it's a good addition.\n\nNow, considering the shared memory, which includes principles like M10, M11, M4, etc. The existing principles (like G1, G3, G6, etc.) are strategy-specific. The suggested updates need to complement these without duplicating shared memory. For example, M10 talks about symmetry and parity checks, which is similar to G1. So the suggested modifications need to be more specific or different.\n\nLooking at the suggested updates, some are modifications that add more specific contexts. For example, the modification to G6 adds cross-validating algebraic steps in simplification. That's a good addition. Similarly, the modification to G9 about preventing overflow and aligning with modulus is a refinement.\n\nNow, considering the operations: modify or merge. If there are similar principles, merging them would reduce duplication. For example, if C3 and G6 both talk about cross-validating with small test cases, maybe they can be merged. But the user's suggested updates include C3 and G6 being modified. Wait, looking at the existing principles, C3 is a cross-validation of modular arithmetic with small test cases, same as G8 and G9. But the user's suggested updates include modifying G6 and C3. So maybe merging C3 and G6 into a more general principle about cross-validating with test cases.\n\nAlso, the user's suggested updates include modifying C1, which is a duplicate of G14. Wait, in the existing principles, C0 and C1 are G14, which might be a placeholder. So maybe C1 is redundant and needs to be merged or removed. But the user's suggested updates include modifying C1, which might be a typo or an error. However, the user's task is to process the suggested updates and create the final plan.\n\nPutting this all together, the final Revision Plan should involve modifying specific principles to add more context or specificity, and merging similar ones to reduce duplication. For example, merging C3 and G6 into a principle about cross-validating with small test cases. Also, checking if the suggested modifications are necessary and not overlapping with shared memory.\n\nEach principle in the final plan must be clear, generalizable, start with a general background, focus on strategic thinking, and avoid repetition. So, for example, the modified G6 would be about cross-validating algebraic steps in smaller cases. The modified G9 would emphasize reducing intermediate results modulo the target value to prevent overflow. The new principle about random pairings and symmetric scenarios would fit into strategic thinking for handling symmetric cases.\n\nI need to make sure that each modified or merged principle meets the requirements. Let me go through each suggested update again and decide whether to modify, merge, or remove. Then structure the JSON accordingly.\n</think>\n\n```json\n[\n    {\n        \"operation\": \"modify\",\n        \"principle\": \"When applying symmetry and coordinate geometry principles, explicitly verify symmetry assumptions to ensure alignment with problem constraints, especially in cases involving random pairings where symmetric scenarios must be weighted equally.\",\n        \"modified_from\": \"G1\"\n    },\n    {\n        \"operation\": \"modify\",\n        \"principle\": \"In prime factorization scenarios, cross-validate each component's contribution to the total sum of exponents to ensure accuracy in calculations involving perfect squares or divisibility conditions, particularly in simplification and reduction of fractions.\",\n        \"modified_from\": \"G3\"\n    },\n    {\n        \"operation\": \"modify\",\n        \"principle\": \"When solving optimization problems with multiple constraints, ensure all derived equations are simultaneously satisfied by explicitly validating each subcase against the full problem's constraints, including symmetry assumptions and edge cases.\",\n        \"modified_from\": \"G10\"\n    },\n    {\n        \"operation\": \"modify\",\n        \"principle\": \"When validating problem-solving approaches with smaller cases, ensure all algebraic steps are cross-validated to catch errors early, particularly in simplification and reduction of fractions, and verify alignment with modular arithmetic reductions.\",\n        \"modified_from\": \"G6\"\n    },\n    {\n        \"operation\": \"modify\",\n        \"principle\": \"Use modular arithmetic reduction at every computational step to prevent overflow and ensure intermediate results align with the target modulus, while cross-checking against small test cases to validate consistency.\",\n        \"modified_from\": \"G9\"\n    },\n    {\n        \"operation\": \"merge\",\n        \"principle\": \"Cross-validate modular arithmetic and algebraic steps with small test cases to detect errors early, ensuring alignment with problem constraints and preventing overflow through systematic reductions.\",\n        \"merged_from\": [\"C3\", \"G6\", \"G8\"]\n    },\n    {\n        \"operation\": \"merge\",\n        \"principle\": \"In problems with symmetric structures or probabilistic assumptions, explicitly validate symmetry assumptions and ensure all cases are weighted equally, aligning with problem constraints and avoiding biased solutions.\",\n        \"merged_from\": [\"G1\", \"C4\"]\n    }\n]\n```",
+  "revision_plan": [
+    {
+      "operation": "modify",
+      "principle": "When applying symmetry and coordinate geometry principles, explicitly verify symmetry assumptions to ensure alignment with problem constraints, especially in cases involving random pairings where symmetric scenarios must be weighted equally.",
+      "modified_from": "G1"
+    },
+    {
+      "operation": "modify",
+      "principle": "In prime factorization scenarios, cross-validate each component's contribution to the total sum of exponents to ensure accuracy in calculations involving perfect squares or divisibility conditions, particularly in simplification and reduction of fractions.",
+      "modified_from": "G3"
+    },
+    {
+      "operation": "modify",
+      "principle": "When solving optimization problems with multiple constraints, ensure all derived equations are simultaneously satisfied by explicitly validating each subcase against the full problem's constraints, including symmetry assumptions and edge cases.",
+      "modified_from": "G10"
+    },
+    {
+      "operation": "modify",
+      "principle": "When validating problem-solving approaches with smaller cases, ensure all algebraic steps are cross-validated to catch errors early, particularly in simplification and reduction of fractions, and verify alignment with modular arithmetic reductions.",
+      "modified_from": "G6"
+    },
+    {
+      "operation": "modify",
+      "principle": "Use modular arithmetic reduction at every computational step to prevent overflow and ensure intermediate results align with the target modulus, while cross-checking against small test cases to validate consistency.",
+      "modified_from": "G9"
+    },
+    {
+      "operation": "merge",
+      "principle": "Cross-validate modular arithmetic and algebraic steps with small test cases to detect errors early, ensuring alignment with problem constraints and preventing overflow through systematic reductions.",
+      "merged_from": [
+        "C3",
+        "G6",
+        "G8"
+      ]
+    },
+    {
+      "operation": "merge",
+      "principle": "In problems with symmetric structures or probabilistic assumptions, explicitly validate symmetry assumptions and ensure all cases are weighted equally, aligning with problem constraints and avoiding biased solutions.",
+      "merged_from": [
+        "G1",
+        "C4"
+      ]
+    }
+  ],
+  "new_principles": {
+    "G0": "When validating median constraints, ensure calculations exclude list elements by verifying parity and sum consistency to maintain accuracy.",
+    "G2": "In problems involving isosceles right triangles and internal points with equal angle conditions, consider applying trigonometric Ceva's theorem directly to relate the angles and side lengths.",
+    "G3": "In prime factorization scenarios, cross-validate each component's contribution to the total sum of exponents to ensure accuracy in calculations involving perfect squares or divisibility conditions, particularly in simplification and reduction of fractions.",
+    "G4": "For overlapping set problems, cross-validate inclusion-exclusion equations against total population constraints to ensure logical consistency and prevent under/overcounting.",
+    "G5": "In problems where a symmetric equation and a sum constraint are given, consider cases where one variable is fixed (e.g., at a value derived from the equation) and count permutations of the remaining variables under the sum constraint.",
+    "G7": "In problems involving generating functions and coefficient extraction, always verify that higher-degree terms in the numerator do not interfere with the target coefficient by explicitly confirming that their exponents exceed the target value.",
+    "G9": "Use modular arithmetic reduction at every computational step to prevent overflow and ensure intermediate results align with the target modulus, while cross-checking against small test cases to validate consistency.",
+    "G10": "When solving optimization problems with multiple constraints, ensure all derived equations are simultaneously satisfied by explicitly validating each subcase against the full problem's constraints, including symmetry assumptions and edge cases.",
+    "G11": "In problems with multiple constraints, explicitly verify that each subcase's solutions adhere to all digit bounds and sum conditions to prevent invalid or incomplete counts.",
+    "G12": "Use parametric equations for angle bisectors, solving for intersection points by equating parameters and validating solutions against geometric constraints.",
+    "G13": "In problems involving cyclic quadrilaterals, explicitly verify the positions of all points relative to the circle's center and the given geometric constraints to avoid ambiguous solutions.",
+    "C0": "G14",
+    "C1": "G14",
+    "C2": "In problems involving maximizing or minimizing expressions under constraints, always consider symmetry assumptions and validate their necessity by cross-checking against alternative configurations.",
+    "C5": "Cross-validate modular arithmetic and algebraic steps with small test cases to detect errors early, ensuring alignment with problem constraints and preventing overflow through systematic reductions.",
+    "C6": "In problems with symmetric structures or probabilistic assumptions, explicitly validate symmetry assumptions and ensure all cases are weighted equally, aligning with problem constraints and avoiding biased solutions."
+  }
+}

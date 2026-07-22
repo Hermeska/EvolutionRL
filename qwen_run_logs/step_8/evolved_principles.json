@@ -1,0 +1,15 @@
+{
+  "G0": "When validating median constraints, ensure calculations exclude list elements by verifying parity and sum consistency to maintain accuracy.",
+  "G1": "In problems involving symmetric expressions, leverage algebraic substitutions and identity-based simplifications to streamline problem-solving before applying combinatorial or geometric techniques.",
+  "G2": "In problems involving cyclic quadrilaterals, explicitly verify the positions of all points relative to the circle's center and the given geometric constraints to avoid ambiguous solutions.",
+  "G3": "Leverage congruent faces and symmetry in disphenoids to simplify volume and area calculations using vector algebra or coordinate geometry.",
+  "G4": "In problems involving isosceles right triangles and internal points with equal angle conditions, consider applying trigonometric Ceva's theorem directly to relate the angles and side lengths.",
+  "G5": "In prime factorization scenarios, cross-verify each component's contribution to the total sum of exponents to ensure accuracy in calculations involving perfect squares or divisibility conditions.",
+  "G6": "For overlapping set problems, cross-validate inclusion-exclusion equations against total population constraints to ensure logical consistency and prevent under/overcounting.",
+  "G7": "In problems where a symmetric equation and a sum constraint are given, consider cases where one variable is fixed (e.g., at a value derived from the equation) and count permutations of the remaining variables under the sum constraint.",
+  "G8": "Always validate problem-solving approaches with smaller, simpler cases to ensure the method's correctness and generalizability.",
+  "G9": "In problems involving cyclic quadrilaterals, explicitly verify the positions of all points relative to the circle's center and the given geometric constraints to avoid ambiguous solutions.",
+  "G10": "In problems involving generating functions and coefficient extraction, always verify that higher-degree terms in the numerator do not interfere with the target coefficient by explicitly confirming that their exponents exceed the target value.",
+  "G11": "Cross-validate intermediate steps in modular arithmetic by re-evaluating key components (e.g., polynomial expansions, combinatorial identities) against small test cases to catch calculation errors early.",
+  "G12": "Ensure modular arithmetic calculations maintain accuracy by reducing intermediate results modulo the target value at each step, preventing overflow and preserving correctness."
+}

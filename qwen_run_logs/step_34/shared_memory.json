@@ -1,0 +1,139 @@
+{
+  "max_bullets": 50,
+  "_next_id": 20,
+  "bullets": {
+    "M0": {
+      "bullet_id": "M0",
+      "content": "Failing to verify intermediate steps can lead to cumulative errors; cross-checking solutions with alternative methods improves reliability across strategies.",
+      "helpful_count": 0,
+      "harmful_count": 0,
+      "created_at": 0
+    },
+    "M1": {
+      "bullet_id": "M1",
+      "content": "Overlooking problem constraints may result in invalid solutions; explicitly validating inputs against requirements ensures alignment across strategies.",
+      "helpful_count": 0,
+      "harmful_count": 0,
+      "created_at": 0
+    },
+    "M2": {
+      "bullet_id": "M2",
+      "content": "Neglecting to decompose complex problems into manageable sub-problems can hinder progress; systematic breakdowns enhance clarity and strategy adaptability.",
+      "helpful_count": 0,
+      "harmful_count": 0,
+      "created_at": 0
+    },
+    "M3": {
+      "bullet_id": "M3",
+      "content": "Failing to consider alternative solution paths limits adaptability; exploring multiple approaches increases robustness across problem types.",
+      "helpful_count": 3,
+      "harmful_count": 0,
+      "created_at": 1
+    },
+    "M4": {
+      "bullet_id": "M4",
+      "content": "Neglecting to test edge cases may result in solutions failing under unexpected conditions; systematic boundary testing ensures robustness.",
+      "helpful_count": 0,
+      "harmful_count": 0,
+      "created_at": 1
+    },
+    "M5": {
+      "bullet_id": "M5",
+      "content": "Overlooking interdependencies between sub-problems can lead to fragmented solutions; ensuring holistic integration of components improves effectiveness.",
+      "helpful_count": 0,
+      "harmful_count": 0,
+      "created_at": 1
+    },
+    "M6": {
+      "bullet_id": "M6",
+      "content": "Failing to validate domain-specific constraints (e.g., symmetry, parity, approximations) can introduce errors; explicitly check problem-specific properties to ensure alignment with solution requirements.",
+      "helpful_count": 0,
+      "harmful_count": 0,
+      "created_at": 6
+    },
+    "M8": {
+      "bullet_id": "M8",
+      "content": "Failing to cross-check derived congruences against original problem requirements can introduce errors; explicitly validate intermediate results against problem specifications to ensure alignment.",
+      "helpful_count": 0,
+      "harmful_count": 0,
+      "created_at": 12
+    },
+    "M9": {
+      "bullet_id": "M9",
+      "content": "Failing to validate both algebraic and geometric constraints in hybrid problems can lead to inconsistencies; explicitly check for alignment between numerical and spatial requirements to ensure comprehensive solution accuracy.",
+      "helpful_count": 0,
+      "harmful_count": 0,
+      "created_at": 14
+    },
+    "M10": {
+      "bullet_id": "M10",
+      "content": "Failing to integrate symmetry and parity checks in problem-solving can lead to overlooked constraints; explicitly cross-check these properties across problem domains to ensure comprehensive validation.",
+      "helpful_count": 0,
+      "harmful_count": 0,
+      "created_at": 15
+    },
+    "M11": {
+      "bullet_id": "M11",
+      "content": "Failing to systematically validate geometric and algebraic constraints in hybrid problems can introduce inconsistencies; explicitly cross-check numerical and spatial requirements to ensure comprehensive solution accuracy.",
+      "helpful_count": 0,
+      "harmful_count": 0,
+      "created_at": 17
+    },
+    "M12": {
+      "bullet_id": "M12",
+      "content": "Failing to cross-check different validation methods (e.g., algebraic checks vs. combinatorial constraints) can lead to incomplete solutions; explicitly integrate multiple validation approaches for robustness.",
+      "helpful_count": 0,
+      "harmful_count": 0,
+      "created_at": 19
+    },
+    "M13": {
+      "bullet_id": "M13",
+      "content": "Failing to prioritize constraints with fewer possibilities can increase computational complexity; explicitly prioritize such constraints to enhance efficiency across problem domains.",
+      "helpful_count": 0,
+      "harmful_count": 0,
+      "created_at": 20
+    },
+    "M14": {
+      "bullet_id": "M14",
+      "content": "Failing to apply specific cross-validation techniques (e.g., parity checks, trigonometric Ceva's theorem) in relevant problem types can reduce accuracy; explicitly integrate these methods across strategies for consistency.",
+      "helpful_count": 0,
+      "harmful_count": 0,
+      "created_at": 22
+    },
+    "M15": {
+      "bullet_id": "M15",
+      "content": "Failing to apply parity checks and trigonometric Ceva's theorem in hybrid problems can lead to inconsistencies; explicitly integrate these methods across all problem domains for robustness.",
+      "helpful_count": 0,
+      "harmful_count": 0,
+      "created_at": 23
+    },
+    "M16": {
+      "bullet_id": "M16",
+      "content": "Failing to cross-validate frequency distributions can lead to ambiguous solutions; explicitly check uniqueness constraints in all problem types to ensure clarity.",
+      "helpful_count": 0,
+      "harmful_count": 0,
+      "created_at": 27
+    },
+    "M17": {
+      "bullet_id": "M17",
+      "content": "Failing to correctly calculate the gcd in fraction simplification can lead to errors; explicitly verify gcd calculations using the multiplier's gcd with the denominator to ensure accuracy.",
+      "helpful_count": 0,
+      "harmful_count": 0,
+      "created_at": 29
+    },
+    "M18": {
+      "bullet_id": "M18",
+      "content": "Failing to cross-validate multiple constraint types (e.g., parity, equations, subcases) in hybrid problems can lead to fragmented solutions; explicitly integrate diverse validation methods for holistic accuracy.",
+      "helpful_count": 0,
+      "harmful_count": 0,
+      "created_at": 30
+    },
+    "M19": {
+      "bullet_id": "M19",
+      "content": "Failing to cross-validate geometric and algebraic constraints in hybrid problems can lead to inconsistencies; explicitly check for alignment between numerical and spatial requirements to ensure comprehensive solution accuracy.",
+      "helpful_count": 0,
+      "harmful_count": 0,
+      "created_at": 33
+    }
+  }
+}

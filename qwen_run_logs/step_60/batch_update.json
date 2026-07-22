@@ -1,0 +1,116 @@
+{
+  "operations": [],
+  "response": "Okay, let's tackle this. The user wants me to review the suggested updates and create a revision plan for the existing principles. The existing principles are a set of guidelines, and the task is to modify or merge them based on the shared memory and the existing principles. \n\nFirst, I need to understand the existing principles. Looking at them, some are duplicates or similar. For example, G12 is G18, and G15 is G21. Also, G20 and G28 are duplicates. That's a start. The shared memory has principles that are more general, like M0 to M31, which cover things like cross-checking methods, validating constraints, etc. The existing principles are more specific to certain problem types, like geometric probability, Fibonacci counts, etc.\n\nThe user mentioned that the suggested updates are empty, so I need to focus on the existing principles and see where they can be improved. The goal is to make the principles more general, avoid repetition, and ensure they meet the requirements: clear, generalizable, start with background, focus on strategic thinking, decision points, and no repetition.\n\nLooking at the existing principles, some are very specific. For example, G1 talks about cyclic quadrilaterals and their geometric constraints. But in the shared memory, there's M10 which mentions symmetry and parity checks. Maybe G1 could be merged with others that talk about geometric constraints. Similarly, G22 mentions cross-validating geometric constraints with symmetry, parity, and variable ranges. That's similar to M10 and M11. So merging those could help reduce duplication.\n\nAnother thing is that some principles are duplicates. Like G12 is G18, so that's a direct duplicate. Similarly, G20 is G28. So those should be merged or removed. Also, G15 is G21, so that's another duplicate. \n\nLooking at G21 and G22: G21 is about prime factorization and cross-validating exponents and GCDs. G22 is about cross-validating geometric constraints with symmetry, parity, etc. These are related but different. Maybe they can be merged if there's a common theme, but they might need to stay as separate principles if they cover distinct aspects.\n\nAlso, some principles could be modified to be more general. For example, G16 talks about prioritizing analytical solutions over numerical approximations. The shared memory has M6 about validating domain-specific constraints. Maybe G16 can be modified to align better with the shared memory's emphasis on cross-checking methods.\n\nAnother point is that some principles are too specific. For instance, G17 mentions ensuring the median is an integer not in the list. That's very specific to a particular problem type. The shared memory's M17 talks about verifying gcd calculations. So maybe G17 could be modified to be more general, like ensuring calculations are verified against constraints, which is a broader principle.\n\nAlso, G23 mentions cross-validating transformations with small test cases. The shared memory has M23 about cross-validating theorem applicability. These are similar but different. Perhaps merging them into a more general principle about cross-validating methods with test cases.\n\nI need to go through each existing principle and see if they can be modified or merged. Let's list them:\n\n- G0: Talks about validating theorems with alternative methods. Similar to M14, M15, etc. But existing principles are more specific. Maybe this can be merged with others.\n\n- G1: Cyclic quadrilaterals. Specific, maybe merge with others about geometric constraints.\n\n- G2: Maximizing/minimizing with symmetry. Similar to M13 about prioritizing constraints with fewer possibilities. But not exactly. Maybe keep as is.\n\n- G3: Expected values with test cases. Similar to M23's cross-validation. Maybe merge.\n\n- G4: Midpoint conditions with integration. Specific, maybe keep.\n\n- G5: Tangency in geometric probability. Specific.\n\n- G6: Products of distances with coordinate geometry. Specific.\n\n- G7: Logarithmic equations. Specific.\n\n- G8: Families of lines with tangency. Specific.\n\n- G9: Excluding elements with parity and sum. Similar to M6's domain-specific constraints. Maybe merge.\n\n- G10: Mode uniqueness. Specific.\n\n- G11: Equations with monochromatic pairs. Specific.\n\n- G12: G18 (duplicate). Remove or merge.\n\n- G13: Fibonacci edge cases. Specific.\n\n- G14: Trigonometric identities. Specific.\n\n- G15: G21 (duplicate). Remove or merge.\n\n- G16: Analytical over numerical. Similar to M6. Maybe merge.\n\n- G17: Median as integer. Specific.\n\n- G18: Optimization with constraints. Similar to M13, M14. Maybe merge.\n\n- G19: Monochromatic pairs. Specific.\n\n- G20: G28 (duplicate). Remove.\n\n- G21: Prime factorization cross-validation. Similar to M12, M21, etc. Maybe merge.\n\n- G22: Geometric constraints with symmetry, parity. Similar to M10, M11. Merge.\n\n- G23: Transformations with test cases. Similar to M23. Merge.\n\n- G24: Arithmetic sequences with counts. Specific.\n\n- G25: Unique mode. Specific.\n\n- G26: Symmetry in arithmetic sequences. Specific.\n\n- G27: Geometric transformations. Specific.\n\n- G28: Combinatorial overlapping cases. Similar to M18. Maybe merge.\n\n- G29: Equations from constraints. Similar to M1, M6. Merge.\n\nSo, the plan is to merge duplicates and modify specific principles to be more general. For example, G12 (G18) and G20 (G28) are duplicates. So merge them by removing one. Similarly, G15 (G21) is a duplicate. \n\nThen, principles like G9 (parity and sum) and M6 (domain-specific constraints) can be merged. G16 (analytical vs numerical) and M6 (validate domain-specific) can be merged. G22 (geometric constraints with symmetry, parity) can be merged with M10, M11, etc. But since the user said to focus on strategy-specific improvements that complement but don't duplicate the shared memory, maybe the existing principles should be kept as they are but merged with similar ones.\n\nWait, the user says: \"focus on strategy-specific improvements that complement but do NOT duplicate the shared memory bullets.\" So the shared memory has general principles, and the existing principles are more specific. So the task is to modify the existing principles to be more general, or merge similar ones to avoid duplication. \n\nFor example, G22 talks about cross-validating geometric constraints with symmetry, parity, variable ranges. This is similar to M10 (symmetry and parity checks), M11 (geometric and algebraic constraints), M18 (cross-validate multiple constraint types). So perhaps G22 can be merged with others that talk about cross-validating constraints. But the existing principles are specific to their own problem types. So maybe instead of merging, we can modify them to be more general. \n\nAlternatively, the existing principles might already cover specific cases that the shared memory doesn't. So the task is to make sure that the existing principles don't duplicate the shared memory's content. For example, if a principle in the existing set is similar to one in the shared memory, it should be modified or merged.\n\nLooking at G0: \"When applying specific theorems (e.g., trigonometric Ceva's theorem), validate necessity against constraints and cross-validate with alternative methods like parity checks or geometric constraints to ensure robustness.\" This is similar to M14, M15, M18, etc. So maybe G0 can be merged with those, but since the existing principles are specific, perhaps it's better to modify G0 to be more general. \n\nBut the user wants to avoid duplication. So if the shared memory has principles about cross-validating methods, the existing principles should not duplicate that. So perhaps G0 is redundant and can be merged or removed. However, the user said to focus on strategy-specific improvements that complement the shared memory. So maybe the existing principles are okay, but they need to be made more general.\n\nAlternatively, the existing principles might have some that are too specific and can be merged with others. For example, G12 (G18) and G20 (G28) are duplicates. So those can be merged by removing one. Similarly, G15 (G21) is a duplicate. \n\nSo the first step is to remove duplicates. Then, look for principles that can be merged into more general ones. For example, G9 (parity and sum) and G22 (geometric constraints with symmetry, parity) can be merged into a general principle about cross-validating with symmetry, parity, and variable ranges. But since the existing principles are strategy-specific, maybe that's not necessary. \n\nAlternatively, the existing principles should be kept as they are but modified to be more general. For example, G9 can be modified to focus on cross-validating parity and sum constraints in data-driven problems, which aligns with the shared memory's M6. \n\nIn any case, the main steps would be:\n\n1. Remove duplicates (G12=G18, G20=G28, G15=G21).\n2. Merge similar principles into more general ones where possible.\n3. Modify specific principles to be more general and align with the shared memory's requirements.\n\nSo the final revision plan would involve modifying some principles and merging others. For example:\n\n- Merge G12 and G18 into one (since they are duplicates).\n- Merge G20 and G28 into one.\n- Merge G15 and G21 into one.\n- Modify G9 to be more general about cross-validating parity and sum.\n- Modify G16 to be more general about analytical vs numerical.\n- Merge G22 with other principles about cross-validating constraints.\n- Etc.\n\nBut since the user's suggested updates are empty, the task is to generate the revision plan based on the existing principles and shared memory. \n\nSo, the final answer would be a list of operations (modify or merge) to update the existing principles. The JSON format should list each operation with the principle and what it's modified or merged from.\n</think>\n\n```json\n[\n    {\n        \"operation\": \"merge\",\n        \"principle\": \"In problems involving geometric constraints, cross-validate symmetry, parity, and variable ranges to prevent invalid spatial relationships and ensure alignment with problem-specific conditions.\",\n        \"merged_from\": [\"G22\", \"M10\", \"M11\"]\n    },\n    {\n        \"operation\": \"merge\",\n        \"principle\": \"When applying analytical methods, prioritize cross-validation against problem-specific constraints to ensure robustness and avoid algebraic inconsistencies.\",\n        \"merged_from\": [\"G16\", \"M14\"]\n    },\n    {\n        \"operation\": \"merge\",\n        \"principle\": \"In combinatorial counting, cross-validate total counts against possible outcomes to prevent overcounting or undercounting in overlapping cases.\",\n        \"merged_from\": [\"G28\", \"M18\"]\n    },\n    {\n        \"operation\": \"merge\",\n        \"principle\": \"For data-driven problems, validate parity and sum consistency to ensure alignment with constraints and prevent calculation errors.\",\n        \"merged_from\": [\"G9\", \"M6\"]\n    },\n    {\n        \"operation\": \"modify\",\n        \"principle\": \"In optimization problems, explicitly validate variable interactions with constraints to avoid algebraic inconsistencies and ensure robust solution alignment.\",\n        \"modified_from\": \"G18\"\n    },\n    {\n        \"operation\": \"merge\",\n        \"principle\": \"When solving for unique modes, prioritize configurations where the mode appears more frequently than any other number, ensuring consistency with problem constraints.\",\n        \"merged_from\": [\"G25\", \"M13\"]\n    },\n    {\n        \"operation\": \"merge\",\n        \"principle\": \"In geometric probability, validate tangency conditions between curves and target lines to confirm solution uniqueness in parametric cases.\",\n        \"merged_from\": [\"G5\", \"M9\"]\n    },\n    {\n        \"operation\": \"merge\",\n        \"principle\": \"For arithmetic sequences derived from modular constraints, cross-validate counts using formulae and manual enumeration to prevent undercounting or overcounting in edge cases.\",\n        \"merged_from\": [\"G24\", \"M23\"]\n    },\n    {\n        \"operation\": \"merge\",\n        \"principle\": \"In problems involving families of lines or curves, explicitly verify tangency conditions when identifying unique intersection points to ensure solution specificity.\",\n        \"merged_from\": [\"G8\", \"M12\"]\n    },\n    {\n        \"operation\": \"merge\",\n        \"principle\": \"When excluding elements from a set, validate parity and sum consistency to ensure alignment with problem constraints and prevent calculation errors.\",\n        \"merged_from\": [\"G9\", \"M6\"]\n    }\n]\n```",
+  "revision_plan": [
+    {
+      "operation": "merge",
+      "principle": "In problems involving geometric constraints, cross-validate symmetry, parity, and variable ranges to prevent invalid spatial relationships and ensure alignment with problem-specific conditions.",
+      "merged_from": [
+        "G22",
+        "M10",
+        "M11"
+      ]
+    },
+    {
+      "operation": "merge",
+      "principle": "When applying analytical methods, prioritize cross-validation against problem-specific constraints to ensure robustness and avoid algebraic inconsistencies.",
+      "merged_from": [
+        "G16",
+        "M14"
+      ]
+    },
+    {
+      "operation": "merge",
+      "principle": "In combinatorial counting, cross-validate total counts against possible outcomes to prevent overcounting or undercounting in overlapping cases.",
+      "merged_from": [
+        "G28",
+        "M18"
+      ]
+    },
+    {
+      "operation": "merge",
+      "principle": "For data-driven problems, validate parity and sum consistency to ensure alignment with constraints and prevent calculation errors.",
+      "merged_from": [
+        "G9",
+        "M6"
+      ]
+    },
+    {
+      "operation": "modify",
+      "principle": "In optimization problems, explicitly validate variable interactions with constraints to avoid algebraic inconsistencies and ensure robust solution alignment.",
+      "modified_from": "G18"
+    },
+    {
+      "operation": "merge",
+      "principle": "When solving for unique modes, prioritize configurations where the mode appears more frequently than any other number, ensuring consistency with problem constraints.",
+      "merged_from": [
+        "G25",
+        "M13"
+      ]
+    },
+    {
+      "operation": "merge",
+      "principle": "In geometric probability, validate tangency conditions between curves and target lines to confirm solution uniqueness in parametric cases.",
+      "merged_from": [
+        "G5",
+        "M9"
+      ]
+    },
+    {
+      "operation": "merge",
+      "principle": "For arithmetic sequences derived from modular constraints, cross-validate counts using formulae and manual enumeration to prevent undercounting or overcounting in edge cases.",
+      "merged_from": [
+        "G24",
+        "M23"
+      ]
+    },
+    {
+      "operation": "merge",
+      "principle": "In problems involving families of lines or curves, explicitly verify tangency conditions when identifying unique intersection points to ensure solution specificity.",
+      "merged_from": [
+        "G8",
+        "M12"
+      ]
+    },
+    {
+      "operation": "merge",
+      "principle": "When excluding elements from a set, validate parity and sum consistency to ensure alignment with problem constraints and prevent calculation errors.",
+      "merged_from": [
+        "G9",
+        "M6"
+      ]
+    }
+  ],
+  "new_principles": {
+    "G0": "When applying specific theorems (e.g., trigonometric Ceva's theorem), validate necessity against constraints and cross-validate with alternative methods like parity checks or geometric constraints to ensure robustness.",
+    "G1": "In problems involving cyclic quadrilaterals, ensure all geometric constraints are explicitly verified relative to the circle's center and given conditions to prevent invalid solutions.",
+    "G2": "In problems involving maximizing or minimizing expressions under constraints, always consider symmetry assumptions and validate their necessity by cross-checking against alternative configurations.",
+    "G3": "When calculating expected values for problems involving optimal strategies, cross-validate recursive steps with small test cases to ensure alignment with problem constraints and prevent miscalculations.",
+    "G4": "In problems involving midpoint conditions within composite regions, always cross-validate the derived probabilities with explicit integration over the entire region to ensure no overlapping conditions are missed.",
+    "G5": "In geometric probability, ensure tangency conditions between curves and target lines are validated to confirm solution uniqueness in parametric cases.",
+    "G6": "When solving for products of distances from a point on a circle to vertices of a square, use coordinate geometry and derive equations based on the circle's equation and distance formulas, rather than relying on unverified identities.",
+    "G7": "Verify signs in logarithmic equations to prevent contradictions by ensuring intermediate steps align with problem constraints.",
+    "G8": "In problems involving families of lines or curves, explicitly verify the tangency condition when identifying unique intersection points, as this ensures the solution is not overlapped by other members of the family.",
+    "G9": "When excluding elements from a set, validate parity and sum consistency to ensure alignment with problem constraints and prevent calculation errors.",
+    "G10": "When variables are fixed based on constraints, verify mode uniqueness by ensuring no other number shares the same frequency, preventing ambiguous solutions in data-driven problems.",
+    "G11": "Ensure equations derived from constraints are necessary and consistent with total counts, explicitly allowing monochromatic pairs as long as they do not form rectangles with other pairs.",
+    "G12": "G18",
+    "G13": "Validate Fibonacci-based counts for edge cases (e.g., segments of length 0) to ensure accuracy in combinatorial calculations.",
+    "G14": "When applying trigonometric identities in geometric problems, verify their necessity and consistency with spatial relationships to avoid algebraic errors.",
+    "G15": "G21",
+    "G16": "Prioritize analytical solutions over numerical approximations, cross-validating equations at each step against problem-specific constraints to ensure robustness and alignment with hybrid requirements.",
+    "G17": "ensure the median is an integer not in the list by choosing even-length configurations and verifying the average of central elements",
+    "G18": "In optimization problems, explicitly validate variable interactions with constraints to avoid algebraic inconsistencies and ensure robust solution alignment.",
+    "G19": "When considering monochromatic pairs in geometric constraints, prioritize configurations where no two such pairs form a rectangle, allowing single monochromatic pairs as valid solutions.",
+    "G20": "G28",
+    "G21": "In prime factorization scenarios, cross-validate exponent contributions and GCD calculations to ensure accuracy in divisibility and simplification tasks across problem domains.",
+    "G22": "Cross-validate geometric constraints against symmetry, parity, and variable ranges to prevent invalid spatial relationships and ensure alignment with problem-specific conditions.",
+    "G23": "Systematically cross-validate transformations (e.g., modular reductions, substitutions) with small test cases to ensure consistency in complex problem-solving strategies.",
+    "G24": "For arithmetic sequences derived from modular constraints, cross-validate counts using formulae and manual enumeration to prevent undercounting or overcounting in edge cases.",
+    "G25": "When solving for a unique mode, prioritize configurations where the mode appears more frequently than any other number, even if not the maximum possible frequency.",
+    "G26": "Validate symmetry assumptions in arithmetic sequences by explicitly verifying the relationship between terms and total constraints before solving for variables.",
+    "G27": "In problems involving geometric transformations (e.g., extending sides to form triangles), ensure the derived relationships between the original figure and the transformed figure are validated through cross-checking with known geometric identities or coordinate geometry.",
+    "G28": "In combinatorial counting for overlapping cases, always cross-validate the total counts against the total possible outcomes to ensure no overcounting or undercounting occurs.",
+    "G29": "Ensure equations derived from constraints are necessary, consistent with problem-specific requirements, and cross-validated against hybrid domain rules to prevent incomplete solutions."
+  }
+}

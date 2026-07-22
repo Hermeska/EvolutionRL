@@ -1,0 +1,18 @@
+{
+  "G0": "When applying theorems, explicitly validate their necessity against problem constraints, cross-check with alternative methods, and assess theorem relevance to constraints for consistency across all strategies.",
+  "G1": "In problems involving cyclic quadrilaterals, ensure all geometric constraints are explicitly verified relative to the circle's center and given conditions to prevent invalid solutions.",
+  "G2": "When calculating expected values for problems involving optimal strategies, cross-validate recursive steps with small test cases to ensure alignment with problem constraints and prevent miscalculations.",
+  "G3": "In problems involving midpoint conditions within composite regions, always cross-validate the derived probabilities with explicit integration over the entire region to ensure no overlapping conditions are missed.",
+  "G4": "In geometric probability, ensure tangency conditions between curves and target lines are validated to confirm solution uniqueness in parametric cases.",
+  "G5": "When solving for products of distances from a point on a circle to vertices of a square, use coordinate geometry and derive equations based on the circle's equation and distance formulas, rather than relying on unverified identities.",
+  "G6": "In logarithmic equations involving variable products, verify reciprocal relationships to ensure algebraic consistency and prevent miscalculations.",
+  "G7": "In problems involving families of lines or curves, explicitly verify the tangency condition when identifying unique intersection points, as this ensures the solution is not overlapped by other members of the family.",
+  "G8": "G18",
+  "G9": "G28",
+  "G10": "For arithmetic sequences derived from modular constraints, cross-validate counts using formulae and manual enumeration to prevent undercounting or overcounting in edge cases.",
+  "G11": "Cross-validate sum formulas for all sequence types by verifying the relationship between initial and final terms, ensuring alignment with sequence properties and constraints.",
+  "G12": "Prioritize constraints with fewer possibilities and cross-validate analytical solutions against numerical approximations and domain-specific checks to enhance efficiency and robustness across problem domains.",
+  "G13": "In hybrid problems, systematically align theorem applicability, prime factorization checks, and geometric constraints to ensure comprehensive accuracy across strategies.",
+  "G14": "Ensure uniqueness in data-driven problems by verifying mode frequency constraints and validating median conditions through systematic edge case analysis and configuration checks.",
+  "G15": "Systematically cross-validate transformations, test cases, and domain-specific constraints to maintain consistency in complex strategies, preventing undercounting/overcounting errors through holistic integration."
+}

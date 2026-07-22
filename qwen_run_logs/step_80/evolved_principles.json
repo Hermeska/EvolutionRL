@@ -1,0 +1,19 @@
+{
+  "G0": "When applying theorems, explicitly validate their necessity against problem constraints, cross-check with alternative methods, and assess theorem relevance to constraints for consistency across all strategies.",
+  "G1": "In problems involving cyclic quadrilaterals, ensure all geometric constraints are explicitly verified relative to the circle's center and given conditions to prevent invalid solutions.",
+  "G2": "Cross-validate recursive steps with minimal test cases to ensure constraint alignment across problem types.",
+  "G3": "In problems involving midpoint conditions within composite regions, always cross-validate the derived probabilities with explicit integration over the entire region to ensure no overlapping conditions are missed.",
+  "G4": "In geometric probability, ensure tangency conditions between curves and target lines are validated to confirm solution uniqueness in parametric cases.",
+  "G5": "When solving for products of distances from a point on a circle to vertices of a square, use coordinate geometry and derive equations based on the circle's equation and distance formulas, rather than relying on unverified identities.",
+  "G6": "In logarithmic equations involving variable products, verify reciprocal relationships to ensure algebraic consistency and prevent miscalculations.",
+  "G7": "In problems involving families of lines or curves, explicitly verify the tangency condition when identifying unique intersection points, as this ensures the solution is not overlapped by other members of the family.",
+  "G8": "Cross-validate frequency distributions to ensure uniqueness constraints in all problem types.",
+  "G9": "ensure the median is an integer not in the list by choosing even-length configurations and verifying the average of central elements",
+  "G10": "For arithmetic sequences derived from modular constraints, cross-validate counts using formulae and manual enumeration to prevent undercounting or overcounting in edge cases.",
+  "G11": "Cross-validate sum formulas for all sequence types by verifying the relationship between initial and final terms, ensuring alignment with sequence properties and constraints.",
+  "G12": "Systematically cross-validate transformations, test cases, and domain-specific constraints to ensure consistency in complex problem-solving strategies and prevent undercounting/overcounting errors.",
+  "G13": "Align theorem validation, prime factorization checks, and geometric constraints across problem domains for comprehensive accuracy.",
+  "G14": "In problems involving triangles formed by extending hexagon sides, cross-validate geometric proportionality with algebraic constraints to ensure alignment between spatial relationships and derived formulas, emphasizing strategic consistency across hybrid problems.",
+  "G15": "When a triangle is formed by extending the sides of a convex equilateral hexagon with parallel opposite sides, the triangle's side lengths are directly proportional to the distances between the hexagon's opposite sides. This relationship enables the use of proportional reasoning to determine the hexagon's side length.",
+  "G16": "Cross-validate theorem applicability across problem domains to ensure relevance to constraints and prevent unverified assumptions."
+}

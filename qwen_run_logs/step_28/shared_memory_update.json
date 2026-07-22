@@ -1,0 +1,123 @@
+{
+  "prompt": "Multiple independent problem-solving strategies were evaluated on the same batch of math problems.\nEach strategy uses its own per-strategy principles, but we want to identify insights that are useful ACROSS ALL strategies.\n\nStrategy performance summary:\nStrategy A (program_id=28, avg_reward=0.460, problems=10):\n  Top principles: ['When validating median constraints, ensure calculations exclude list elements by verifying parity and sum consistency to maintain accuracy.', \"In problems involving isosceles right triangles and internal points with equal angle conditions, consider applying trigonometric Ceva's theorem directly to relate the angles and side lengths.\", \"In prime factorization scenarios, cross-validate each component's contribution to the total sum of exponents to ensure accuracy in calculations involving perfect squares or divisibility conditions, particularly in simplification and reduction of fractions.\"]\n\nStrategy B (program_id=25, avg_reward=0.440, problems=10):\n  Top principles: ['When validating median constraints, ensure calculations exclude list elements by verifying parity and sum consistency to maintain accuracy.', 'When verifying the mode, ensure all other numbers in the list appear fewer times than the mode to guarantee uniqueness, aligning with constraints on frequency distribution and avoiding ambiguous solutions.', \"In prime factorization scenarios, cross-validate each component's contribution to the total sum of exponents to ensure accuracy in calculations involving perfect squares or divisibility conditions, particularly in simplification and reduction of fractions.\"]\n\nStrategy C (program_id=24, avg_reward=0.540, problems=10):\n  Top principles: ['When validating median constraints, ensure calculations exclude list elements by verifying parity and sum consistency to maintain accuracy.', \"In problems involving isosceles right triangles and internal points with equal angle conditions, consider applying trigonometric Ceva's theorem directly to relate the angles and side lengths.\", \"In prime factorization scenarios, cross-validate each component's contribution to the total sum of exponents to ensure accuracy in calculations involving perfect squares or divisibility conditions, particularly in simplification and reduction of fractions.\"]\n\nCurrent shared memory (global insights already captured):\n[M0] Failing to verify intermediate steps can lead to cumulative errors; cross-checking solutions with alternative methods improves reliability across strategies.\n[M1] Overlooking problem constraints may result in invalid solutions; explicitly validating inputs against requirements ensures alignment across strategies.\n[M10] Failing to integrate symmetry and parity checks in problem-solving can lead to overlooked constraints; explicitly cross-check these properties across problem domains to ensure comprehensive validation.\n[M11] Failing to systematically validate geometric and algebraic constraints in hybrid problems can introduce inconsistencies; explicitly cross-check numerical and spatial requirements to ensure comprehensive solution accuracy.\n[M12] Failing to cross-check different validation methods (e.g., algebraic checks vs. combinatorial constraints) can lead to incomplete solutions; explicitly integrate multiple validation approaches for robustness.\n[M13] Failing to prioritize constraints with fewer possibilities can increase computational complexity; explicitly prioritize such constraints to enhance efficiency across problem domains.\n[M14] Failing to apply specific cross-validation techniques (e.g., parity checks, trigonometric Ceva's theorem) in relevant problem types can reduce accuracy; explicitly integrate these methods across strategies for consistency.\n[M15] Failing to apply parity checks and trigonometric Ceva's theorem in hybrid problems can lead to inconsistencies; explicitly integrate these methods across all problem domains for robustness.\n[M16] Failing to cross-validate frequency distributions can lead to ambiguous solutions; explicitly check uniqueness constraints in all problem types to ensure clarity.\n[M2] Neglecting to decompose complex problems into manageable sub-problems can hinder progress; systematic breakdowns enhance clarity and strategy adaptability.\n[M3] Failing to consider alternative solution paths limits adaptability; exploring multiple approaches increases robustness across problem types.\n[M4] Neglecting to test edge cases may result in solutions failing under unexpected conditions; systematic boundary testing ensures robustness.\n[M5] Overlooking interdependencies between sub-problems can lead to fragmented solutions; ensuring holistic integration of components improves effectiveness.\n[M6] Failing to validate domain-specific constraints (e.g., symmetry, parity, approximations) can introduce errors; explicitly check problem-specific properties to ensure alignment with solution requirements.\n[M8] Failing to cross-check derived congruences against original problem requirements can introduce errors; explicitly validate intermediate results against problem specifications to ensure alignment.\n[M9] Failing to validate both algebraic and geometric constraints in hybrid problems can lead to inconsistencies; explicitly check for alignment between numerical and spatial requirements to ensure comprehensive solution accuracy.\n\nYour task: Update the shared memory by proposing operations based on cross-strategy evidence.\n\nNew bullets to ADD must:\n  1. Apply to MULTIPLE strategies (not specific to one approach)\n  2. NOT duplicate anything already in shared memory\n  3. Be at most 32 words, concrete, and focused on strategic thinking\n  4. Describe failure modes, verification strategies, or universally helpful heuristics\n\nReturn a JSON list of operations (at most 3 total, or an empty list if no clear cross-strategy insight):\n```json\n[\n    {\"operation\": \"add\", \"content\": \"globally useful insight across all strategies\"},\n    {\"operation\": \"mark_helpful\", \"bullet_id\": \"M3\"},\n    {\"operation\": \"mark_harmful\", \"bullet_id\": \"M7\"}\n]\n```\nReturn only operations that are strongly supported by cross-strategy evidence.",
+  "response": "Okay, let's tackle this problem. The user wants me to update the shared memory by adding new insights that apply across all strategies, without duplicating existing ones. Let me first look at the strategies and their principles.\n\nLooking at Strategy A, B, and C, they all have some common principles. For example, all three mention verifying parity and sum consistency when dealing with median constraints. Also, they all mention cross-validating prime factorization components. So there's a common theme here about cross-checking in different problem types.\n\nNow, the existing shared memory has several bullets. I need to make sure the new ones aren't duplicates. Let me check the existing M0 to M16. For instance, M14 and M15 talk about applying specific cross-validation techniques like parity checks and trigonometric Ceva's theorem. But maybe there's something else that's common across all strategies.\n\nWait, the top principles of all three strategies include cross-validating in prime factorization scenarios. Also, they all mention checking parity and sum consistency for median constraints. So maybe there's a need to emphasize cross-validation in multiple areas, not just specific ones. But M14 and M15 already cover some of that. \n\nWait, what about the failure to integrate symmetry and parity checks? That's M10. But the user wants new bullets. Let me think about other common issues. All strategies mention cross-checking solutions with alternative methods (M0), validating inputs (M1), and decomposing problems (M2). But the new insights should be about cross-strategy evidence. \n\nLooking at the principles, all three strategies have principles related to cross-validating in different contexts. Maybe the new insight is about cross-checking different validation methods, but M12 already mentions that. Hmm.\n\nWait, the problem says to apply to multiple strategies, not specific to one. So maybe something like ensuring that when dealing with constraints, all strategies should prioritize checking constraints with fewer possibilities to enhance efficiency. But M13 already talks about that. \n\nAlternatively, maybe the failure to cross-validate frequency distributions leading to ambiguous solutions is covered in M16. So perhaps the new insight is about ensuring that when handling problems with multiple constraints, all strategies should integrate both algebraic and geometric checks, but M9 already mentions that. \n\nWait, maybe there's a common failure mode that's not covered yet. For example, all strategies mention cross-validating in prime factorization and median constraints. But perhaps a new insight could be about the importance of checking both numerical and spatial requirements in hybrid problems, which is covered in M11 and M9. \n\nAlternatively, maybe the need to check for uniqueness in frequency distributions, which is M16. But since that's already present, I need to find something else. \n\nWait, looking at the top principles again, all three strategies have the same three principles. So perhaps the new insight is about the necessity of cross-validating in prime factorization scenarios, but that's already covered in M14 and M15. \n\nAlternatively, maybe the failure to apply parity checks in hybrid problems, which is M15. But again, that's already there. \n\nHmm, maybe there's a new insight that combines cross-checking different validation methods and ensuring that all constraints are checked. But M12 and M14 already touch on that. \n\nWait, the user says the new bullets must not duplicate existing ones. Let me check again. The existing bullets include M14 and M15 about applying specific cross-validation techniques. The new insight could be about ensuring that all strategies use cross-validation in both numerical and geometric aspects, but that's covered in M11 and M9. \n\nAlternatively, maybe the failure to integrate symmetry and parity checks is already in M10. So perhaps there's no new insight. But the user says to return up to three operations. Wait, maybe there's a failure mode related to not considering alternative solution paths, which is M3. But the user says to mark helpful or harmful. \n\nWait, the user wants new bullets to add. If I can't find any, maybe return an empty list. But the example shows adding something. Let me think again. \n\nWait, all three strategies mention cross-validating in prime factorization, median constraints, and isosceles triangles. Maybe a new insight is about the importance of cross-checking in multiple problem types, but that's already covered. \n\nAlternatively, maybe the failure to prioritize constraints with fewer possibilities is M13. But the user wants to add new ones. \n\nHmm, perhaps there's no new insight. But the user might expect at least one. Let me check the principles again. All three strategies have the same three principles. So maybe the new insight is about the necessity of cross-validating in multiple areas, but that's already covered. \n\nWait, maybe the failure to cross-validate different validation methods, like algebraic vs combinatorial, is M12. So perhaps the new insight is about ensuring that all strategies use both algebraic and combinatorial checks. But that's already in M12. \n\nAlternatively, maybe the failure to integrate symmetry and parity checks is M10. \n\nI think maybe there's no new insight here. So the answer would be an empty list. But the user might expect adding something. Let me check the existing shared memory again. \n\nWait, looking at the current shared memory, there's M14 and M15 about applying specific techniques. The new insight could be about applying these techniques in hybrid problems, but that's covered. \n\nAlternatively, maybe the failure to apply parity checks and trigonometric Ceva's theorem in hybrid problems is M15. \n\nI think there's no new insight to add here. So the correct answer is an empty list. But the example shows adding something. Maybe I'm missing something. Let me check again. \n\nWait, the strategies all mention cross-validating in prime factorization scenarios. But M14 and M15 already mention cross-validating in prime factorization. So perhaps the new insight is about ensuring that cross-validation is done in all problem types, not just specific ones. But that's already covered in M14 and M15. \n\nAlternatively, maybe the failure to check for uniqueness in frequency distributions is M16. \n\nI think there's no new insight to add here. Therefore, the answer is an empty list.\n</think>\n\n```json\n[]\n```",
+  "operations": [],
+  "shared_memory_after": {
+    "max_bullets": 50,
+    "_next_id": 17,
+    "bullets": {
+      "M0": {
+        "bullet_id": "M0",
+        "content": "Failing to verify intermediate steps can lead to cumulative errors; cross-checking solutions with alternative methods improves reliability across strategies.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 0
+      },
+      "M1": {
+        "bullet_id": "M1",
+        "content": "Overlooking problem constraints may result in invalid solutions; explicitly validating inputs against requirements ensures alignment across strategies.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 0
+      },
+      "M2": {
+        "bullet_id": "M2",
+        "content": "Neglecting to decompose complex problems into manageable sub-problems can hinder progress; systematic breakdowns enhance clarity and strategy adaptability.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 0
+      },
+      "M3": {
+        "bullet_id": "M3",
+        "content": "Failing to consider alternative solution paths limits adaptability; exploring multiple approaches increases robustness across problem types.",
+        "helpful_count": 3,
+        "harmful_count": 0,
+        "created_at": 1
+      },
+      "M4": {
+        "bullet_id": "M4",
+        "content": "Neglecting to test edge cases may result in solutions failing under unexpected conditions; systematic boundary testing ensures robustness.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 1
+      },
+      "M5": {
+        "bullet_id": "M5",
+        "content": "Overlooking interdependencies between sub-problems can lead to fragmented solutions; ensuring holistic integration of components improves effectiveness.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 1
+      },
+      "M6": {
+        "bullet_id": "M6",
+        "content": "Failing to validate domain-specific constraints (e.g., symmetry, parity, approximations) can introduce errors; explicitly check problem-specific properties to ensure alignment with solution requirements.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 6
+      },
+      "M8": {
+        "bullet_id": "M8",
+        "content": "Failing to cross-check derived congruences against original problem requirements can introduce errors; explicitly validate intermediate results against problem specifications to ensure alignment.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 12
+      },
+      "M9": {
+        "bullet_id": "M9",
+        "content": "Failing to validate both algebraic and geometric constraints in hybrid problems can lead to inconsistencies; explicitly check for alignment between numerical and spatial requirements to ensure comprehensive solution accuracy.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 14
+      },
+      "M10": {
+        "bullet_id": "M10",
+        "content": "Failing to integrate symmetry and parity checks in problem-solving can lead to overlooked constraints; explicitly cross-check these properties across problem domains to ensure comprehensive validation.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 15
+      },
+      "M11": {
+        "bullet_id": "M11",
+        "content": "Failing to systematically validate geometric and algebraic constraints in hybrid problems can introduce inconsistencies; explicitly cross-check numerical and spatial requirements to ensure comprehensive solution accuracy.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 17
+      },
+      "M12": {
+        "bullet_id": "M12",
+        "content": "Failing to cross-check different validation methods (e.g., algebraic checks vs. combinatorial constraints) can lead to incomplete solutions; explicitly integrate multiple validation approaches for robustness.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 19
+      },
+      "M13": {
+        "bullet_id": "M13",
+        "content": "Failing to prioritize constraints with fewer possibilities can increase computational complexity; explicitly prioritize such constraints to enhance efficiency across problem domains.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 20
+      },
+      "M14": {
+        "bullet_id": "M14",
+        "content": "Failing to apply specific cross-validation techniques (e.g., parity checks, trigonometric Ceva's theorem) in relevant problem types can reduce accuracy; explicitly integrate these methods across strategies for consistency.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 22
+      },
+      "M15": {
+        "bullet_id": "M15",
+        "content": "Failing to apply parity checks and trigonometric Ceva's theorem in hybrid problems can lead to inconsistencies; explicitly integrate these methods across all problem domains for robustness.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 23
+      },
+      "M16": {
+        "bullet_id": "M16",
+        "content": "Failing to cross-validate frequency distributions can lead to ambiguous solutions; explicitly check uniqueness constraints in all problem types to ensure clarity.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 27
+      }
+    }
+  }
+}

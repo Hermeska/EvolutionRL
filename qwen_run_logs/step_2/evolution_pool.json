@@ -1,0 +1,65 @@
+{
+  "max_pool_size": 100,
+  "max_program_id": 2,
+  "evolution_pool": [
+    {
+      "principles": {},
+      "program_id": 0,
+      "timestep": -1,
+      "self_modified_from": -1,
+      "self_modify_id_list": [
+        1,
+        2
+      ],
+      "parents_list": null,
+      "children_list": [],
+      "past_score_history": [
+        0.4399999976158142,
+        0.41999998688697815,
+        0.3800000250339508,
+        0.35999998450279236,
+        0.4000000059604645,
+        0.41999998688697815
+      ],
+      "rating": {
+        "mu": 25,
+        "sigma": 8.333333333333334
+      }
+    },
+    {
+      "principles": {
+        "G0": "Cross-check different representations or bases to ensure consistency in problem-solving approaches.",
+        "G1": "Decompose complex problems into manageable components for strategic analysis and solution synthesis.",
+        "G2": "Validate solutions against all constraints at critical decision points to ensure consistency across problem stages."
+      },
+      "program_id": 1,
+      "timestep": 0,
+      "self_modified_from": 0,
+      "self_modify_id_list": [],
+      "parents_list": null,
+      "children_list": [],
+      "past_score_history": [],
+      "rating": {
+        "mu": 25,
+        "sigma": 8.393118874676116
+      }
+    },
+    {
+      "principles": {
+        "G0": "When approximating values in sums with floor functions, always verify the impact of fractional parts on the total sum to ensure the approximation remains valid.",
+        "G1": "Clarify assumptions about labeled vs. unlabeled positions in circular arrangements to avoid misinterpretation of total permutations."
+      },
+      "program_id": 2,
+      "timestep": 1,
+      "self_modified_from": 0,
+      "self_modify_id_list": [],
+      "parents_list": null,
+      "children_list": [],
+      "past_score_history": [],
+      "rating": {
+        "mu": 25,
+        "sigma": 8.393118874676116
+      }
+    }
+  ]
+}

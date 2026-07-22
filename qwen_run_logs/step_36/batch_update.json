@@ -1,0 +1,122 @@
+{
+  "operations": [],
+  "response": "Okay, let's tackle this problem. The user wants me to review the existing principles and the suggested updates (which are empty here) to create a revision plan. The goal is to make the principles clearer, more generalizable, and avoid repetition while focusing on strategic thinking patterns.\n\nFirst, I need to look at the existing principles. They seem to cover various problem-solving aspects like validation, cross-checking, modular arithmetic, symmetry, etc. But some might be redundant or could be merged. For example, G0 and G5 both mention verifying parity and sum consistency when excluding elements, which might be similar. Also, several principles talk about cross-validating different methods or constraints, which could be grouped under a more general rule.\n\nLooking at the shared memory, there are principles about cross-checking, validating constraints, and avoiding errors through systematic checks. The existing principles need to complement these without duplicating. So, I should check for overlaps. For instance, G1 and G14 both mention cross-validating with test cases, which might be merged.\n\nAnother thing is that some principles are too specific. For example, G1 talks about isosceles right triangles and trigonometric Ceva's theorem. That's very specific. Maybe generalizing that to a broader strategic pattern would be better. Also, G23 and G20 both mention validating residue distributions in modular arithmetic, which could be merged.\n\nI need to ensure each principle starts with a general background, is clear, and focuses on strategic thinking. Let me go through each existing principle and see where improvements can be made. \n\nG0 and G5 both mention parity and sum consistency. Maybe they can be merged into one principle about verifying parity and sum consistency in exclusion scenarios. \n\nG1 is specific to isosceles right triangles and Ceva's theorem. That's too narrow. Maybe a more general principle about using specific theorems in relevant contexts. \n\nG2 talks about prime factorization and cross-validating exponents. That's specific but could be part of a broader principle about cross-validating component contributions. \n\nG3 mentions modular arithmetic for higher-degree terms. That's a good point but maybe can be merged with G4, which also talks about modular arithmetic. \n\nG5 is similar to G0, so merging them makes sense. \n\nG6 and G16 both mention symmetry assumptions and validating against geometric constraints. They can be merged into a single principle about symmetry and cross-validation. \n\nG7 and G16 both involve cyclic quadrilaterals and circle centers. Merging them would be better. \n\nG8 and G20 both mention symmetry and validating against alternative configurations. Merging them could help. \n\nG9 talks about equations and consistency. Maybe it's similar to other principles about ensuring equations are necessary and consistent. \n\nG10 and G19 both involve fixing variables and counting permutations under constraints. Merging them would reduce duplication. \n\nG11 and G13 both mention cross-validating with test cases. Merging these could create a general principle about test cases. \n\nG12 and G19 both involve cross-validating probabilities with integration. Merging them. \n\nG14 and G23 both mention validating counts and subcases. Merging. \n\nG15 and G13 both involve cross-validating integration steps. Merging. \n\nG17 and G24 both mention tangency conditions. Merging. \n\nG18 and G23 are about modular arithmetic and substitutions. Merging. \n\nG21 is specific to coordinate geometry and distances. Maybe generalizing. \n\nG22 and G25 both involve verifying GCDs. Merging. \n\nSo, the plan would involve merging similar principles into more general ones and modifying specific ones to be broader. For example, merging G0 and G5 into a principle about parity and sum consistency in exclusion scenarios. Also, modifying G1 to be more general about using theorems in relevant contexts. \n\nI need to ensure that each final principle meets the requirements: clear, generalizable, starts with a general background, strategic thinking, decision points, no repetition. Then, create the JSON operations for the revision plan based on these merges and modifications.\n</think>\n\n```json\n[\n    {\n        \"operation\": \"merge\",\n        \"principle\": \"When excluding elements from a set, validate parity and sum consistency to ensure alignment with problem constraints and prevent calculation errors.\",\n        \"merged_from\": [\"G0\", \"G5\"]\n    },\n    {\n        \"operation\": \"merge\",\n        \"principle\": \"In geometric constraint validation, explicitly verify symmetry and parity assumptions against derived configurations to avoid invalid spatial relationships.\",\n        \"merged_from\": [\"G6\", \"G16\"]\n    },\n    {\n        \"operation\": \"merge\",\n        \"principle\": \"For cyclic structures, cross-validate point positions relative to central properties and constraints to prevent ambiguous or invalid configurations.\",\n        \"merged_from\": [\"G7\", \"G16\"]\n    },\n    {\n        \"operation\": \"merge\",\n        \"principle\": \"When solving with symmetry, prioritize cases where variables are fixed based on constraints and systematically count permutations under remaining conditions.\",\n        \"merged_from\": [\"G10\", \"G19\"]\n    },\n    {\n        \"operation\": \"merge\",\n        \"principle\": \"Cross-validate algebraic and geometric constraints through test cases to ensure consistency across numerical and spatial requirements.\",\n        \"merged_from\": [\"G13\", \"G15\"]\n    },\n    {\n        \"operation\": \"merge\",\n        \"principle\": \"In modular arithmetic, reduce variables at each step and verify transformations with small test cases to prevent overflow and ensure accuracy.\",\n        \"merged_from\": [\"G3\", \"G4\"]\n    },\n    {\n        \"operation\": \"merge\",\n        \"principle\": \"Validate residue distributions across modular ranges to ensure all valid combinations are accounted for in congruence-based solutions.\",\n        \"merged_from\": [\"G23\", \"G20\"]\n    },\n    {\n        \"operation\": \"merge\",\n        \"principle\": \"When solving Diophantine equations, apply modular reductions and substitutions systematically while cross-checking with test cases for consistency.\",\n        \"merged_from\": [\"G18\", \"G23\"]\n    },\n    {\n        \"operation\": \"merge\",\n        \"principle\": \"Ensure equations derived from constraints are necessary and consistent with total counts, avoiding redundant or conflicting relationships.\",\n        \"merged_from\": [\"G9\", \"G14\"]\n    },\n    {\n        \"operation\": \"merge\",\n        \"principle\": \"In probabilistic problems, cross-validate integration steps with explicit test cases to ensure alignment with region boundaries and subregion constraints.\",\n        \"merged_from\": [\"G12\", \"G15\"]\n    },\n    {\n        \"operation\": \"modify\",\n        \"principle\": \"When applying specific theorems (e.g., trigonometric Ceva's theorem), explicitly validate their necessity against problem constraints to avoid over-reliance on unverified assumptions.\",\n        \"modified_from\": \"G1\"\n    },\n    {\n        \"operation\": \"modify\",\n        \"principle\": \"In geometric probability, ensure tangency conditions between curves and target lines are validated to confirm solution uniqueness in parametric cases.\",\n        \"modified_from\": \"G17\"\n    },\n    {\n        \"operation\": \"modify\",\n        \"principle\": \"For fraction simplification, verify GCD calculations using denominator-specific reductions to ensure fully reduced forms without miscalculations.\",\n        \"modified_from\": \"G25\"\n    }\n]\n```",
+  "revision_plan": [
+    {
+      "operation": "merge",
+      "principle": "When excluding elements from a set, validate parity and sum consistency to ensure alignment with problem constraints and prevent calculation errors.",
+      "merged_from": [
+        "G0",
+        "G5"
+      ]
+    },
+    {
+      "operation": "merge",
+      "principle": "In geometric constraint validation, explicitly verify symmetry and parity assumptions against derived configurations to avoid invalid spatial relationships.",
+      "merged_from": [
+        "G6",
+        "G16"
+      ]
+    },
+    {
+      "operation": "merge",
+      "principle": "For cyclic structures, cross-validate point positions relative to central properties and constraints to prevent ambiguous or invalid configurations.",
+      "merged_from": [
+        "G7",
+        "G16"
+      ]
+    },
+    {
+      "operation": "merge",
+      "principle": "When solving with symmetry, prioritize cases where variables are fixed based on constraints and systematically count permutations under remaining conditions.",
+      "merged_from": [
+        "G10",
+        "G19"
+      ]
+    },
+    {
+      "operation": "merge",
+      "principle": "Cross-validate algebraic and geometric constraints through test cases to ensure consistency across numerical and spatial requirements.",
+      "merged_from": [
+        "G13",
+        "G15"
+      ]
+    },
+    {
+      "operation": "merge",
+      "principle": "In modular arithmetic, reduce variables at each step and verify transformations with small test cases to prevent overflow and ensure accuracy.",
+      "merged_from": [
+        "G3",
+        "G4"
+      ]
+    },
+    {
+      "operation": "merge",
+      "principle": "Validate residue distributions across modular ranges to ensure all valid combinations are accounted for in congruence-based solutions.",
+      "merged_from": [
+        "G23",
+        "G20"
+      ]
+    },
+    {
+      "operation": "merge",
+      "principle": "When solving Diophantine equations, apply modular reductions and substitutions systematically while cross-checking with test cases for consistency.",
+      "merged_from": [
+        "G18",
+        "G23"
+      ]
+    },
+    {
+      "operation": "merge",
+      "principle": "Ensure equations derived from constraints are necessary and consistent with total counts, avoiding redundant or conflicting relationships.",
+      "merged_from": [
+        "G9",
+        "G14"
+      ]
+    },
+    {
+      "operation": "merge",
+      "principle": "In probabilistic problems, cross-validate integration steps with explicit test cases to ensure alignment with region boundaries and subregion constraints.",
+      "merged_from": [
+        "G12",
+        "G15"
+      ]
+    },
+    {
+      "operation": "modify",
+      "principle": "When applying specific theorems (e.g., trigonometric Ceva's theorem), explicitly validate their necessity against problem constraints to avoid over-reliance on unverified assumptions.",
+      "modified_from": "G1"
+    },
+    {
+      "operation": "modify",
+      "principle": "In geometric probability, ensure tangency conditions between curves and target lines are validated to confirm solution uniqueness in parametric cases.",
+      "modified_from": "G17"
+    },
+    {
+      "operation": "modify",
+      "principle": "For fraction simplification, verify GCD calculations using denominator-specific reductions to ensure fully reduced forms without miscalculations.",
+      "modified_from": "G25"
+    }
+  ],
+  "new_principles": {
+    "G1": "When applying specific theorems (e.g., trigonometric Ceva's theorem), explicitly validate their necessity against problem constraints to avoid over-reliance on unverified assumptions.",
+    "G2": "In prime factorization scenarios, cross-validate each component's contribution to the total sum of exponents to ensure accuracy in calculations involving perfect squares or divisibility conditions, particularly in simplification and reduction of fractions.",
+    "G7": "In problems involving cyclic quadrilaterals, ensure all geometric constraints are explicitly verified relative to the circle's center and given conditions to prevent invalid solutions.",
+    "G8": "In problems involving maximizing or minimizing expressions under constraints, always consider symmetry assumptions and validate their necessity by cross-checking against alternative configurations.",
+    "G11": "When calculating expected values for problems involving optimal strategies, cross-validate recursive steps with small test cases to ensure alignment with problem constraints and prevent miscalculations.",
+    "G12": "In problems involving midpoint conditions within composite regions, always cross-validate the derived probabilities with explicit integration over the entire region to ensure no overlapping conditions are missed.",
+    "G17": "In geometric probability, ensure tangency conditions between curves and target lines are validated to confirm solution uniqueness in parametric cases.",
+    "G18": "G19: In solving Diophantine equations with multiple variables, systematically apply modular arithmetic reductions and substitutions to simplify the problem, cross-validating each transformation with small test cases.",
+    "G21": "When solving for products of distances from a point on a circle to vertices of a square, use coordinate geometry and derive equations based on the circle's equation and distance formulas, rather than relying on unverified identities.",
+    "G22": "Verify signs in logarithmic equations to prevent contradictions by ensuring intermediate steps align with problem constraints.",
+    "G24": "In problems involving families of lines or curves, explicitly verify the tangency condition when identifying unique intersection points, as this ensures the solution is not overlapped by other members of the family.",
+    "G25": "For fraction simplification, verify GCD calculations using denominator-specific reductions to ensure fully reduced forms without miscalculations.",
+    "C0": "When excluding elements from a set, validate parity and sum consistency to ensure alignment with problem constraints and prevent calculation errors.",
+    "C1": "In geometric constraint validation, explicitly verify symmetry and parity assumptions against derived configurations to avoid invalid spatial relationships.",
+    "C2": "When solving with symmetry, prioritize cases where variables are fixed based on constraints and systematically count permutations under remaining conditions.",
+    "C3": "Cross-validate algebraic and geometric constraints through test cases to ensure consistency across numerical and spatial requirements.",
+    "C4": "In modular arithmetic, reduce variables at each step and verify transformations with small test cases to prevent overflow and ensure accuracy.",
+    "C5": "Validate residue distributions across modular ranges to ensure all valid combinations are accounted for in congruence-based solutions.",
+    "C6": "Ensure equations derived from constraints are necessary and consistent with total counts, avoiding redundant or conflicting relationships."
+  }
+}

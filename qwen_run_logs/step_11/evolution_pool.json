@@ -1,0 +1,337 @@
+{
+  "max_pool_size": 100,
+  "max_program_id": 11,
+  "evolution_pool": [
+    {
+      "principles": {},
+      "program_id": 0,
+      "timestep": -1,
+      "self_modified_from": -1,
+      "self_modify_id_list": [
+        1,
+        2
+      ],
+      "parents_list": null,
+      "children_list": [],
+      "past_score_history": [
+        0.4399999976158142,
+        0.41999998688697815,
+        0.3800000250339508,
+        0.35999998450279236,
+        0.4000000059604645,
+        0.41999998688697815,
+        0.5,
+        0.4599999785423279
+      ],
+      "rating": {
+        "mu": 20.078546762113024,
+        "sigma": 5.152437749101448
+      }
+    },
+    {
+      "principles": {
+        "G0": "Cross-check different representations or bases to ensure consistency in problem-solving approaches.",
+        "G1": "Decompose complex problems into manageable components for strategic analysis and solution synthesis.",
+        "G2": "Validate solutions against all constraints at critical decision points to ensure consistency across problem stages."
+      },
+      "program_id": 1,
+      "timestep": 0,
+      "self_modified_from": 0,
+      "self_modify_id_list": [
+        3,
+        6
+      ],
+      "parents_list": null,
+      "children_list": [],
+      "past_score_history": [
+        0.5200000405311584,
+        0.4000000059604645,
+        0.2199999988079071
+      ],
+      "rating": {
+        "mu": 30.691742465313887,
+        "sigma": 4.320145404131469
+      }
+    },
+    {
+      "principles": {
+        "G0": "When approximating values in sums with floor functions, always verify the impact of fractional parts on the total sum to ensure the approximation remains valid.",
+        "G1": "Clarify assumptions about labeled vs. unlabeled positions in circular arrangements to avoid misinterpretation of total permutations."
+      },
+      "program_id": 2,
+      "timestep": 1,
+      "self_modified_from": 0,
+      "self_modify_id_list": [
+        4
+      ],
+      "parents_list": null,
+      "children_list": [],
+      "past_score_history": [
+        0.5,
+        0.4599999785423279,
+        0.2800000011920929
+      ],
+      "rating": {
+        "mu": 25.559993415951123,
+        "sigma": 4.133643750037774
+      }
+    },
+    {
+      "principles": {
+        "G0": "Decompose complex problems into manageable components for strategic analysis and solution synthesis.",
+        "G1": "When no specific probability is given for a match between two players, assume equal likelihood for both outcomes unless stated otherwise.",
+        "G2": "When solving for multiple variables, validate the product of all variables against initial constraints at critical decision points to ensure holistic integration.",
+        "G3": "Cross-check intermediate steps against original equations and different representations to ensure consistency and prevent errors in strategic analysis."
+      },
+      "program_id": 3,
+      "timestep": 2,
+      "self_modified_from": 1,
+      "self_modify_id_list": [],
+      "parents_list": null,
+      "children_list": [],
+      "past_score_history": [
+        0.3199999928474426,
+        0.48000001907348633,
+        0.20000000298023224
+      ],
+      "rating": {
+        "mu": 25.910938855511244,
+        "sigma": 3.5651117187108343
+      }
+    },
+    {
+      "principles": {
+        "G0": "When validating median constraints, ensure calculations exclude list elements by verifying parity and sum consistency to maintain accuracy.",
+        "G1": "When solving geometric problems with symmetric structures, verify key properties (e.g., insphere) before applying formulas to ensure validity.",
+        "G2": "In problems involving cyclic quadrilaterals, explicitly verify the positions of all points relative to the circle's center and the given geometric constraints to avoid ambiguous solutions.",
+        "G3": "Leverage congruent faces and symmetry in disphenoids to simplify volume and area calculations using vector algebra or coordinate geometry.",
+        "G4": "Prioritize testing smaller even n values first to simplify constraint validation and avoid overcomplication in larger configurations.",
+        "G5": "In problems requiring exact fractional answers, always verify the coprimality of numerator and denominator after simplification to ensure the final result is in lowest terms."
+      },
+      "program_id": 4,
+      "timestep": 3,
+      "self_modified_from": 2,
+      "self_modify_id_list": [
+        5
+      ],
+      "parents_list": null,
+      "children_list": [],
+      "past_score_history": [
+        0.48000001907348633,
+        0.30000001192092896
+      ],
+      "rating": {
+        "mu": 29.191502251927567,
+        "sigma": 3.4153073926194506
+      }
+    },
+    {
+      "principles": {
+        "G0": "When validating median constraints, ensure calculations exclude list elements by verifying parity and sum consistency to maintain accuracy.",
+        "G1": "When solving geometric problems with multiple angle constraints, prioritize trigonometric identities and symmetry to simplify equations before complex algebraic manipulations, ensuring strategic simplification.",
+        "G2": "In problems involving cyclic quadrilaterals, explicitly verify the positions of all points relative to the circle's center and the given geometric constraints to avoid ambiguous solutions.",
+        "G3": "Leverage congruent faces and symmetry in disphenoids to simplify volume and area calculations using vector algebra or coordinate geometry.",
+        "G4": "When computing large numbers modulo 1000, break down the computation into smaller steps by reducing intermediate results modulo 1000 at each stage. This minimizes the risk of arithmetic errors when dealing with large exponents or products.",
+        "G5": "In problems involving isosceles right triangles and internal points with equal angle conditions, consider applying trigonometric Ceva's theorem directly to relate the angles and side lengths.",
+        "G6": "In prime factorization scenarios, cross-verify each component's contribution to the total sum of exponents to ensure accuracy in calculations involving perfect squares or divisibility conditions.",
+        "G7": "For overlapping set problems, cross-validate inclusion-exclusion equations against total population constraints to ensure logical consistency and prevent under/overcounting."
+      },
+      "program_id": 5,
+      "timestep": 4,
+      "self_modified_from": 4,
+      "self_modify_id_list": [
+        7,
+        8,
+        9
+      ],
+      "parents_list": null,
+      "children_list": [],
+      "past_score_history": [
+        0.20000000298023224,
+        0.4599999785423279,
+        0.5400000214576721,
+        0.36000001430511475
+      ],
+      "rating": {
+        "mu": 32.3203353214837,
+        "sigma": 2.7150064078648852
+      }
+    },
+    {
+      "principles": {
+        "G0": "Cross-check problem representations to ensure consistency, enhancing adaptability in complex scenarios.",
+        "G1": "Decompose complex problems into manageable components for strategic analysis and solution synthesis.",
+        "G2": "Validate solutions against all constraints at critical decision points to ensure consistency across problem stages.",
+        "G3": "M5. Systematically explore all valid roots of congruences to avoid missing smaller solutions."
+      },
+      "program_id": 6,
+      "timestep": 5,
+      "self_modified_from": 1,
+      "self_modify_id_list": [],
+      "parents_list": null,
+      "children_list": [],
+      "past_score_history": [
+        0.3999999761581421,
+        0.5199999809265137,
+        0.30000001192092896
+      ],
+      "rating": {
+        "mu": 27.471556131703494,
+        "sigma": 2.872893958113102
+      }
+    },
+    {
+      "principles": {
+        "G0": "When validating median constraints, ensure calculations exclude list elements by verifying parity and sum consistency to maintain accuracy.",
+        "G1": "When solving geometric problems with trigonometric constraints, ensure all angle relationships are explicitly validated using both trigonometric identities and coordinate geometry to prevent algebraic oversights.",
+        "G2": "In problems involving cyclic quadrilaterals, explicitly verify the positions of all points relative to the circle's center and the given geometric constraints to avoid ambiguous solutions.",
+        "G3": "Leverage congruent faces and symmetry in disphenoids to simplify volume and area calculations using vector algebra or coordinate geometry.",
+        "G4": "When computing large numbers modulo 1000, break down the computation into smaller steps by reducing intermediate results modulo 1000 at each stage. This minimizes the risk of arithmetic errors when dealing with large exponents or products.",
+        "G5": "In problems involving isosceles right triangles and internal points with equal angle conditions, consider applying trigonometric Ceva's theorem directly to relate the angles and side lengths.",
+        "G6": "In prime factorization scenarios, cross-verify each component's contribution to the total sum of exponents to ensure accuracy in calculations involving perfect squares or divisibility conditions.",
+        "G7": "For overlapping set problems, cross-validate inclusion-exclusion equations against total population constraints to ensure logical consistency and prevent under/overcounting.",
+        "G8": "In problems involving symmetric states, validate the assumption of symmetry by cross-checking with alternative state transitions to prevent errors in expectation calculations.",
+        "G9": "In polynomial equations derived from geometric constraints, always cross-validate all potential roots against the original problem's geometric conditions to ensure they correspond to valid configurations.",
+        "G10": "For problems with geometric constraints, systematically validate intermediate steps by cross-checking against the total population or range limits to prevent invalid configurations."
+      },
+      "program_id": 7,
+      "timestep": 6,
+      "self_modified_from": 5,
+      "self_modify_id_list": [],
+      "parents_list": null,
+      "children_list": [],
+      "past_score_history": [
+        0.5200000405311584,
+        0.36000001430511475,
+        0.3199999928474426
+      ],
+      "rating": {
+        "mu": 29.32658841255293,
+        "sigma": 2.382201737553484
+      }
+    },
+    {
+      "principles": {
+        "G0": "When validating median constraints, ensure calculations exclude list elements by verifying parity and sum consistency to maintain accuracy.",
+        "G1": "In combinatorial problems with parity constraints, validate parity conditions for all pairs to ensure alignment with problem requirements and prevent invalid configurations.",
+        "G2": "In problems involving cyclic quadrilaterals, explicitly verify the positions of all points relative to the circle's center and the given geometric constraints to avoid ambiguous solutions.",
+        "G3": "Leverage congruent faces and symmetry in disphenoids to simplify volume and area calculations using vector algebra or coordinate geometry.",
+        "G4": "When computing large numbers modulo 1000, break down the computation into smaller steps by reducing intermediate results modulo 1000 at each stage. This minimizes the risk of arithmetic errors when dealing with large exponents or products.",
+        "G5": "In problems involving isosceles right triangles and internal points with equal angle conditions, consider applying trigonometric Ceva's theorem directly to relate the angles and side lengths.",
+        "G6": "In prime factorization scenarios, cross-verify each component's contribution to the total sum of exponents to ensure accuracy in calculations involving perfect squares or divisibility conditions.",
+        "G7": "For overlapping set problems, cross-validate inclusion-exclusion equations against total population constraints to ensure logical consistency and prevent under/overcounting.",
+        "G8": "In problems involving large exponents and modular constraints, systematically decompose the problem into residue classes and validate counts through cross-checking to ensure accuracy.",
+        "G9": "For products over roots of unity, recognize that the product of a polynomial evaluated at all roots of a cyclotomic polynomial can often be simplified by exploiting the polynomial's symmetry and known identities, such as the resultant of the polynomials involved.",
+        "G10": "In problems requiring the calculation of probabilities with multiple constraints, cross-validate intermediate steps using smaller test cases to ensure consistency and correctness."
+      },
+      "program_id": 8,
+      "timestep": 7,
+      "self_modified_from": 5,
+      "self_modify_id_list": [
+        10
+      ],
+      "parents_list": null,
+      "children_list": [],
+      "past_score_history": [
+        0.2199999988079071,
+        0.3799999952316284
+      ],
+      "rating": {
+        "mu": 30.336864723517937,
+        "sigma": 2.612242342591892
+      }
+    },
+    {
+      "principles": {
+        "G0": "When validating median constraints, ensure calculations exclude list elements by verifying parity and sum consistency to maintain accuracy.",
+        "G1": "In problems involving symmetric expressions, leverage algebraic substitutions and identity-based simplifications to streamline problem-solving before applying combinatorial or geometric techniques.",
+        "G2": "In problems involving cyclic quadrilaterals, explicitly verify the positions of all points relative to the circle's center and the given geometric constraints to avoid ambiguous solutions.",
+        "G3": "Leverage congruent faces and symmetry in disphenoids to simplify volume and area calculations using vector algebra or coordinate geometry.",
+        "G4": "In problems involving isosceles right triangles and internal points with equal angle conditions, consider applying trigonometric Ceva's theorem directly to relate the angles and side lengths.",
+        "G5": "In prime factorization scenarios, cross-verify each component's contribution to the total sum of exponents to ensure accuracy in calculations involving perfect squares or divisibility conditions.",
+        "G6": "For overlapping set problems, cross-validate inclusion-exclusion equations against total population constraints to ensure logical consistency and prevent under/overcounting.",
+        "G7": "In problems where a symmetric equation and a sum constraint are given, consider cases where one variable is fixed (e.g., at a value derived from the equation) and count permutations of the remaining variables under the sum constraint.",
+        "G8": "Always validate problem-solving approaches with smaller, simpler cases to ensure the method's correctness and generalizability.",
+        "G9": "In problems involving cyclic quadrilaterals, explicitly verify the positions of all points relative to the circle's center and the given geometric constraints to avoid ambiguous solutions.",
+        "G10": "In problems involving generating functions and coefficient extraction, always verify that higher-degree terms in the numerator do not interfere with the target coefficient by explicitly confirming that their exponents exceed the target value.",
+        "G11": "Cross-validate intermediate steps in modular arithmetic by re-evaluating key components (e.g., polynomial expansions, combinatorial identities) against small test cases to catch calculation errors early.",
+        "G12": "Ensure modular arithmetic calculations maintain accuracy by reducing intermediate results modulo the target value at each step, preventing overflow and preserving correctness."
+      },
+      "program_id": 9,
+      "timestep": 8,
+      "self_modified_from": 5,
+      "self_modify_id_list": [],
+      "parents_list": null,
+      "children_list": [],
+      "past_score_history": [
+        0.35999998450279236
+      ],
+      "rating": {
+        "mu": 31.04020989742556,
+        "sigma": 2.5882064626084422
+      }
+    },
+    {
+      "principles": {
+        "G0": "When validating median constraints, ensure calculations exclude list elements by verifying parity and sum consistency to maintain accuracy.",
+        "G1": "In combinatorial problems with parity constraints, validate parity conditions for all pairs to ensure alignment with problem requirements and prevent invalid configurations.",
+        "G2": "In problems involving cyclic quadrilaterals, explicitly verify the positions of all points relative to the circle's center and the given geometric constraints to avoid ambiguous solutions.",
+        "G3": "Leverage congruent faces and symmetry in disphenoids to simplify volume and area calculations using vector algebra or coordinate geometry.",
+        "G4": "When computing large numbers modulo any value, break down the computation into smaller steps by reducing intermediate results modulo that value at each stage to minimize arithmetic errors.",
+        "G5": "In problems involving isosceles right triangles and internal points with equal angle conditions, consider applying trigonometric Ceva's theorem directly to relate the angles and side lengths.",
+        "G6": "In prime factorization scenarios, cross-verify each component's contribution to the total sum of exponents to ensure accuracy in calculations involving perfect squares or divisibility conditions.",
+        "G7": "For overlapping set problems, cross-validate inclusion-exclusion equations against total population constraints to ensure logical consistency and prevent under/overcounting.",
+        "G8": "In problems involving large exponents and modular constraints, systematically decompose the problem into residue classes and validate counts through cross-checking to ensure accuracy.",
+        "G9": "For products over roots of unity, recognize that the product of a polynomial evaluated at all roots of a cyclotomic polynomial can often be simplified by exploiting the polynomial's symmetry and known identities, such as the resultant of the polynomials involved.",
+        "G10": "In problems requiring the calculation of probabilities with multiple constraints, cross-validate intermediate steps using smaller test cases to ensure consistency and correctness.",
+        "G11": "In problems involving binomial coefficients and large factorials, explicitly verify the co-primality of the numerator and denominator before simplifying to ensure the fraction is in its lowest terms."
+      },
+      "program_id": 10,
+      "timestep": 9,
+      "self_modified_from": 8,
+      "self_modify_id_list": [
+        11
+      ],
+      "parents_list": null,
+      "children_list": [],
+      "past_score_history": [
+        0.3199999928474426
+      ],
+      "rating": {
+        "mu": 30.554205928444436,
+        "sigma": 2.521574265683885
+      }
+    },
+    {
+      "principles": {
+        "G0": "When validating median constraints, ensure calculations exclude list elements by verifying parity and sum consistency to maintain accuracy.",
+        "G1": "In combinatorial problems with parity constraints, validate parity conditions for all pairs and cross-check derived congruences against the original problem's requirements to ensure alignment and prevent invalid configurations.",
+        "G2": "In problems involving cyclic quadrilaterals, explicitly verify the positions of all points relative to the circle's center and the given geometric constraints to avoid ambiguous solutions.",
+        "G3": "Leverage congruent faces and symmetry in disphenoids to simplify volume and area calculations using vector algebra or coordinate geometry.",
+        "G4": "When applying logarithmic identities, ensure transformed equations maintain the original constraints and relationships between variables. Cross-check derived results against the problem's requirements to prevent invalid configurations.",
+        "G5": "In problems involving isosceles right triangles and internal points with equal angle conditions, consider applying trigonometric Ceva's theorem directly to relate the angles and side lengths.",
+        "G6": "In prime factorization scenarios, cross-verify each component's contribution to the total sum of exponents to ensure accuracy in calculations involving perfect squares or divisibility conditions.",
+        "G7": "For overlapping set problems, cross-validate inclusion-exclusion equations against total population constraints to ensure logical consistency and prevent under/overcounting.",
+        "G8": "In problems involving large exponents and modular constraints, systematically decompose the problem into residue classes and validate counts through cross-checking to ensure accuracy.",
+        "G9": "For products over roots of unity, recognize that the product of a polynomial evaluated at all roots of a cyclotomic polynomial can often be simplified by exploiting the polynomial's symmetry and known identities, such as the resultant of the polynomials involved.",
+        "G10": "In combinatorial case analysis, ensure all mutually exclusive and collectively exhaustive cases are considered, especially when constraints involve overlapping or interdependent conditions. Cross-validate intermediate steps using smaller test cases to ensure consistency and correctness.",
+        "G11": "In problems involving binomial coefficients and large factorials, explicitly verify the co-primality of the numerator and denominator before simplifying to ensure the fraction is in its lowest terms.",
+        "G12": "In combinatorial problems involving unstructured pairings, always enumerate all valid pairings and verify their probabilities are equally distributed.",
+        "G13": "In problems involving periodic cycles (e.g., LCM-based repetitions), explicitly verify the remaining partial cycle after accounting for full cycles to prevent undercounting or overcounting.",
+        "G14": "When addressing combinatorial problems with geometric constraints, explicitly model the geometric structure (e.g., diameters, rectangles) and translate constraints into combinatorial rules to avoid missing valid configurations.",
+        "G15": "In problems involving reciprocal logarithmic relationships, explicitly express variables in terms of a single parameter to simplify algebraic manipulation."
+      },
+      "program_id": 11,
+      "timestep": 10,
+      "self_modified_from": 10,
+      "self_modify_id_list": [],
+      "parents_list": null,
+      "children_list": [],
+      "past_score_history": [],
+      "rating": {
+        "mu": 30.554205928444436,
+        "sigma": 2.7126254399307
+      }
+    }
+  ]
+}

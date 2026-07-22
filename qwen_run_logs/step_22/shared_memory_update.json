@@ -1,0 +1,114 @@
+{
+  "prompt": "Multiple independent problem-solving strategies were evaluated on the same batch of math problems.\nEach strategy uses its own per-strategy principles, but we want to identify insights that are useful ACROSS ALL strategies.\n\nStrategy performance summary:\nStrategy A (program_id=22, avg_reward=0.320, problems=10):\n  Top principles: ['When validating median constraints, ensure calculations exclude list elements by verifying parity and sum consistency to maintain accuracy.', \"In problems involving isosceles right triangles and internal points with equal angle conditions, consider applying trigonometric Ceva's theorem directly to relate the angles and side lengths.\", \"In prime factorization scenarios, cross-validate each component's contribution to the total sum of exponents to ensure accuracy in calculations involving perfect squares or divisibility conditions, particularly in simplification and reduction of fractions.\"]\n\nStrategy B (program_id=20, avg_reward=0.380, problems=10):\n  Top principles: ['When validating median constraints, ensure calculations exclude list elements by verifying parity and sum consistency to maintain accuracy.', \"In problems involving isosceles right triangles and internal points with equal angle conditions, consider applying trigonometric Ceva's theorem directly to relate the angles and side lengths.\", \"In prime factorization scenarios, cross-validate each component's contribution to the total sum of exponents to ensure accuracy in calculations involving perfect squares or divisibility conditions, particularly in simplification and reduction of fractions.\"]\n\nStrategy C (program_id=19, avg_reward=0.400, problems=10):\n  Top principles: ['When validating median constraints, ensure calculations exclude list elements by verifying parity and sum consistency to maintain accuracy.', \"In problems involving isosceles right triangles and internal points with equal angle conditions, consider applying trigonometric Ceva's theorem directly to relate the angles and side lengths.\", \"In prime factorization scenarios, cross-validate each component's contribution to the total sum of exponents to ensure accuracy in calculations involving perfect squares or divisibility conditions, particularly in simplification and reduction of fractions.\"]\n\nCurrent shared memory (global insights already captured):\n[M0] Failing to verify intermediate steps can lead to cumulative errors; cross-checking solutions with alternative methods improves reliability across strategies.\n[M1] Overlooking problem constraints may result in invalid solutions; explicitly validating inputs against requirements ensures alignment across strategies.\n[M10] Failing to integrate symmetry and parity checks in problem-solving can lead to overlooked constraints; explicitly cross-check these properties across problem domains to ensure comprehensive validation.\n[M11] Failing to systematically validate geometric and algebraic constraints in hybrid problems can introduce inconsistencies; explicitly cross-check numerical and spatial requirements to ensure comprehensive solution accuracy.\n[M12] Failing to cross-check different validation methods (e.g., algebraic checks vs. combinatorial constraints) can lead to incomplete solutions; explicitly integrate multiple validation approaches for robustness.\n[M13] Failing to prioritize constraints with fewer possibilities can increase computational complexity; explicitly prioritize such constraints to enhance efficiency across problem domains.\n[M2] Neglecting to decompose complex problems into manageable sub-problems can hinder progress; systematic breakdowns enhance clarity and strategy adaptability.\n[M3] Failing to consider alternative solution paths limits adaptability; exploring multiple approaches increases robustness across problem types.\n[M4] Neglecting to test edge cases may result in solutions failing under unexpected conditions; systematic boundary testing ensures robustness.\n[M5] Overlooking interdependencies between sub-problems can lead to fragmented solutions; ensuring holistic integration of components improves effectiveness.\n[M6] Failing to validate domain-specific constraints (e.g., symmetry, parity, approximations) can introduce errors; explicitly check problem-specific properties to ensure alignment with solution requirements.\n[M8] Failing to cross-check derived congruences against original problem requirements can introduce errors; explicitly validate intermediate results against problem specifications to ensure alignment.\n[M9] Failing to validate both algebraic and geometric constraints in hybrid problems can lead to inconsistencies; explicitly check for alignment between numerical and spatial requirements to ensure comprehensive solution accuracy.\n\nYour task: Update the shared memory by proposing operations based on cross-strategy evidence.\n\nNew bullets to ADD must:\n  1. Apply to MULTIPLE strategies (not specific to one approach)\n  2. NOT duplicate anything already in shared memory\n  3. Be at most 32 words, concrete, and focused on strategic thinking\n  4. Describe failure modes, verification strategies, or universally helpful heuristics\n\nReturn a JSON list of operations (at most 3 total, or an empty list if no clear cross-strategy insight):\n```json\n[\n    {\"operation\": \"add\", \"content\": \"globally useful insight across all strategies\"},\n    {\"operation\": \"mark_helpful\", \"bullet_id\": \"M3\"},\n    {\"operation\": \"mark_harmful\", \"bullet_id\": \"M7\"}\n]\n```\nReturn only operations that are strongly supported by cross-strategy evidence.",
+  "response": "Okay, let's see. The user wants me to update the shared memory by adding new bullets based on cross-strategy evidence. The strategies A, B, and C all have the same top principles. Wait, that's interesting. All three strategies have identical top principles. So, maybe there's something common here that's not already covered in the existing shared memory.\n\nLooking at the existing shared memory, there are a bunch of M bullets. Let me check if any of the new principles from the strategies are already in there. The principles from all strategies are about validating median constraints, trigonometric Ceva's theorem for isosceles right triangles, and prime factorization cross-validation. \n\nNow, the existing shared memory has M0 to M13, M14 maybe? Let me check the list again. The existing bullets include things like cross-checking intermediate steps, validating inputs, symmetry and parity checks, systematic validation of geometric and algebraic constraints, cross-checking validation methods, prioritizing constraints, decomposing problems, considering alternative paths, testing edge cases, interdependencies between sub-problems, domain-specific constraints, cross-checking congruences, and validating both algebraic and geometric constraints.\n\nWait, the new principles from the strategies involve specific techniques: verifying parity and sum consistency for median constraints, applying trigonometric Ceva's theorem in certain geometric problems, and cross-validating prime factorization components. But the existing shared memory already has some related points. For example, M10 talks about symmetry and parity checks, M11 about geometric and algebraic constraints, M6 about domain-specific constraints. \n\nBut the key here is that all three strategies have the same top principles. So maybe the cross-strategy evidence is that these principles are consistently used across different strategies. However, the existing shared memory might not have a bullet that explicitly mentions the importance of these specific principles. Wait, looking again, M10 mentions parity checks, but the strategies' principles are more about explicitly cross-checking these properties. However, M10 says \"explicitly cross-check these properties across problem domains.\" But the strategies' principles are about applying specific methods (like trigonometric Ceva's theorem) in certain problem types. \n\nAlternatively, maybe the commonality is that all strategies emphasize cross-validation of certain aspects. But the existing shared memory already has M12 about cross-checking different validation methods. However, the strategies' principles are more about specific cross-validation steps. \n\nWait, the user wants new bullets that are applicable to multiple strategies, not specific to one. Since all three strategies have the same top principles, maybe the insight is that these principles are universally effective. But the existing shared memory might not have a bullet that captures that. For example, maybe there's a bullet that says something like \"Applying specific cross-validation techniques (like parity checks or trigonometric Ceva's theorem) in relevant problem types enhances accuracy across strategies.\" But I need to check if that's already present.\n\nLooking at the existing bullets, none of them specifically mention trigonometric Ceva's theorem or prime factorization cross-validation. However, M6 talks about domain-specific constraints, which could include those. But the user wants new bullets that are not duplicates. \n\nAlternatively, since all three strategies have the same principles, maybe the cross-strategy evidence is that these principles are consistently effective. But how to phrase that as a new bullet. For example, \"Failing to apply specific cross-validation techniques (e.g., parity checks, trigonometric Ceva's theorem) in relevant problem types can reduce accuracy; explicitly integrate these methods across strategies for consistency.\" But that might be too specific. However, the user allows for up to three new bullets, so maybe that's a candidate. \n\nBut the existing shared memory includes M10 about parity and symmetry checks. So maybe the new bullet should be about the importance of these specific techniques. However, since the existing M10 mentions parity checks, but the strategies' principles are more about explicitly cross-checking them. Alternatively, maybe the new insight is that using these specific techniques (like trigonometric Ceva's theorem) in their respective problem types is a common strategy. But I need to ensure that the new bullet is not a duplicate. \n\nAlternatively, perhaps the failure mode is not considering these specific principles, leading to errors. For example, \"Failing to apply trigonometric Ceva's theorem in isosceles right triangle problems can lead to incorrect angle relations; explicitly integrate geometric theorem applications in relevant contexts for accuracy.\" But that's specific to one type of problem. However, since all strategies have this principle, maybe it's a cross-strategy insight. \n\nWait, but the user says the new bullets must apply to multiple strategies, not specific to one. So the bullet should be general enough to apply to all strategies. The existing shared memory already has M11 about hybrid problems and M6 about domain-specific constraints. So maybe the new bullet is about the importance of applying these specific techniques in their respective domains. \n\nAlternatively, maybe the cross-strategy evidence is that all strategies use the same principles, implying that these principles are universally useful. But the existing bullets might not cover that. However, the user wants to avoid duplicates. \n\nAlternatively, maybe the failure mode is not validating the specific cross-validation steps, leading to errors. For example, \"Failing to cross-validate prime factorization components for perfect squares can introduce errors; explicitly check exponent contributions across all strategies for consistency.\" But this is specific to prime factorization. \n\nHmm, this is tricky. The user wants to add bullets that are applicable across all strategies. Since all three strategies have the same top principles, maybe the insight is that these principles are consistently effective. But how to phrase that. \n\nWait, the existing shared memory includes M10 (symmetry and parity), M11 (geometric and algebraic constraints), M6 (domain-specific constraints). The strategies' principles are about specific cross-validation steps (parity checks, trigonometric Ceva, prime factorization). So perhaps the new insight is about the importance of applying these specific cross-validation techniques in their respective problem domains. \n\nBut the user says the new bullets must not duplicate existing ones. So, if M10 and M6 are already about parity and domain-specific checks, maybe the new bullet is about the necessity of applying these techniques in specific problem types. \n\nAlternatively, the failure mode could be not considering these techniques, leading to errors. For example, \"Failing to apply trigonometric Ceva's theorem in isosceles right triangle problems can lead to incorrect angle relations; explicitly integrate geometric theorem applications in relevant contexts for accuracy.\" But this is specific to one problem type. However, since all strategies have this, maybe it's a cross-strategy insight. \n\nAlternatively, maybe the insight is that the strategies all rely on cross-validation of specific steps, so a general insight would be that cross-validating intermediate steps with domain-specific techniques improves accuracy. \n\nBut I need to ensure that the new bullets are not duplicates. Let me check again. The existing shared memory has M12 about cross-checking different validation methods. So if the new bullet is about cross-checking domain-specific techniques, maybe that's a different angle. \n\nAlternatively, the new bullet could be about the importance of applying specific principles (like parity checks) in multiple problem domains. But I need to make sure it's not a duplicate. \n\nAlternatively, maybe the failure mode is not integrating these principles across different strategies. But the user wants to add new bullets based on cross-strategy evidence. \n\nGiven the time I've spent, perhaps the best approach is to create a bullet that highlights the common use of specific cross-validation techniques across all strategies. For example, \"Failing to apply specific cross-validation techniques (e.g., parity checks, trigonometric Ceva's theorem) in relevant problem types can reduce accuracy; explicitly integrate these methods across strategies for consistency.\" But this is 32 words. Let me check: \n\n\"Failing to apply specific cross-validation techniques (e.g., parity checks, trigonometric Ceva's theorem) in relevant problem types can reduce accuracy; explicitly integrate these methods across strategies for consistency.\" That's 32 words. \n\nBut does this apply to multiple strategies? Yes, since all three strategies use these techniques. Also, it's not a duplicate of existing bullets. \n\nAnother possible bullet could be about the importance of systematic cross-checking of these techniques. For example, \"Neglecting systematic cross-checking of domain-specific validation steps (e.g., parity, prime factorization) can lead to fragmented solutions; explicitly validate these steps across problem domains for coherence.\" \n\nBut again, need to check for duplicates. \n\nAlternatively, considering the existing M10 and M6, maybe the new bullet is about the necessity of applying these techniques in specific contexts. \n\nAlternatively, since all strategies have the same principles, perhaps the insight is that these principles are universally effective, but how to phrase that. \n\nMaybe the answer is that there are no new bullets to add, but the user says to return at most 3. However, given that all strategies have the same principles, which are not covered in existing shared memory, maybe adding a bullet about the necessity of applying these specific techniques. \n\nBut I need to ensure that it's not a duplicate. Since existing bullets don't mention the specific techniques like trigonometric Ceva's theorem or prime factorization cross-validation, perhaps it's safe. \n\nSo, the final answer would be adding a bullet about the importance of applying these specific cross-validation techniques across strategies. \n\nBut also, the user allows for up to three bullets. So maybe two more. However, I need to ensure they are not duplicates. \n\nAnother possible bullet could be about the necessity of using trigonometric Ceva's theorem in isosceles right triangle problems. But that's specific to one problem type. \n\nAlternatively, a bullet about cross-validating prime factorization components for perfect squares. But again, specific. \n\nHmm. Maybe the user's answer is that there are no new bullets to add, but the initial analysis shows that all strategies have the same principles, which are not covered in existing shared memory. Therefore, the new bullet would be about applying these specific techniques. \n\nSo the JSON would be adding one bullet. But the user allows up to three. \n\nAlternatively, the existing shared memory may have M12 about cross-checking different validation methods. But the strategies' principles are about specific cross-validation steps. \n\nI think the best approach is to add a bullet that highlights the common use of these specific cross-validation techniques across all strategies. So the final answer would be adding that bullet.\n</think>\n\n```json\n[\n    {\"operation\": \"add\", \"content\": \"Failing to apply specific cross-validation techniques (e.g., parity checks, trigonometric Ceva's theorem) in relevant problem types can reduce accuracy; explicitly integrate these methods across strategies for consistency.\"}\n]\n```",
+  "operations": [
+    {
+      "operation": "add",
+      "content": "Failing to apply specific cross-validation techniques (e.g., parity checks, trigonometric Ceva's theorem) in relevant problem types can reduce accuracy; explicitly integrate these methods across strategies for consistency."
+    }
+  ],
+  "shared_memory_after": {
+    "max_bullets": 50,
+    "_next_id": 15,
+    "bullets": {
+      "M0": {
+        "bullet_id": "M0",
+        "content": "Failing to verify intermediate steps can lead to cumulative errors; cross-checking solutions with alternative methods improves reliability across strategies.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 0
+      },
+      "M1": {
+        "bullet_id": "M1",
+        "content": "Overlooking problem constraints may result in invalid solutions; explicitly validating inputs against requirements ensures alignment across strategies.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 0
+      },
+      "M2": {
+        "bullet_id": "M2",
+        "content": "Neglecting to decompose complex problems into manageable sub-problems can hinder progress; systematic breakdowns enhance clarity and strategy adaptability.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 0
+      },
+      "M3": {
+        "bullet_id": "M3",
+        "content": "Failing to consider alternative solution paths limits adaptability; exploring multiple approaches increases robustness across problem types.",
+        "helpful_count": 3,
+        "harmful_count": 0,
+        "created_at": 1
+      },
+      "M4": {
+        "bullet_id": "M4",
+        "content": "Neglecting to test edge cases may result in solutions failing under unexpected conditions; systematic boundary testing ensures robustness.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 1
+      },
+      "M5": {
+        "bullet_id": "M5",
+        "content": "Overlooking interdependencies between sub-problems can lead to fragmented solutions; ensuring holistic integration of components improves effectiveness.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 1
+      },
+      "M6": {
+        "bullet_id": "M6",
+        "content": "Failing to validate domain-specific constraints (e.g., symmetry, parity, approximations) can introduce errors; explicitly check problem-specific properties to ensure alignment with solution requirements.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 6
+      },
+      "M8": {
+        "bullet_id": "M8",
+        "content": "Failing to cross-check derived congruences against original problem requirements can introduce errors; explicitly validate intermediate results against problem specifications to ensure alignment.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 12
+      },
+      "M9": {
+        "bullet_id": "M9",
+        "content": "Failing to validate both algebraic and geometric constraints in hybrid problems can lead to inconsistencies; explicitly check for alignment between numerical and spatial requirements to ensure comprehensive solution accuracy.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 14
+      },
+      "M10": {
+        "bullet_id": "M10",
+        "content": "Failing to integrate symmetry and parity checks in problem-solving can lead to overlooked constraints; explicitly cross-check these properties across problem domains to ensure comprehensive validation.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 15
+      },
+      "M11": {
+        "bullet_id": "M11",
+        "content": "Failing to systematically validate geometric and algebraic constraints in hybrid problems can introduce inconsistencies; explicitly cross-check numerical and spatial requirements to ensure comprehensive solution accuracy.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 17
+      },
+      "M12": {
+        "bullet_id": "M12",
+        "content": "Failing to cross-check different validation methods (e.g., algebraic checks vs. combinatorial constraints) can lead to incomplete solutions; explicitly integrate multiple validation approaches for robustness.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 19
+      },
+      "M13": {
+        "bullet_id": "M13",
+        "content": "Failing to prioritize constraints with fewer possibilities can increase computational complexity; explicitly prioritize such constraints to enhance efficiency across problem domains.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 20
+      },
+      "M14": {
+        "bullet_id": "M14",
+        "content": "Failing to apply specific cross-validation techniques (e.g., parity checks, trigonometric Ceva's theorem) in relevant problem types can reduce accuracy; explicitly integrate these methods across strategies for consistency.",
+        "helpful_count": 0,
+        "harmful_count": 0,
+        "created_at": 22
+      }
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "G0": "When applying trigonometric Ceva's theorem, explicitly verify derived equations against all angle conditions to ensure consistency and avoid contradictory solutions.",
+  "G1": "In prime factorization scenarios, cross-validate each component's contribution to the total sum of exponents to ensure accuracy in calculations involving perfect squares or divisibility conditions, particularly in simplification and reduction of fractions.",
+  "G2": "When solving geometric probability problems with multiple constraints, ensure all subcases are explicitly validated against the problem's constraints to prevent under/overcounting and ensure alignment with the region's boundaries.",
+  "G3": "In problems involving generating functions and coefficient extraction, always verify that higher-degree terms in the numerator do not interfere with the target coefficient by explicitly confirming that their exponents exceed the target value.",
+  "G4": "Use modular arithmetic reduction at every computational step to prevent overflow and ensure intermediate results align with the target modulus, while cross-checking against small test cases to validate consistency.",
+  "G5": "In problems with multiple constraints, explicitly verify that each subcase's solutions adhere to all digit bounds and sum conditions to prevent invalid or incomplete counts.",
+  "G6": "Use parametric equations for angle bisectors, solving for intersection points by equating parameters and validating solutions against geometric constraints.",
+  "G7": "In problems involving cyclic quadrilaterals, explicitly verify the positions of all points relative to the circle's center and the given geometric constraints to avoid ambiguous solutions.",
+  "G8": "Prioritize symmetry assumptions in optimization problems when they simplify constraints without restricting solution space, ensuring efficient exploration of valid configurations.",
+  "G9": "Ensure that all equations derived from problem constraints are necessary and consistent with the total count, avoiding redundant or conflicting equations that may arise from misinterpretation of incidence relationships.",
+  "G10": "In problems where a symmetric equation and a sum constraint are given, consider cases where one variable is fixed (e.g., at a value derived from the equation) and count permutations of the remaining variables under the sum constraint.",
+  "G11": "In problems with symmetric structures or probabilistic assumptions, explicitly validate symmetry assumptions and ensure all cases are weighted equally, aligning with problem constraints and avoiding biased solutions.",
+  "G12": "In problems involving midpoint conditions within composite regions, always cross-validate the derived probabilities with explicit integration over the entire region to ensure no overlapping conditions are missed.",
+  "G13": "In problems involving complex equations or envelope intersections, cross-validate algebraic steps with explicit test cases to prevent miscalculations.",
+  "G14": "In problems involving multiple geometric constraints, prioritize simplifying equations by leveraging symmetry or direct relationships between variables to avoid unnecessary complexity.",
+  "G15": "When solving for the inradius of a tetrahedron with congruent faces, it is essential to recognize that the total surface area is four times the area of one face. This symmetry allows for simplification of the inradius formula, r = 3V / A_total, by leveraging the congruence of the faces to avoid redundant calculations.",
+  "G16": "Explicitly validate angle reductions in complex number exponentiation to ensure correct polar form calculations when working with roots of unity.",
+  "G17": "For ratios of combinatorial sums involving binomial coefficients, apply combinatorial identities to simplify the expression before evaluating modular arithmetic, ensuring efficient computation and correctness.",
+  "G18": "When maximizing or minimizing expressions under constraints, always validate that the derived maximum/minimum is consistent with all constraints by testing alternative configurations and ensuring no higher/lower values exist.",
+  "G19": "Ensure parity and sum consistency checks are explicitly applied to exclude invalid elements and maintain accuracy in constraint validation across problem domains.",
+  "G20": "Cross-validate algebraic and geometric steps with small test cases to detect errors early, ensuring alignment with problem constraints and preventing computational pitfalls."
+}

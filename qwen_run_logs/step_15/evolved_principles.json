@@ -1,0 +1,18 @@
+{
+  "G0": "When validating median constraints, ensure calculations exclude list elements by verifying parity and sum consistency to maintain accuracy.",
+  "G1": "In problems involving cyclic quadrilaterals, explicitly verify the positions of all points relative to the circle's center and the given geometric constraints to avoid ambiguous solutions.",
+  "G2": "Leverage congruent faces and symmetry in disphenoids to simplify volume and area calculations using vector algebra or coordinate geometry.",
+  "G3": "In problems involving isosceles right triangles and internal points with equal angle conditions, consider applying trigonometric Ceva's theorem directly to relate the angles and side lengths.",
+  "G4": "In prime factorization scenarios, cross-verify each component's contribution to the total sum of exponents to ensure accuracy in calculations involving perfect squares or divisibility conditions.",
+  "G5": "For overlapping set problems, cross-validate inclusion-exclusion equations against total population constraints to ensure logical consistency and prevent under/overcounting.",
+  "G6": "In problems where a symmetric equation and a sum constraint are given, consider cases where one variable is fixed (e.g., at a value derived from the equation) and count permutations of the remaining variables under the sum constraint.",
+  "G7": "Validate problem-solving approaches by testing with smaller cases, especially for problems involving alternating constraints or combinatorial segmentations.",
+  "G8": "Cross-validate all derived solutions against the problem's geometric constraints to prevent invalid configurations from being accepted as valid.",
+  "G9": "In problems involving generating functions and coefficient extraction, always verify that higher-degree terms in the numerator do not interfere with the target coefficient by explicitly confirming that their exponents exceed the target value.",
+  "G10": "When solving problems involving modular arithmetic and congruence conditions, explicitly consider the number of distinct prime factors of the modulus and their impact on solution counts.",
+  "G11": "Ensure modular arithmetic calculations maintain accuracy by reducing intermediate results modulo the target value at each step, preventing overflow and preserving correctness.",
+  "G12": "When problem structures involve non-contiguous elements, split into independent segments and apply combinatorial techniques to each to ensure accurate counting and avoid over/undercounting.",
+  "G13": "When solving for positions of collinear points, consider multiple configurations (e.g., points on either side of a reference line) to ensure completeness in solution space exploration.",
+  "G14": "When solving problems involving direction changes in paths, decompose the path into alternating segments and use case analysis based on the starting direction to ensure all valid configurations are considered.",
+  "G15": "In problems where the number of solutions depends on the prime factorization of a modulus, systematically analyze how each prime factor contributes to the total solution count by considering the multiplicative factors introduced by the prime's exponents."
+}

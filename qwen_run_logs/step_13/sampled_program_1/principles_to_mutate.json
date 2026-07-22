@@ -1,0 +1,14 @@
+{
+  "G0": "When validating median constraints, ensure calculations exclude list elements by verifying parity and sum consistency to maintain accuracy.",
+  "G1": "When solving geometric problems with trigonometric constraints, ensure all angle relationships are explicitly validated using both trigonometric identities and coordinate geometry to prevent algebraic oversights.",
+  "G2": "In problems involving cyclic quadrilaterals, explicitly verify the positions of all points relative to the circle's center and the given geometric constraints to avoid ambiguous solutions.",
+  "G3": "Leverage congruent faces and symmetry in disphenoids to simplify volume and area calculations using vector algebra or coordinate geometry.",
+  "G4": "In problems involving isosceles right triangles and internal points with equal angle conditions, consider applying trigonometric Ceva's theorem directly to relate the angles and side lengths.",
+  "G5": "When solving congruence equations, systematically check all roots to ensure completeness and avoid missing solutions.",
+  "G6": "For overlapping set problems, cross-validate inclusion-exclusion equations against total population constraints to ensure logical consistency and prevent under/overcounting.",
+  "G7": "In problems involving symmetric states, validate the assumption of symmetry by cross-checking with alternative state transitions to prevent errors in expectation calculations.",
+  "G8": "In problems requiring the uniqueness of a solution, systematically test neighboring values of the candidate parameter to confirm that no alternative solutions satisfy the constraints.",
+  "G9": "Leverage symmetry in equations by first checking symmetric solutions (e.g., x = y = z), then systematically analyze asymmetric cases through case analysis to ensure completeness.",
+  "G10": "For problems with boundary conditions, cross-validate intermediate steps against range limits or modular constraints to prevent invalid configurations.",
+  "G11": "For solution validation, cross-check potential roots or configurations against original constraints to ensure completeness and correctness."
+}
