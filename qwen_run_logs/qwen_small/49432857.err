@@ -1,0 +1,214 @@
+wandb: WARNING `resume` will be ignored since W&B syncing is set to `offline`. Starting a new run with run id qwen3_0_6b_vllm_evo5.
+wandb: Tracking run with wandb version 0.23.1
+wandb: W&B syncing is set to `offline` in this directory. Run `wandb online` or set WANDB_MODE=online to enable cloud syncing.
+wandb: Run data is saved locally in /ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5/tinker_logs/wandb/offline-run-20260726_025648-qwen3_0_6b_vllm_evo5
+tinker_cookbook.utils.ml_log:475 [[92mINFO[0m] Logging to: /ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5/tinker_logs
+/ibex/user/khangea/conda-environments/spl/lib/python3.11/site-packages/transformers/utils/hub.py:110: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
+  warnings.warn(
+__main__:1141 [[92mINFO[0m] Using renderer: qwen3
+__main__:1148 [[92mINFO[0m] Loading dataset...
+__main__:1150 [[92mINFO[0m] Using dataset pair: aimo_beyondaime (train=aimo-validation-aime, test=BeyondAIME)
+__main__:1173 [[92mINFO[0m] Test set: 15 items
+tinker_cookbook.local_backend.vllm_client:215 [[92mINFO[0m] vLLM server healthy at http://127.0.0.1:42857
+__main__:1184 [[92mINFO[0m] Using LOCAL backend with vLLM sampling server
+tinker_cookbook.checkpoint_utils:22 [[92mINFO[0m] Reading checkpoints from /ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5/tinker_logs/checkpoints.jsonl
+tinker_cookbook.checkpoint_utils:42 [[92mINFO[0m] Found 68 valid checkpoints with key 'state_path' in /ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5/tinker_logs
+tinker_cookbook.checkpoint_utils:45 [[92mINFO[0m] Using last checkpoint: {'name': '000036', 'step': 36, 'checkpoint_complete': True, 'state_path': '/ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5/checkpoints/state_000036'}
+tinker_cookbook.local_backend.client:71 [[92mINFO[0m] Loading model Qwen/Qwen3-0.6B in bfloat16 on cuda ...
+`torch_dtype` is deprecated! Use `dtype` instead!
+__main__:1289 [[92mINFO[0m] Resuming from completed checkpoint at step 36; next step is 37
+tinker_cookbook.local_backend.vllm_client:184 [[92mINFO[0m] vLLM loaded policy adapter 'policy_current' from /ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5/checkpoints/adapter_current
+tinker_cookbook.utils.ml_log:143 [[92mINFO[0m] Wrote metrics to /ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5/tinker_logs/metrics.jsonl
+tinker_cookbook.utils.ml_log:195 [[92mINFO[0m] 
+                    Step 1                     
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━┓
+┃ Metric                         ┃ Value      ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━┩
+│ optim/lr                       │ 0.000040   │
+│ progress/batch                 │ 1          │
+│ progress/done_frac             │ 0.222222   │
+│ rollout/Agg_Pass@5             │ 0.100000   │
+│ rollout/Agg_avg_reward         │ 0.006667   │
+│ rollout/avg_PROGRAM_Pass@1     │ 0.006667   │
+│ rollout/avg_PROGRAM_Pass@5     │ 0.033333   │
+│ rollout/avg_question_Pass@1    │ 0.006667   │
+│ rollout/avg_question_Pass@5    │ 0.033333   │
+│ rollout/max_PROGRAM_Pass@1     │ 0.020000   │
+│ rollout/max_PROGRAM_Pass@5     │ 0.100000   │
+│ rollout/max_question_Pass@1    │ 0.066667   │
+│ rollout/max_question_Pass@5    │ 0.333333   │
+│ rollout/min_PROGRAM_Pass@1     │ 0.000000   │
+│ rollout/min_PROGRAM_Pass@5     │ 0.000000   │
+│ rollout/min_question_Pass@1    │ 0.000000   │
+│ rollout/min_question_Pass@5    │ 0.000000   │
+│ time/total                     │ 513.038594 │
+└────────────────────────────────┴────────────┘
+wandb: WARNING URL not available in offline run
+tinker_cookbook.utils.ml_log:236 [[92mINFO[0m] Logging to: None
+tinker_cookbook.local_backend.client:366 [[92mINFO[0m] Saved checkpoint to /ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5/checkpoints/state_000037
+tinker_cookbook.checkpoint_utils:75 [[92mINFO[0m] Saved checkpoints: {'state_path': '/ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5/checkpoints/state_000037'}
+tinker_cookbook.local_backend.vllm_client:184 [[92mINFO[0m] vLLM loaded policy adapter 'policy_current' from /ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5/checkpoints/adapter_current
+tinker_cookbook.local_backend.client:366 [[92mINFO[0m] Saved checkpoint to /ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5/checkpoints/state_000038
+tinker_cookbook.checkpoint_utils:75 [[92mINFO[0m] Saved checkpoints: {'state_path': '/ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5/checkpoints/state_000038'}
+tinker_cookbook.utils.ml_log:143 [[92mINFO[0m] Wrote metrics to /ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5/tinker_logs/metrics.jsonl
+tinker_cookbook.utils.ml_log:195 [[92mINFO[0m] 
+                    Step 2                     
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━┓
+┃ Metric                         ┃ Value      ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━┩
+│ optim/lr                       │ 0.000040   │
+│ progress/batch                 │ 2          │
+│ progress/done_frac             │ 0.333333   │
+│ rollout/Agg_Pass@5             │ 0.000000   │
+│ rollout/Agg_avg_reward         │ 0.000000   │
+│ rollout/avg_PROGRAM_Pass@1     │ 0.000000   │
+│ rollout/avg_PROGRAM_Pass@5     │ 0.000000   │
+│ rollout/avg_question_Pass@1    │ 0.000000   │
+│ rollout/avg_question_Pass@5    │ 0.000000   │
+│ rollout/max_PROGRAM_Pass@1     │ 0.000000   │
+│ rollout/max_PROGRAM_Pass@5     │ 0.000000   │
+│ rollout/max_question_Pass@1    │ 0.000000   │
+│ rollout/max_question_Pass@5    │ 0.000000   │
+│ rollout/min_PROGRAM_Pass@1     │ 0.000000   │
+│ rollout/min_PROGRAM_Pass@5     │ 0.000000   │
+│ rollout/min_question_Pass@1    │ 0.000000   │
+│ rollout/min_question_Pass@5    │ 0.000000   │
+│ time/total                     │ 525.130330 │
+└────────────────────────────────┴────────────┘
+wandb: WARNING URL not available in offline run
+tinker_cookbook.utils.ml_log:236 [[92mINFO[0m] Logging to: None
+tinker_cookbook.local_backend.client:366 [[92mINFO[0m] Saved checkpoint to /ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5/checkpoints/state_000038
+tinker_cookbook.checkpoint_utils:75 [[92mINFO[0m] Saved checkpoints: {'state_path': '/ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5/checkpoints/state_000038'}
+tinker_cookbook.local_backend.vllm_client:184 [[92mINFO[0m] vLLM loaded policy adapter 'policy_current' from /ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5/checkpoints/adapter_current
+tinker_cookbook.local_backend.client:366 [[92mINFO[0m] Saved checkpoint to /ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5/checkpoints/state_000039
+tinker_cookbook.checkpoint_utils:75 [[92mINFO[0m] Saved checkpoints: {'state_path': '/ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5/checkpoints/state_000039'}
+tinker_cookbook.utils.ml_log:143 [[92mINFO[0m] Wrote metrics to /ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5/tinker_logs/metrics.jsonl
+tinker_cookbook.utils.ml_log:195 [[92mINFO[0m] 
+                    Step 3                     
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━┓
+┃ Metric                         ┃ Value      ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━┩
+│ optim/lr                       │ 0.000040   │
+│ progress/batch                 │ 3          │
+│ progress/done_frac             │ 0.444444   │
+│ rollout/Agg_Pass@5             │ 0.000000   │
+│ rollout/Agg_avg_reward         │ 0.000000   │
+│ rollout/avg_PROGRAM_Pass@1     │ 0.000000   │
+│ rollout/avg_PROGRAM_Pass@5     │ 0.000000   │
+│ rollout/avg_question_Pass@1    │ 0.000000   │
+│ rollout/avg_question_Pass@5    │ 0.000000   │
+│ rollout/max_PROGRAM_Pass@1     │ 0.000000   │
+│ rollout/max_PROGRAM_Pass@5     │ 0.000000   │
+│ rollout/max_question_Pass@1    │ 0.000000   │
+│ rollout/max_question_Pass@5    │ 0.000000   │
+│ rollout/min_PROGRAM_Pass@1     │ 0.000000   │
+│ rollout/min_PROGRAM_Pass@5     │ 0.000000   │
+│ rollout/min_question_Pass@1    │ 0.000000   │
+│ rollout/min_question_Pass@5    │ 0.000000   │
+│ time/total                     │ 512.491819 │
+└────────────────────────────────┴────────────┘
+wandb: WARNING URL not available in offline run
+tinker_cookbook.utils.ml_log:236 [[92mINFO[0m] Logging to: None
+tinker_cookbook.local_backend.client:366 [[92mINFO[0m] Saved checkpoint to /ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5/checkpoints/state_000039
+tinker_cookbook.checkpoint_utils:75 [[92mINFO[0m] Saved checkpoints: {'state_path': '/ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5/checkpoints/state_000039'}
+tinker_cookbook.local_backend.vllm_client:184 [[92mINFO[0m] vLLM loaded policy adapter 'policy_current' from /ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5/checkpoints/adapter_current
+tinker_cookbook.local_backend.client:366 [[92mINFO[0m] Saved checkpoint to /ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5/checkpoints/state_000040
+tinker_cookbook.checkpoint_utils:75 [[92mINFO[0m] Saved checkpoints: {'state_path': '/ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5/checkpoints/state_000040'}
+tinker_cookbook.utils.ml_log:143 [[92mINFO[0m] Wrote metrics to /ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5/tinker_logs/metrics.jsonl
+tinker_cookbook.utils.ml_log:195 [[92mINFO[0m] 
+                    Step 4                     
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━┓
+┃ Metric                         ┃ Value      ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━┩
+│ optim/lr                       │ 0.000040   │
+│ progress/batch                 │ 4          │
+│ progress/done_frac             │ 0.555556   │
+│ rollout/Agg_Pass@5             │ 0.000000   │
+│ rollout/Agg_avg_reward         │ 0.000000   │
+│ rollout/avg_PROGRAM_Pass@1     │ 0.000000   │
+│ rollout/avg_PROGRAM_Pass@5     │ 0.000000   │
+│ rollout/avg_question_Pass@1    │ 0.000000   │
+│ rollout/avg_question_Pass@5    │ 0.000000   │
+│ rollout/max_PROGRAM_Pass@1     │ 0.000000   │
+│ rollout/max_PROGRAM_Pass@5     │ 0.000000   │
+│ rollout/max_question_Pass@1    │ 0.000000   │
+│ rollout/max_question_Pass@5    │ 0.000000   │
+│ rollout/min_PROGRAM_Pass@1     │ 0.000000   │
+│ rollout/min_PROGRAM_Pass@5     │ 0.000000   │
+│ rollout/min_question_Pass@1    │ 0.000000   │
+│ rollout/min_question_Pass@5    │ 0.000000   │
+│ testing/Pass@1                 │ 0.022222   │
+│ testing/Pass@2                 │ 0.044444   │
+│ testing/Pass@3                 │ 0.066667   │
+│ testing/eval_avg_reward        │ 0.022222   │
+│ time/total                     │ 644.648559 │
+└────────────────────────────────┴────────────┘
+wandb: WARNING URL not available in offline run
+tinker_cookbook.utils.ml_log:236 [[92mINFO[0m] Logging to: None
+tinker_cookbook.local_backend.client:366 [[92mINFO[0m] Saved checkpoint to /ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5/checkpoints/state_000040
+tinker_cookbook.checkpoint_utils:75 [[92mINFO[0m] Saved checkpoints: {'state_path': '/ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5/checkpoints/state_000040'}
+tinker_cookbook.local_backend.vllm_client:184 [[92mINFO[0m] vLLM loaded policy adapter 'policy_current' from /ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5/checkpoints/adapter_current
+tinker_cookbook.local_backend.client:366 [[92mINFO[0m] Saved checkpoint to /ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5/checkpoints/state_000041
+tinker_cookbook.checkpoint_utils:75 [[92mINFO[0m] Saved checkpoints: {'state_path': '/ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5/checkpoints/state_000041'}
+tinker_cookbook.utils.ml_log:143 [[92mINFO[0m] Wrote metrics to /ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5/tinker_logs/metrics.jsonl
+tinker_cookbook.utils.ml_log:195 [[92mINFO[0m] 
+                    Step 5                     
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━┓
+┃ Metric                         ┃ Value      ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━┩
+│ optim/lr                       │ 0.000040   │
+│ progress/batch                 │ 5          │
+│ progress/done_frac             │ 0.666667   │
+│ rollout/Agg_Pass@5             │ 0.000000   │
+│ rollout/Agg_avg_reward         │ 0.000000   │
+│ rollout/avg_PROGRAM_Pass@1     │ 0.000000   │
+│ rollout/avg_PROGRAM_Pass@5     │ 0.000000   │
+│ rollout/avg_question_Pass@1    │ 0.000000   │
+│ rollout/avg_question_Pass@5    │ 0.000000   │
+│ rollout/max_PROGRAM_Pass@1     │ 0.000000   │
+│ rollout/max_PROGRAM_Pass@5     │ 0.000000   │
+│ rollout/max_question_Pass@1    │ 0.000000   │
+│ rollout/max_question_Pass@5    │ 0.000000   │
+│ rollout/min_PROGRAM_Pass@1     │ 0.000000   │
+│ rollout/min_PROGRAM_Pass@5     │ 0.000000   │
+│ rollout/min_question_Pass@1    │ 0.000000   │
+│ rollout/min_question_Pass@5    │ 0.000000   │
+│ time/total                     │ 516.253467 │
+└────────────────────────────────┴────────────┘
+wandb: WARNING URL not available in offline run
+tinker_cookbook.utils.ml_log:236 [[92mINFO[0m] Logging to: None
+tinker_cookbook.local_backend.client:366 [[92mINFO[0m] Saved checkpoint to /ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5/checkpoints/state_000041
+tinker_cookbook.checkpoint_utils:75 [[92mINFO[0m] Saved checkpoints: {'state_path': '/ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5/checkpoints/state_000041'}
+tinker_cookbook.local_backend.vllm_client:184 [[92mINFO[0m] vLLM loaded policy adapter 'policy_current' from /ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5/checkpoints/adapter_current
+tinker_cookbook.local_backend.client:366 [[92mINFO[0m] Saved checkpoint to /ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5/checkpoints/state_000042
+tinker_cookbook.checkpoint_utils:75 [[92mINFO[0m] Saved checkpoints: {'state_path': '/ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5/checkpoints/state_000042'}
+tinker_cookbook.utils.ml_log:143 [[92mINFO[0m] Wrote metrics to /ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5/tinker_logs/metrics.jsonl
+tinker_cookbook.utils.ml_log:195 [[92mINFO[0m] 
+                    Step 6                     
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━┓
+┃ Metric                         ┃ Value      ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━┩
+│ optim/lr                       │ 0.000040   │
+│ progress/batch                 │ 6          │
+│ progress/done_frac             │ 0.777778   │
+│ rollout/Agg_Pass@5             │ 0.100000   │
+│ rollout/Agg_avg_reward         │ 0.006667   │
+│ rollout/avg_PROGRAM_Pass@1     │ 0.006667   │
+│ rollout/avg_PROGRAM_Pass@5     │ 0.033333   │
+│ rollout/avg_question_Pass@1    │ 0.006667   │
+│ rollout/avg_question_Pass@5    │ 0.033333   │
+│ rollout/max_PROGRAM_Pass@1     │ 0.020000   │
+│ rollout/max_PROGRAM_Pass@5     │ 0.100000   │
+│ rollout/max_question_Pass@1    │ 0.066667   │
+│ rollout/max_question_Pass@5    │ 0.333333   │
+│ rollout/min_PROGRAM_Pass@1     │ 0.000000   │
+│ rollout/min_PROGRAM_Pass@5     │ 0.000000   │
+│ rollout/min_question_Pass@1    │ 0.000000   │
+│ rollout/min_question_Pass@5    │ 0.000000   │
+│ time/total                     │ 553.461160 │
+└────────────────────────────────┴────────────┘
+wandb: WARNING URL not available in offline run
+tinker_cookbook.utils.ml_log:236 [[92mINFO[0m] Logging to: None
+tinker_cookbook.local_backend.client:366 [[92mINFO[0m] Saved checkpoint to /ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5/checkpoints/state_000042
+tinker_cookbook.checkpoint_utils:75 [[92mINFO[0m] Saved checkpoints: {'state_path': '/ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5/checkpoints/state_000042'}
+tinker_cookbook.local_backend.vllm_client:184 [[92mINFO[0m] vLLM loaded policy adapter 'policy_current' from /ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5/checkpoints/adapter_current

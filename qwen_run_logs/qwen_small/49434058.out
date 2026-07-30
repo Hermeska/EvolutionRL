@@ -1,0 +1,8 @@
+==================================================================
+[chain] SLURM_JOB_ID=49434058   started Sun Jul 26 04:12:09 +03 2026
+[chain] host=gpu203-16-r   run_root=/ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5
+[chain] experiment=qwen3_0_6b_vllm_evo5   dataset_pair=aimo_beyondaime   wandb_mode=offline
+[chain] num_gpus=2   use_vllm=1   vllm_port=44058   max_tokens=8192
+[chain] successor resources: gres=gpu:a100:2 mem=96G cpus=12
+==================================================================
+[chain] /ibex/user/khangea/espl/qwen3_0_6b_vllm_evo5/COMPLETED exists — training is done. Not submitting next job. Exiting.
