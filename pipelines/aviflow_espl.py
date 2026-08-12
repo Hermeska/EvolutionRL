@@ -21,7 +21,7 @@ BASE_COMPONENT = os.environ.get(
     "pytorch-dl/pytorch-train-dl:0.2.4",
 )
 SOURCE_REPOSITORY = "https://github.com/Hermeska/EvolutionRL"
-SOURCE_SHA = "08be53ed944418b30d5f19eb92af62aa36987725"
+SOURCE_SHA = "05074825fec8e06577ec63746083de1f2cf89f05"
 
 RUNTIME_PACKAGES = [
     "torch==2.8.0",

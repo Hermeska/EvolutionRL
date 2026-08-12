@@ -3,7 +3,7 @@
 # Inputs:
 #    custom_priority_queue: str [Default: '']
 #    notifications: list [Default: []]
-#    params: dict [Default: {'dataset_seed': 42.0, 'hf_home': '', 'dataset_pair': 'aimo_beyondaime', 'group_size': 4.0, 'learning_rate': 5e-06, 'eval_every': 18.0, 'lora_rank': 32.0, 'crossover_prob': 0.0, 'checkpoint_root': '', 'enable_shared_memory': False, 'run_name': 'qwen3-4b-vllm-3ep-4k', 'n_epochs': 3.0, 'save_every': 1.0, 'training_microbatch_size': 1.0, 'source_sha': '08be53ed944418b30d5f19eb92af62aa36987725', 'num_parallel_programs': 2.0, 'batch_size': 5.0, 'test_dataset_size': 20.0, 'model_name': 'Qwen/Qwen3-4B', 'max_tokens': 4096.0, 'dataset_size': 90.0, 'rl_loss_fn': 'cispo'}]
+#    params: dict [Default: {'batch_size': 5.0, 'num_parallel_programs': 2.0, 'group_size': 4.0, 'training_microbatch_size': 1.0, 'crossover_prob': 0.0, 'save_every': 1.0, 'checkpoint_root': '', 'dataset_size': 90.0, 'source_sha': '05074825fec8e06577ec63746083de1f2cf89f05', 'hf_home': '', 'rl_loss_fn': 'cispo', 'eval_every': 18.0, 'max_tokens': 4096.0, 'lora_rank': 32.0, 'learning_rate': 5e-06, 'model_name': 'Qwen/Qwen3-4B', 'dataset_pair': 'aimo_beyondaime', 'enable_shared_memory': False, 'n_epochs': 3.0, 'test_dataset_size': 20.0, 'run_name': 'qwen3-4b-vllm-3ep-4k', 'dataset_seed': 42.0}]
 #    run_priority: str [Default: '']
 components:
   comp-train-espl:
@@ -286,7 +286,7 @@ root:
           rl_loss_fn: cispo
           run_name: qwen3-4b-vllm-3ep-4k
           save_every: 1.0
-          source_sha: 08be53ed944418b30d5f19eb92af62aa36987725
+          source_sha: 05074825fec8e06577ec63746083de1f2cf89f05
           test_dataset_size: 20.0
           training_microbatch_size: 1.0
         parameterType: STRUCT
