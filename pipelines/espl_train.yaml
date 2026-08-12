@@ -1,0 +1,234 @@
+# PIPELINE DEFINITION
+# Name: espl-training-pipeline
+# Inputs:
+#    custom_priority_queue: str [Default: '']
+#    notifications: list [Default: []]
+#    params: dict [Default: {'group_size': 4.0, 'run_name': 'qwen3-0.6b-vllm-3ep-8k', 'max_tokens': 8192.0, 'crossover_prob': 0.0, 'enable_shared_memory': False, 'batch_size': 5.0, 'dataset_size': 20.0, 'num_parallel_programs': 3.0, 'lora_rank': 32.0, 'eval_every': 4.0, 'n_epochs': 3.0, 'hf_home': '', 'learning_rate': 1e-05, 'save_every': 1.0, 'training_microbatch_size': 1.0, 'model_name': 'Qwen/Qwen3-0.6B', 'rl_loss_fn': 'cispo', 'dataset_pair': 'aimo_beyondaime', 'test_dataset_size': 10.0, 'checkpoint_root': '', 'source_sha': '08be53ed944418b30d5f19eb92af62aa36987725'}]
+#    run_priority: str [Default: '']
+components:
+  comp-train-espl:
+    executorLabel: exec-train-espl
+    inputDefinitions:
+      parameters:
+        params:
+          parameterType: STRUCT
+    outputDefinitions:
+      artifacts:
+        metrics:
+          artifactType:
+            schemaTitle: system.Metrics
+            schemaVersion: 0.0.1
+        trained_model:
+          artifactType:
+            schemaTitle: system.Model
+            schemaVersion: 0.0.1
+      parameters:
+        Output:
+          parameterType: NUMBER_INTEGER
+deploymentSpec:
+  executors:
+    exec-train-espl:
+      container:
+        args:
+        - --executor_input
+        - '{{$}}'
+        - --function_to_execute
+        - train_espl
+        command:
+        - sh
+        - -c
+        - "\nif ! [ -x \"$(command -v pip)\" ]; then\n    python3 -m ensurepip ||\
+          \ python3 -m ensurepip --user || apt-get install python3-pip\nfi\n\nPIP_DISABLE_PIP_VERSION_CHECK=1\
+          \ python3 -m pip install --quiet --no-warn-script-location --index-url https://download.pytorch.org/whl/cu128\
+          \ --extra-index-url https://pypi.org/simple --trusted-host download.pytorch.org\
+          \ --trusted-host pypi.org 'torch==2.8.0' 'torchvision==0.23.0'\
+          \ 'urllib3>=1.26.4,<2' 'transformers==4.57.6' 'peft==0.19.1' 'accelerate==1.14.0'\
+          \ 'tinker==0.6.3' 'https://files.pythonhosted.org/packages/3c/eb/77789ad6f1807328a61c205881580546af597f60334f1f96fd4f3bb6e929/chz-0.4.0-py3-none-any.whl#sha256=5db5ffe42f6be38f1c37e1b18f0d5559572ee8a8dc941116e67f1bd5396e2a9b'\
+          \ 'datasets' 'rich' 'math-verify' 'vllm==0.10.2'  &&  python3 -m pip install\
+          \ --quiet --no-warn-script-location --index-url https://download.pytorch.org/whl/cu128\
+          \ --extra-index-url https://pypi.org/simple --trusted-host download.pytorch.org\
+          \ --trusted-host pypi.org 'kfp==2.14.6' '--no-deps' 'typing-extensions>=3.7.4,<5;\
+          \ python_version<\"3.9\"' && \"$0\" \"$@\"\n"
+        - sh
+        - -ec
+        - 'program_path=$(mktemp -d)
+
+
+          printf "%s" "$0" > "$program_path/ephemeral_component.py"
+
+          _KFP_RUNTIME=true python3 -m kfp.dsl.executor_main                         --component_module_path                         "$program_path/ephemeral_component.py"                         "$@"
+
+          '
+        - "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import\
+          \ *\n\ndef train_espl(\n    params: Dict[str, Any],\n    trained_model:\
+          \ Output[Model],\n    metrics: Output[Metrics],\n) -> int:\n    import json\n\
+          \    import os\n    import pathlib\n    import shutil\n    import subprocess\n\
+          \    import sys\n    import tarfile\n    import urllib.request\n    import\
+          \ zipfile\n\n    import torch\n\n    cfg = dict(params)\n    print(\n  \
+          \      \"PyTorch runtime:\",\n        f\"torch={torch.__version__}\",\n\
+          \        f\"cuda_build={torch.version.cuda}\",\n        f\"cuda_available={torch.cuda.is_available()}\"\
+          ,\n    )\n    if not torch.cuda.is_available():\n        raise RuntimeError(\"\
+          Aviflow task started without a visible CUDA GPU\")\n\n    source_sha = str(cfg[\"\
+          source_sha\"]).strip()\n    if len(source_sha) != 40 or any(char not in\
+          \ \"0123456789abcdef\" for char in source_sha):\n        raise ValueError(\"\
+          source_sha must be a full lowercase 40-character Git SHA\")\n\n    source_dir\
+          \ = pathlib.Path(\"/tmp/evolutionrl-source\")\n    archive_path = pathlib.Path(\"\
+          /tmp/evolutionrl-source.zip\")\n    if source_dir.exists():\n        shutil.rmtree(source_dir)\n\
+          \    source_dir.mkdir(parents=True)\n    archive_url = (\n        \"https://github.com/Hermeska/EvolutionRL/archive/\"\
+          \n        f\"{source_sha}.zip\"\n    )\n    urllib.request.urlretrieve(archive_url,\
+          \ archive_path)\n    with zipfile.ZipFile(archive_path) as archive:\n  \
+          \      archive.extractall(source_dir)\n\n    recipes = list(\n        source_dir.glob(\n\
+          \            \"*/tinker_cookbook/recipes/system_prompt_learning_rl.py\"\n\
+          \        )\n    )\n    if len(recipes) != 1:\n        raise RuntimeError(\n\
+          \            f\"Expected one E-SPL recipe in {archive_url}, found {len(recipes)}\"\
+          \n        )\n    recipe = recipes[0]\n    project_root = recipe.parents[2]\n\
+          \n    # Source archives do not contain .git, and minimal GPU images may\
+          \ not\n    # contain the git executable either. Make code-state logging\
+          \ treat both\n    # cases as \"not in a Git repository\" instead of aborting\
+          \ training.\n    code_state_path = project_root / \"tinker_cookbook\" /\
+          \ \"utils\" / \"code_state.py\"\n    code_state_source = code_state_path.read_text(encoding=\"\
+          utf-8\")\n    old_handler = \"except subprocess.CalledProcessError:\"\n\
+          \    new_handler = \"except (subprocess.CalledProcessError, FileNotFoundError):\"\
+          \n    if old_handler in code_state_source:\n        code_state_path.write_text(\n\
+          \            code_state_source.replace(old_handler, new_handler, 1),\n \
+          \           encoding=\"utf-8\",\n        )\n\n    # The Qwen tokenizer uses\
+          \ EOS as padding. Transformers cannot infer a\n    # reliable mask in that\
+          \ case, so pass the all-ones mask explicitly for\n    # each unpadded sampling\
+          \ prompt.\n    local_client_path = project_root / \"tinker_cookbook\" /\
+          \ \"local_backend\" / \"client.py\"\n    local_client_source = local_client_path.read_text(encoding=\"\
+          utf-8\")\n    generate_input = \"                    input_ids=input_ids,\\\
+          n\"\n    generate_input_with_mask = (\n        generate_input\n        +\
+          \ \"                    attention_mask=torch.ones_like(input_ids),\\n\"\n\
+          \    )\n    if (\n        generate_input in local_client_source\n      \
+          \  and generate_input_with_mask not in local_client_source\n    ):\n   \
+          \     local_client_path.write_text(\n            local_client_source.replace(\n\
+          \                generate_input,\n                generate_input_with_mask,\n\
+          \                1,\n            ),\n            encoding=\"utf-8\",\n \
+          \       )\n\n    run_name = str(cfg[\"run_name\"])\n    persistent_root\
+          \ = str(cfg.get(\"checkpoint_root\", \"\")).strip()\n    run_root = (\n\
+          \        pathlib.Path(persistent_root)\n        if persistent_root\n   \
+          \     else pathlib.Path(\"/tmp\") / \"espl\" / run_name\n    )\n    checkpoint_dir\
+          \ = run_root / \"checkpoints\"\n    log_dir = run_root / \"logs\"\n    checkpoint_dir.mkdir(parents=True,\
+          \ exist_ok=True)\n    log_dir.mkdir(parents=True, exist_ok=True)\n\n   \
+          \ env = os.environ.copy()\n    env[\"PYTHONUNBUFFERED\"] = \"1\"\n    env[\"\
+          PYTHONPATH\"] = os.pathsep.join(\n        [str(project_root), env.get(\"\
+          PYTHONPATH\", \"\")]\n    ).rstrip(os.pathsep)\n    env[\"PYTORCH_CUDA_ALLOC_CONF\"\
+          ] = \"expandable_segments:True\"\n    if str(cfg.get(\"hf_home\", \"\")).strip():\n\
+          \        env[\"HF_HOME\"] = str(cfg[\"hf_home\"]).strip()\n\n    model_name\
+          \ = str(cfg[\"model_name\"])\n    command = [\n        sys.executable,\n\
+          \        \"-u\",\n        str(recipe),\n        \"use_local_backend=True\"\
+          ,\n        f\"model_name={model_name}\",\n        f\"local_model_name={model_name}\"\
+          ,\n        \"local_num_gpus=1\",\n        \"local_dtype=bfloat16\",\n  \
+          \      \"local_attention_backend=sdpa\",\n        \"local_sampling_backend=vllm\"\
+          ,\n        \"local_vllm_device=cuda:1\",\n        \"local_vllm_max_model_len=16384\"\
+          ,\n        \"local_vllm_gpu_memory_utilization=0.9\",\n        f\"local_vllm_max_lora_rank={cfg['lora_rank']}\"\
+          ,\n        f\"local_training_microbatch_size={cfg['training_microbatch_size']}\"\
+          ,\n        f\"local_lora_rank={cfg['lora_rank']}\",\n        f\"local_max_tokens={cfg['max_tokens']}\"\
+          ,\n        f\"learning_rate={cfg['learning_rate']}\",\n        f\"batch_size={cfg['batch_size']}\"\
+          ,\n        f\"group_size={cfg['group_size']}\",\n        f\"num_parallel_programs={cfg['num_parallel_programs']}\"\
+          ,\n        f\"n_epochs={cfg['n_epochs']}\",\n        f\"dataset_size={cfg['dataset_size']}\"\
+          ,\n        f\"test_dataset_size={cfg['test_dataset_size']}\",\n        f\"\
+          dataset_pair={cfg['dataset_pair']}\",\n        f\"enable_shared_memory={cfg['enable_shared_memory']}\"\
+          ,\n        f\"rl_loss_fn={cfg['rl_loss_fn']}\",\n        f\"crossover_prob={cfg['crossover_prob']}\"\
+          ,\n        \"resume_strategy=last\",\n        f\"save_every={cfg['save_every']}\"\
+          ,\n        f\"eval_every={cfg['eval_every']}\",\n        f\"experiment_name={run_name}\"\
+          ,\n        f\"log_path={log_dir}\",\n        f\"local_checkpoint_dir={checkpoint_dir}\"\
+          ,\n    ]\n    subprocess.run(command, cwd=run_root, env=env, check=True)\n\
+          \n    stats_path = (\n        run_root / \"data\" / \"math\" / \"train\"\
+          \ / run_name / \"stats.json\"\n    )\n    completed_steps = []\n    if stats_path.exists():\n\
+          \        stats = json.loads(stats_path.read_text(encoding=\"utf-8\"))\n\
+          \        completed_steps = [\n            value\n            for _, value\
+          \ in sorted(\n                stats.items(),\n                key=lambda\
+          \ item: int(item[0].removeprefix(\"step_\")),\n            )\n         \
+          \   if value.get(\"complete\")\n        ]\n\n    metrics.log_metric(\"completed_steps\"\
+          , float(len(completed_steps)))\n    if completed_steps:\n        rollout\
+          \ = completed_steps[-1].get(\"rollout\", {})\n        if \"Agg_avg_reward\"\
+          \ in rollout:\n            metrics.log_metric(\n                \"final_reward\"\
+          ,\n                float(rollout[\"Agg_avg_reward\"]),\n            )\n\
+          \        pass_keys = sorted(\n            key for key in rollout if key.startswith(\"\
+          Agg_Pass@\")\n        )\n        if pass_keys:\n            metrics.log_metric(\n\
+          \                \"final_pass_at_k\",\n                float(rollout[pass_keys[-1]]),\n\
+          \            )\n\n        eval_rewards = [\n            float(step[\"test\"\
+          ][\"eval_avg_reward\"])\n            for step in completed_steps\n     \
+          \       if \"eval_avg_reward\" in step.get(\"test\", {})\n        ]\n  \
+          \      if eval_rewards:\n            metrics.log_metric(\"best_eval_reward\"\
+          , max(eval_rewards))\n            metrics.log_metric(\"final_eval_reward\"\
+          , eval_rewards[-1])\n\n    artifact_path = pathlib.Path(trained_model.path)\n\
+          \    artifact_path.parent.mkdir(parents=True, exist_ok=True)\n    if artifact_path.exists():\n\
+          \        if artifact_path.is_dir():\n            shutil.rmtree(artifact_path)\n\
+          \        else:\n            artifact_path.unlink()\n    with tarfile.open(artifact_path,\
+          \ \"w:gz\") as archive:\n        archive.add(run_root, arcname=run_name)\n\
+          \    trained_model.framework = \"peft\"\n    trained_model.metadata[\"base_model\"\
+          ] = model_name\n    trained_model.metadata[\"source_sha\"] = source_sha\n\
+          \    trained_model.metadata[\"lora_rank\"] = int(cfg[\"lora_rank\"])\n\n\
+          \    return len(completed_steps)\n\n"
+        image: registry.k.avito.ru/ml-platform/components-lib-pytorch-dl:20260116131214-643fd4
+        resources:
+          accelerator:
+            count: '2'
+            resourceCount: '2'
+            resourceType: nvidia.com/gpu
+            type: nvidia.com/gpu
+          cpuLimit: 8.0
+          cpuRequest: 8.0
+          memoryLimit: 32.768
+          memoryRequest: 32.768
+          resourceCpuLimit: 8000m
+          resourceCpuRequest: 8000m
+          resourceMemoryLimit: 32768M
+          resourceMemoryRequest: 32768M
+pipelineInfo:
+  name: espl-training-pipeline
+root:
+  dag:
+    tasks:
+      train-espl:
+        cachingOptions: {}
+        componentRef:
+          name: comp-train-espl
+        inputs:
+          parameters:
+            params:
+              componentInputParameter: params
+        taskInfo:
+          name: train-espl
+  inputDefinitions:
+    parameters:
+      custom_priority_queue:
+        defaultValue: ''
+        isOptional: true
+        parameterType: STRING
+      notifications:
+        defaultValue: []
+        isOptional: true
+        parameterType: LIST
+      params:
+        defaultValue:
+          batch_size: 5.0
+          checkpoint_root: ''
+          crossover_prob: 0.0
+          dataset_pair: aimo_beyondaime
+          dataset_size: 20.0
+          enable_shared_memory: false
+          eval_every: 4.0
+          group_size: 4.0
+          hf_home: ''
+          learning_rate: 1.0e-05
+          lora_rank: 32.0
+          max_tokens: 8192.0
+          model_name: Qwen/Qwen3-0.6B
+          n_epochs: 3.0
+          num_parallel_programs: 3.0
+          rl_loss_fn: cispo
+          run_name: qwen3-0.6b-vllm-3ep-8k
+          save_every: 1.0
+          source_sha: 08be53ed944418b30d5f19eb92af62aa36987725
+          test_dataset_size: 10.0
+          training_microbatch_size: 1.0
+        parameterType: STRUCT
+      run_priority:
+        defaultValue: ''
+        isOptional: true
+        parameterType: STRING
+schemaVersion: 2.1.0
+sdkVersion: kfp-2.14.6
