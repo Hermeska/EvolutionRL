@@ -12,9 +12,8 @@ Drop-in replacement for tinker.ServiceClient:
 
 import logging
 import os
-import asyncio
 import threading
-from concurrent.futures import Future as ConcurrentFuture, ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor
 from types import SimpleNamespace
 from typing import Optional
 
@@ -24,28 +23,9 @@ import torch.nn.functional as F
 from tinker import types
 from tinker.types.tensor_data import TensorData
 
+from .future import LocalFuture
+
 logger = logging.getLogger(__name__)
-
-
-# ---------------------------------------------------------------------------
-# Futures
-# ---------------------------------------------------------------------------
-
-class LocalFuture:
-    """Small APIFuture-compatible wrapper around a value or worker future."""
-
-    def __init__(self, value):
-        self._value = value
-
-    def result(self):
-        if isinstance(self._value, ConcurrentFuture):
-            return self._value.result()
-        return self._value
-
-    async def result_async(self):
-        if isinstance(self._value, ConcurrentFuture):
-            return await asyncio.wrap_future(self._value)
-        return self._value
 
 
 # ---------------------------------------------------------------------------
@@ -237,6 +217,7 @@ class LocalSamplingClient:
             with torch.inference_mode():
                 outputs = model.generate(
                     input_ids=input_ids,
+                    attention_mask=torch.ones_like(input_ids),
                     max_new_tokens=max_new_tokens,
                     temperature=temperature if temperature > 0 else 1.0,
                     top_p=top_p,
@@ -300,19 +281,24 @@ class LocalTrainingClient:
         executor: ThreadPoolExecutor,
         checkpoint_dir: str = "/tmp/espl_checkpoints",
         microbatch_size: int = 1,
+        materialize_sampler_weights: bool = False,
     ):
         self._models = shared_models
         self._sm = shared_models[0]  # compatibility alias and checkpoint authority
         self._executor = executor
         self._checkpoint_dir = checkpoint_dir
         self._microbatch_size = max(int(microbatch_size), 1)
+        self._materialize_sampler_weights = materialize_sampler_weights
         self._grad_scale = 0.0
 
     # --- Called every step ---
 
     def save_weights_for_sampler(self, name: str = "") -> LocalFuture:
-        # Locally: the sampling client already references the same model.
-        # Return a path sentinel that LocalServiceClient will recognise.
+        if self._materialize_sampler_weights:
+            save_path = os.path.join(self._checkpoint_dir, f"sampler_{name}")
+            self._sm.save_lora(save_path)
+            return LocalFuture(types.SaveWeightsForSamplerResponse(path=save_path))
+        # The Transformers sampler references the same in-memory model.
         response = types.SaveWeightsForSamplerResponse(path=f"local:{name}")
         return LocalFuture(response)
 
@@ -446,8 +432,7 @@ class LocalTrainingClient:
         return LocalFuture(SimpleNamespace(path=save_path))
 
     async def save_weights_for_sampler_async(self, name: str) -> LocalFuture:
-        response = types.SaveWeightsForSamplerResponse(path=f"local:{name}")
-        return LocalFuture(response)
+        return self.save_weights_for_sampler(name)
 
     def _do_save(self, save_path: str):
         os.makedirs(save_path, exist_ok=True)
@@ -501,6 +486,11 @@ class LocalServiceClient:
         num_gpus: int = 1,
         dtype: str = "bfloat16",
         attention_backend: str = "sdpa",
+        sampling_backend: str = "transformers",
+        vllm_device: str = "cuda:1",
+        vllm_max_model_len: int = 16384,
+        vllm_gpu_memory_utilization: float = 0.9,
+        vllm_max_lora_rank: int = 32,
     ):
         # base_url is ignored (compatibility shim)
         if device is None:
@@ -517,6 +507,16 @@ class LocalServiceClient:
         self.training_microbatch_size = max(int(training_microbatch_size), 1)
         self.dtype = dtype
         self.attention_backend = attention_backend
+        if sampling_backend not in {"transformers", "vllm"}:
+            raise ValueError("sampling_backend must be 'transformers' or 'vllm'")
+        self.sampling_backend = sampling_backend
+        self.vllm_device = vllm_device
+        self.vllm_max_model_len = int(vllm_max_model_len)
+        self.vllm_gpu_memory_utilization = float(vllm_gpu_memory_utilization)
+        self.vllm_max_lora_rank = int(vllm_max_lora_rank)
+        self._vllm_engine = None
+        self._vllm_adapter_id = 0
+        self._model_name: Optional[str] = None
         self._shared_models: list[_SharedLocalModel] = []
         self._executor = ThreadPoolExecutor(
             max_workers=len(self.devices), thread_name_prefix="espl-gpu"
@@ -529,6 +529,7 @@ class LocalServiceClient:
         logger.info("Local backend devices: %s", self.devices)
 
     def _get_or_create_models(self, model_name: str, lora_rank: int = 0) -> list[_SharedLocalModel]:
+        self._model_name = model_name
         if not self._shared_models:
             self._shared_models = [
                 _SharedLocalModel(
@@ -578,6 +579,7 @@ class LocalServiceClient:
             self._executor,
             checkpoint_dir=self.checkpoint_dir,
             microbatch_size=self.training_microbatch_size,
+            materialize_sampler_weights=self.sampling_backend == "vllm",
         )
 
     def create_sampling_client(
@@ -585,6 +587,36 @@ class LocalServiceClient:
         base_model: Optional[str] = None,
         model_path: Optional[str] = None,
     ) -> LocalSamplingClient:
+        if self.sampling_backend == "vllm":
+            from .vllm_sampling import VLLMEngine, VLLMSamplingClient
+
+            model_name = base_model or (
+                self._shared_models[0].model_name if self._shared_models else None
+            )
+            if model_name is None:
+                raise ValueError("A base model is required to initialize vLLM")
+            if self._vllm_engine is None:
+                self._model_name = model_name
+                self._vllm_engine = VLLMEngine(
+                    model_name=model_name,
+                    device=self.vllm_device,
+                    dtype=self.dtype,
+                    max_model_len=self.vllm_max_model_len,
+                    gpu_memory_utilization=self.vllm_gpu_memory_utilization,
+                    max_lora_rank=self.vllm_max_lora_rank,
+                )
+            adapter_path = None
+            adapter_id = 0
+            if model_path is not None and not model_path.startswith("local:"):
+                self._vllm_adapter_id += 1
+                adapter_id = self._vllm_adapter_id
+                adapter_path = model_path
+            return VLLMSamplingClient(
+                self._vllm_engine,
+                adapter_path=adapter_path,
+                adapter_id=adapter_id,
+            )
+
         if not self._shared_models:
             assert base_model is not None, "Must call create_lora_training_client first or pass base_model"
             self._get_or_create_models(base_model, lora_rank=0)
@@ -602,7 +634,10 @@ class LocalServiceClient:
         return LocalSamplingClient(models, self._executor, use_lora=True)
 
     def create_training_client_from_state(self, state_path: str, rank: int = 16) -> LocalTrainingClient:
-        assert self._shared_models, "Must call create_sampling_client first to load the model"
+        if not self._shared_models:
+            if self._model_name is None:
+                raise RuntimeError("Cannot resume without a known base model")
+            self._get_or_create_models(self._model_name, lora_rank=rank)
         if self._shared_models[0].lora_rank == 0:
             # Apply LoRA before loading saved LoRA weights
             self._get_or_create_models(self._shared_models[0].model_name, lora_rank=rank)
@@ -611,6 +646,7 @@ class LocalServiceClient:
             self._executor,
             checkpoint_dir=self.checkpoint_dir,
             microbatch_size=self.training_microbatch_size,
+            materialize_sampler_weights=self.sampling_backend == "vllm",
         )
         client.load_state(state_path)
         return client

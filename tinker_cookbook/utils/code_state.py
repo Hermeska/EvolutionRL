@@ -65,7 +65,7 @@ def code_state(modules: Sequence[str | ModuleType] = ("tinker_cookbook",)) -> st
                 text=True,
             )
             return Path(completed.stdout.strip()).resolve()
-        except subprocess.CalledProcessError:
+        except (subprocess.CalledProcessError, FileNotFoundError):
             return None
 
     def git_rev(head_dir: Path) -> str:
