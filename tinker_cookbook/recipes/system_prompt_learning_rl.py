@@ -47,6 +47,7 @@ class Config:
     domain: str = "math"
     experiment_name: str = "system_prompt_learning_rl"
     dataset_size: int = 256
+    dataset_seed: int = 42
     dataset_pair: str = "aimo_beyondaime"  # "dapo_aime25", "aimo_beyondaime", "aime_and_amc_to_beyondaime", or "hmmt"
 
     train_mode: str = "evolution_rl"
@@ -585,6 +586,10 @@ class PrincipleUpdater:
             save_dir=save_dir,
             max_operations=self.max_operations,
         )
+
+        if not any(critique.get("operations") for critique in critiques):
+            print("No actionable critique operations; skipping principle mutation")
+            return None
 
         # 3. batch update principles
         new_principles = self._batch_update(
@@ -1162,6 +1167,7 @@ def main(config: Config):
     else:
         train_data = load_data(train_dataset_name)
         if config.dataset_size > 0:
+            random.Random(config.dataset_seed).shuffle(train_data)
             train_data = train_data[: config.dataset_size]
 
         with open(train_data_filename, "w") as f:
@@ -1388,7 +1394,10 @@ def main(config: Config):
             print("     past self-modify:", test_time_program.self_modify_id_list)
 
             # EVAL: send futures first
-            run_full_eval = step % max(config.eval_every, 1) == 0
+            final_step = config.n_epochs * num_batches - 1
+            run_full_eval = (
+                step % max(config.eval_every, 1) == 0 or step == final_step
+            )
             step_test_data = (
                 test_data if run_full_eval else test_data[: max(config.quick_eval_size, 1)]
             )
@@ -1647,6 +1656,7 @@ def main(config: Config):
                             },
                         )
                         training_datums.append(datum)
+            metrics["rl/training_datums"] = len(training_datums)
             
             # EVAL: now collect test evals
             # =============================== TEST BEGINS ===============================
@@ -1730,25 +1740,30 @@ def main(config: Config):
 
             # TRAINING step
             if "rl" in config.train_mode:
-                print("Sending RL step future to server ...")
-                if config.rl_loss_fn == "importance_sampling":
-                    fwd_bwd_future = training_client.forward_backward(
-                        training_datums, loss_fn="importance_sampling"
-                    )
-                elif config.rl_loss_fn == "cispo":
-                    fwd_bwd_future = training_client.forward_backward(
-                        training_datums,
-                        loss_fn="cispo",
-                        loss_fn_config={"clip_low_threshold": 0.0, "clip_high_threshold": 4.0}
-                    )
-                elif config.rl_loss_fn == "ppo":
-                    fwd_bwd_future = training_client.forward_backward(
-                        training_datums,
-                        loss_fn="ppo",
-                    )
+                if not training_datums:
+                    print("Skipping RL update: no non-zero advantages in this batch")
+                    fwd_bwd_future = None
+                    optim_step_future = None
                 else:
-                    raise NotImplementedError
-                optim_step_future = training_client.optim_step(adam_params)
+                    print("Sending RL step future to server ...")
+                    if config.rl_loss_fn == "importance_sampling":
+                        fwd_bwd_future = training_client.forward_backward(
+                            training_datums, loss_fn="importance_sampling"
+                        )
+                    elif config.rl_loss_fn == "cispo":
+                        fwd_bwd_future = training_client.forward_backward(
+                            training_datums,
+                            loss_fn="cispo",
+                            loss_fn_config={"clip_low_threshold": 0.0, "clip_high_threshold": 4.0}
+                        )
+                    elif config.rl_loss_fn == "ppo":
+                        fwd_bwd_future = training_client.forward_backward(
+                            training_datums,
+                            loss_fn="ppo",
+                        )
+                    else:
+                        raise NotImplementedError
+                    optim_step_future = training_client.optim_step(adam_params)
 
             # logging stats
             max_K = config.group_size
@@ -1951,8 +1966,11 @@ def main(config: Config):
                         principles=selected_principles,
                         save_dir=cur_step_dir,
                     )
-                    json.dump(new_principles, open(next_principle_filename, "w"), indent=2)
-                    print(f"Saved {len(new_principles)} principles to {next_principle_filename}")
+                    if new_principles:
+                        json.dump(new_principles, open(next_principle_filename, "w"), indent=2)
+                        print(f"Saved {len(new_principles)} principles to {next_principle_filename}")
+                    else:
+                        print("Skipping mutation: no principle changes were proposed")
                 except Exception as mutation_e:
                     print(f"Encountered error: {mutation_e}")
 
@@ -2035,9 +2053,10 @@ def main(config: Config):
             
             # Get weight updates
             if "rl" in config.train_mode:
-                print("Weight update happening ...")
-                _fwd_bwd_result = fwd_bwd_future.result()
-                _optim_result = optim_step_future.result()
+                if fwd_bwd_future is not None:
+                    print("Weight update happening ...")
+                    _fwd_bwd_result = fwd_bwd_future.result()
+                    _optim_result = optim_step_future.result()
 
             # Save stats
             stats[f"step_{step}"]["complete"] = True

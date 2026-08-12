@@ -6,7 +6,7 @@ import os
 from typing import Any, Dict
 
 import aviflow
-from aviflow import Metrics, Model, Output, pipeline, remote
+from aviflow import Chart, Metrics, Model, Output, Table, pipeline, remote
 
 # Aviflow 0.2.x defaults to an insecure PyPI fallback. Use the official
 # CUDA 12.8 wheel index so the runtime stays compatible with CUDA 12.x workers.
@@ -41,26 +41,28 @@ RUNTIME_PACKAGES = [
     "rich",
     "math-verify",
     "vllm==0.10.2",
+    "plotly==6.3.0",
 ]
 
 DEFAULT_PARAMS: Dict[str, Any] = {
     "source_sha": SOURCE_SHA,
-    "run_name": "qwen3-0.6b-vllm-3ep-8k",
-    "model_name": "Qwen/Qwen3-0.6B",
+    "run_name": "qwen3-4b-vllm-3ep-4k",
+    "model_name": "Qwen/Qwen3-4B",
     "dataset_pair": "aimo_beyondaime",
-    "dataset_size": 20,
-    "test_dataset_size": 10,
+    "dataset_size": 90,
+    "dataset_seed": 42,
+    "test_dataset_size": 20,
     "n_epochs": 3,
     "batch_size": 5,
     "group_size": 4,
-    "num_parallel_programs": 3,
-    "max_tokens": 8192,
+    "num_parallel_programs": 2,
+    "max_tokens": 4096,
     "lora_rank": 32,
-    "learning_rate": 1e-5,
+    "learning_rate": 5e-6,
     "rl_loss_fn": "cispo",
     "training_microbatch_size": 1,
     "save_every": 1,
-    "eval_every": 4,
+    "eval_every": 18,
     "enable_shared_memory": False,
     "crossover_prob": 0.0,
     "checkpoint_root": "",
@@ -104,6 +106,9 @@ def make_pipeline():
         params: Dict[str, Any],
         trained_model: Output[Model],
         metrics: Output[Metrics],
+        performance_chart: Output[Chart],
+        efficiency_chart: Output[Chart],
+        step_metrics: Output[Table],
     ) -> int:
         import json
         import os
@@ -238,6 +243,7 @@ def make_pipeline():
             f"num_parallel_programs={cfg['num_parallel_programs']}",
             f"n_epochs={cfg['n_epochs']}",
             f"dataset_size={cfg['dataset_size']}",
+            f"dataset_seed={cfg['dataset_seed']}",
             f"test_dataset_size={cfg['test_dataset_size']}",
             f"dataset_pair={cfg['dataset_pair']}",
             f"enable_shared_memory={cfg['enable_shared_memory']}",
@@ -284,14 +290,98 @@ def make_pipeline():
                     float(rollout[pass_keys[-1]]),
                 )
 
-            eval_rewards = [
+            full_eval_rewards = [
                 float(step["test"]["eval_avg_reward"])
                 for step in completed_steps
-                if "eval_avg_reward" in step.get("test", {})
+                if step.get("test", {}).get("full_eval")
+                and "eval_avg_reward" in step["test"]
             ]
-            if eval_rewards:
-                metrics.log_metric("best_eval_reward", max(eval_rewards))
-                metrics.log_metric("final_eval_reward", eval_rewards[-1])
+            if full_eval_rewards:
+                metrics.log_metric("best_eval_reward", max(full_eval_rewards))
+                metrics.log_metric("final_eval_reward", full_eval_rewards[-1])
+
+        metric_rows = []
+        metrics_file = log_dir / "metrics.jsonl"
+        if metrics_file.exists():
+            with metrics_file.open(encoding="utf-8") as metric_stream:
+                for global_step, line in enumerate(metric_stream):
+                    row = json.loads(line)
+                    metric_rows.append({"global_step": global_step, **row})
+
+        if metric_rows:
+            import plotly.graph_objects as go
+            from plotly.subplots import make_subplots
+
+            steps = [row["global_step"] for row in metric_rows]
+            performance = go.Figure()
+            for key, label in [
+                ("rollout/Agg_avg_reward", "Train reward"),
+                ("rollout/Agg_Pass@4", "Train Pass@4"),
+            ]:
+                performance.add_trace(go.Scatter(
+                    x=steps,
+                    y=[row.get(key) for row in metric_rows],
+                    mode="lines+markers",
+                    name=label,
+                ))
+            full_eval_rows = [
+                row for row in metric_rows if row.get("testing/full_eval") is True
+            ]
+            performance.add_trace(go.Scatter(
+                x=[row["global_step"] for row in full_eval_rows],
+                y=[row.get("testing/eval_avg_reward") for row in full_eval_rows],
+                mode="lines+markers",
+                name="Full eval reward",
+                line={"width": 4},
+            ))
+            performance.update_layout(
+                title="E-SPL learning curves",
+                xaxis_title="Global training step",
+                yaxis_title="Reward / pass rate",
+                yaxis={"range": [0, 1]},
+                hovermode="x unified",
+            )
+            performance_chart.write_plotly(performance)
+
+            efficiency = make_subplots(specs=[[{"secondary_y": True}]])
+            efficiency.add_trace(go.Bar(
+                x=steps,
+                y=[row.get("time/total") for row in metric_rows],
+                name="Step time (s)",
+            ), secondary_y=False)
+            efficiency.add_trace(go.Scatter(
+                x=steps,
+                y=[row.get("rl/training_datums", 0) for row in metric_rows],
+                mode="lines+markers",
+                name="RL datums",
+            ), secondary_y=True)
+            efficiency.update_layout(
+                title="Step time and useful RL signal",
+                xaxis_title="Global training step",
+                hovermode="x unified",
+            )
+            efficiency.update_yaxes(title_text="Seconds", secondary_y=False)
+            efficiency.update_yaxes(title_text="Training datums", secondary_y=True)
+            efficiency_chart.write_plotly(efficiency)
+
+            columns = [
+                "step", "epoch", "batch", "train_reward", "train_pass_at_4",
+                "eval_reward", "full_eval", "rl_datums", "step_seconds",
+            ]
+            table_rows = []
+            for row, stats_step in zip(metric_rows, completed_steps):
+                table_rows.append([
+                    row["global_step"],
+                    stats_step.get("epoch", -1),
+                    stats_step.get("batch", -1),
+                    float(row.get("rollout/Agg_avg_reward", 0.0)),
+                    float(row.get("rollout/Agg_Pass@4", 0.0)),
+                    float(row.get("testing/eval_avg_reward", 0.0)),
+                    str(bool(row.get("testing/full_eval", False))),
+                    int(row.get("rl/training_datums", 0)),
+                    float(row.get("time/total", 0.0)),
+                ])
+            step_metrics.write_table(table_rows, columns=columns)
 
         artifact_path = pathlib.Path(trained_model.path)
         artifact_path.parent.mkdir(parents=True, exist_ok=True)
@@ -309,7 +399,7 @@ def make_pipeline():
 
         return len(completed_steps)
 
-    @pipeline(experiment_name="espl-training", run_name="qwen3-0.6b-vllm-3ep-8k")
+    @pipeline(experiment_name="espl-training", run_name="qwen3-4b-vllm-3ep-4k")
     def espl_training_pipeline(params: Dict[str, Any]):
         train_espl(params=params)
 

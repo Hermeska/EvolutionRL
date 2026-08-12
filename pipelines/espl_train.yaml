@@ -3,7 +3,7 @@
 # Inputs:
 #    custom_priority_queue: str [Default: '']
 #    notifications: list [Default: []]
-#    params: dict [Default: {'group_size': 4.0, 'run_name': 'qwen3-0.6b-vllm-3ep-8k', 'max_tokens': 8192.0, 'crossover_prob': 0.0, 'enable_shared_memory': False, 'batch_size': 5.0, 'dataset_size': 20.0, 'num_parallel_programs': 3.0, 'lora_rank': 32.0, 'eval_every': 4.0, 'n_epochs': 3.0, 'hf_home': '', 'learning_rate': 1e-05, 'save_every': 1.0, 'training_microbatch_size': 1.0, 'model_name': 'Qwen/Qwen3-0.6B', 'rl_loss_fn': 'cispo', 'dataset_pair': 'aimo_beyondaime', 'test_dataset_size': 10.0, 'checkpoint_root': '', 'source_sha': '08be53ed944418b30d5f19eb92af62aa36987725'}]
+#    params: dict [Default: {'dataset_seed': 42.0, 'hf_home': '', 'dataset_pair': 'aimo_beyondaime', 'group_size': 4.0, 'learning_rate': 5e-06, 'eval_every': 18.0, 'lora_rank': 32.0, 'crossover_prob': 0.0, 'checkpoint_root': '', 'enable_shared_memory': False, 'run_name': 'qwen3-4b-vllm-3ep-4k', 'n_epochs': 3.0, 'save_every': 1.0, 'training_microbatch_size': 1.0, 'source_sha': '08be53ed944418b30d5f19eb92af62aa36987725', 'num_parallel_programs': 2.0, 'batch_size': 5.0, 'test_dataset_size': 20.0, 'model_name': 'Qwen/Qwen3-4B', 'max_tokens': 4096.0, 'dataset_size': 90.0, 'rl_loss_fn': 'cispo'}]
 #    run_priority: str [Default: '']
 components:
   comp-train-espl:
@@ -14,9 +14,21 @@ components:
           parameterType: STRUCT
     outputDefinitions:
       artifacts:
+        efficiency_chart:
+          artifactType:
+            schemaTitle: system.Chart
+            schemaVersion: 0.0.1
         metrics:
           artifactType:
             schemaTitle: system.Metrics
+            schemaVersion: 0.0.1
+        performance_chart:
+          artifactType:
+            schemaTitle: system.Chart
+            schemaVersion: 0.0.1
+        step_metrics:
+          artifactType:
+            schemaTitle: system.Table
             schemaVersion: 0.0.1
         trained_model:
           artifactType:
@@ -44,11 +56,12 @@ deploymentSpec:
           \ --trusted-host pypi.org 'torch==2.8.0' 'torchvision==0.23.0'\
           \ 'urllib3>=1.26.4,<2' 'transformers==4.57.6' 'peft==0.19.1' 'accelerate==1.14.0'\
           \ 'tinker==0.6.3' 'https://files.pythonhosted.org/packages/3c/eb/77789ad6f1807328a61c205881580546af597f60334f1f96fd4f3bb6e929/chz-0.4.0-py3-none-any.whl#sha256=5db5ffe42f6be38f1c37e1b18f0d5559572ee8a8dc941116e67f1bd5396e2a9b'\
-          \ 'datasets' 'rich' 'math-verify' 'vllm==0.10.2'  &&  python3 -m pip install\
-          \ --quiet --no-warn-script-location --index-url https://download.pytorch.org/whl/cu128\
-          \ --extra-index-url https://pypi.org/simple --trusted-host download.pytorch.org\
-          \ --trusted-host pypi.org 'kfp==2.14.6' '--no-deps' 'typing-extensions>=3.7.4,<5;\
-          \ python_version<\"3.9\"' && \"$0\" \"$@\"\n"
+          \ 'datasets' 'rich' 'math-verify' 'vllm==0.10.2' 'plotly==6.3.0' 'aviflow==0.2.79'\
+          \  &&  python3 -m pip install --quiet --no-warn-script-location --index-url\
+          \ https://download.pytorch.org/whl/cu128 --extra-index-url https://pypi.org/simple\
+          \ --trusted-host download.pytorch.org --trusted-host pypi.org\
+          \ 'kfp==2.14.6' '--no-deps' 'typing-extensions>=3.7.4,<5; python_version<\"\
+          3.9\"' && \"$0\" \"$@\"\n"
         - sh
         - -ec
         - 'program_path=$(mktemp -d)
@@ -60,15 +73,18 @@ deploymentSpec:
 
           '
         - "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import\
-          \ *\n\ndef train_espl(\n    params: Dict[str, Any],\n    trained_model:\
-          \ Output[Model],\n    metrics: Output[Metrics],\n) -> int:\n    import json\n\
-          \    import os\n    import pathlib\n    import shutil\n    import subprocess\n\
-          \    import sys\n    import tarfile\n    import urllib.request\n    import\
-          \ zipfile\n\n    import torch\n\n    cfg = dict(params)\n    print(\n  \
-          \      \"PyTorch runtime:\",\n        f\"torch={torch.__version__}\",\n\
-          \        f\"cuda_build={torch.version.cuda}\",\n        f\"cuda_available={torch.cuda.is_available()}\"\
-          ,\n    )\n    if not torch.cuda.is_available():\n        raise RuntimeError(\"\
-          Aviflow task started without a visible CUDA GPU\")\n\n    source_sha = str(cfg[\"\
+          \ *\nfrom aviflow.artifact_types import Chart\nfrom aviflow.artifact_types\
+          \ import Table\n\ndef train_espl(\n    params: Dict[str, Any],\n    trained_model:\
+          \ Output[Model],\n    metrics: Output[Metrics],\n    performance_chart:\
+          \ Output[Chart],\n    efficiency_chart: Output[Chart],\n    step_metrics:\
+          \ Output[Table],\n) -> int:\n    import json\n    import os\n    import\
+          \ pathlib\n    import shutil\n    import subprocess\n    import sys\n  \
+          \  import tarfile\n    import urllib.request\n    import zipfile\n\n   \
+          \ import torch\n\n    cfg = dict(params)\n    print(\n        \"PyTorch\
+          \ runtime:\",\n        f\"torch={torch.__version__}\",\n        f\"cuda_build={torch.version.cuda}\"\
+          ,\n        f\"cuda_available={torch.cuda.is_available()}\",\n    )\n   \
+          \ if not torch.cuda.is_available():\n        raise RuntimeError(\"Aviflow\
+          \ task started without a visible CUDA GPU\")\n\n    source_sha = str(cfg[\"\
           source_sha\"]).strip()\n    if len(source_sha) != 40 or any(char not in\
           \ \"0123456789abcdef\" for char in source_sha):\n        raise ValueError(\"\
           source_sha must be a full lowercase 40-character Git SHA\")\n\n    source_dir\
@@ -127,8 +143,8 @@ deploymentSpec:
           ,\n        f\"learning_rate={cfg['learning_rate']}\",\n        f\"batch_size={cfg['batch_size']}\"\
           ,\n        f\"group_size={cfg['group_size']}\",\n        f\"num_parallel_programs={cfg['num_parallel_programs']}\"\
           ,\n        f\"n_epochs={cfg['n_epochs']}\",\n        f\"dataset_size={cfg['dataset_size']}\"\
-          ,\n        f\"test_dataset_size={cfg['test_dataset_size']}\",\n        f\"\
-          dataset_pair={cfg['dataset_pair']}\",\n        f\"enable_shared_memory={cfg['enable_shared_memory']}\"\
+          ,\n        f\"dataset_seed={cfg['dataset_seed']}\",\n        f\"test_dataset_size={cfg['test_dataset_size']}\"\
+          ,\n        f\"dataset_pair={cfg['dataset_pair']}\",\n        f\"enable_shared_memory={cfg['enable_shared_memory']}\"\
           ,\n        f\"rl_loss_fn={cfg['rl_loss_fn']}\",\n        f\"crossover_prob={cfg['crossover_prob']}\"\
           ,\n        \"resume_strategy=last\",\n        f\"save_every={cfg['save_every']}\"\
           ,\n        f\"eval_every={cfg['eval_every']}\",\n        f\"experiment_name={run_name}\"\
@@ -148,12 +164,59 @@ deploymentSpec:
           \        pass_keys = sorted(\n            key for key in rollout if key.startswith(\"\
           Agg_Pass@\")\n        )\n        if pass_keys:\n            metrics.log_metric(\n\
           \                \"final_pass_at_k\",\n                float(rollout[pass_keys[-1]]),\n\
-          \            )\n\n        eval_rewards = [\n            float(step[\"test\"\
-          ][\"eval_avg_reward\"])\n            for step in completed_steps\n     \
-          \       if \"eval_avg_reward\" in step.get(\"test\", {})\n        ]\n  \
-          \      if eval_rewards:\n            metrics.log_metric(\"best_eval_reward\"\
-          , max(eval_rewards))\n            metrics.log_metric(\"final_eval_reward\"\
-          , eval_rewards[-1])\n\n    artifact_path = pathlib.Path(trained_model.path)\n\
+          \            )\n\n        full_eval_rewards = [\n            float(step[\"\
+          test\"][\"eval_avg_reward\"])\n            for step in completed_steps\n\
+          \            if step.get(\"test\", {}).get(\"full_eval\")\n            and\
+          \ \"eval_avg_reward\" in step[\"test\"]\n        ]\n        if full_eval_rewards:\n\
+          \            metrics.log_metric(\"best_eval_reward\", max(full_eval_rewards))\n\
+          \            metrics.log_metric(\"final_eval_reward\", full_eval_rewards[-1])\n\
+          \n    metric_rows = []\n    metrics_file = log_dir / \"metrics.jsonl\"\n\
+          \    if metrics_file.exists():\n        with metrics_file.open(encoding=\"\
+          utf-8\") as metric_stream:\n            for global_step, line in enumerate(metric_stream):\n\
+          \                row = json.loads(line)\n                metric_rows.append({\"\
+          global_step\": global_step, **row})\n\n    if metric_rows:\n        import\
+          \ plotly.graph_objects as go\n        from plotly.subplots import make_subplots\n\
+          \n        steps = [row[\"global_step\"] for row in metric_rows]\n      \
+          \  performance = go.Figure()\n        for key, label in [\n            (\"\
+          rollout/Agg_avg_reward\", \"Train reward\"),\n            (\"rollout/Agg_Pass@4\"\
+          , \"Train Pass@4\"),\n        ]:\n            performance.add_trace(go.Scatter(\n\
+          \                x=steps,\n                y=[row.get(key) for row in metric_rows],\n\
+          \                mode=\"lines+markers\",\n                name=label,\n\
+          \            ))\n        full_eval_rows = [\n            row for row in\
+          \ metric_rows if row.get(\"testing/full_eval\") is True\n        ]\n   \
+          \     performance.add_trace(go.Scatter(\n            x=[row[\"global_step\"\
+          ] for row in full_eval_rows],\n            y=[row.get(\"testing/eval_avg_reward\"\
+          ) for row in full_eval_rows],\n            mode=\"lines+markers\",\n   \
+          \         name=\"Full eval reward\",\n            line={\"width\": 4},\n\
+          \        ))\n        performance.update_layout(\n            title=\"E-SPL\
+          \ learning curves\",\n            xaxis_title=\"Global training step\",\n\
+          \            yaxis_title=\"Reward / pass rate\",\n            yaxis={\"\
+          range\": [0, 1]},\n            hovermode=\"x unified\",\n        )\n   \
+          \     performance_chart.write_plotly(performance)\n\n        efficiency\
+          \ = make_subplots(specs=[[{\"secondary_y\": True}]])\n        efficiency.add_trace(go.Bar(\n\
+          \            x=steps,\n            y=[row.get(\"time/total\") for row in\
+          \ metric_rows],\n            name=\"Step time (s)\",\n        ), secondary_y=False)\n\
+          \        efficiency.add_trace(go.Scatter(\n            x=steps,\n      \
+          \      y=[row.get(\"rl/training_datums\", 0) for row in metric_rows],\n\
+          \            mode=\"lines+markers\",\n            name=\"RL datums\",\n\
+          \        ), secondary_y=True)\n        efficiency.update_layout(\n     \
+          \       title=\"Step time and useful RL signal\",\n            xaxis_title=\"\
+          Global training step\",\n            hovermode=\"x unified\",\n        )\n\
+          \        efficiency.update_yaxes(title_text=\"Seconds\", secondary_y=False)\n\
+          \        efficiency.update_yaxes(title_text=\"Training datums\", secondary_y=True)\n\
+          \        efficiency_chart.write_plotly(efficiency)\n\n        columns =\
+          \ [\n            \"step\", \"epoch\", \"batch\", \"train_reward\", \"train_pass_at_4\"\
+          ,\n            \"eval_reward\", \"full_eval\", \"rl_datums\", \"step_seconds\"\
+          ,\n        ]\n        table_rows = []\n        for row, stats_step in zip(metric_rows,\
+          \ completed_steps):\n            table_rows.append([\n                row[\"\
+          global_step\"],\n                stats_step.get(\"epoch\", -1),\n      \
+          \          stats_step.get(\"batch\", -1),\n                float(row.get(\"\
+          rollout/Agg_avg_reward\", 0.0)),\n                float(row.get(\"rollout/Agg_Pass@4\"\
+          , 0.0)),\n                float(row.get(\"testing/eval_avg_reward\", 0.0)),\n\
+          \                str(bool(row.get(\"testing/full_eval\", False))),\n   \
+          \             int(row.get(\"rl/training_datums\", 0)),\n               \
+          \ float(row.get(\"time/total\", 0.0)),\n            ])\n        step_metrics.write_table(table_rows,\
+          \ columns=columns)\n\n    artifact_path = pathlib.Path(trained_model.path)\n\
           \    artifact_path.parent.mkdir(parents=True, exist_ok=True)\n    if artifact_path.exists():\n\
           \        if artifact_path.is_dir():\n            shutil.rmtree(artifact_path)\n\
           \        else:\n            artifact_path.unlink()\n    with tarfile.open(artifact_path,\
@@ -208,22 +271,23 @@ root:
           checkpoint_root: ''
           crossover_prob: 0.0
           dataset_pair: aimo_beyondaime
-          dataset_size: 20.0
+          dataset_seed: 42.0
+          dataset_size: 90.0
           enable_shared_memory: false
-          eval_every: 4.0
+          eval_every: 18.0
           group_size: 4.0
           hf_home: ''
-          learning_rate: 1.0e-05
+          learning_rate: 5.0e-06
           lora_rank: 32.0
-          max_tokens: 8192.0
-          model_name: Qwen/Qwen3-0.6B
+          max_tokens: 4096.0
+          model_name: Qwen/Qwen3-4B
           n_epochs: 3.0
-          num_parallel_programs: 3.0
+          num_parallel_programs: 2.0
           rl_loss_fn: cispo
-          run_name: qwen3-0.6b-vllm-3ep-8k
+          run_name: qwen3-4b-vllm-3ep-4k
           save_every: 1.0
           source_sha: 08be53ed944418b30d5f19eb92af62aa36987725
-          test_dataset_size: 10.0
+          test_dataset_size: 20.0
           training_microbatch_size: 1.0
         parameterType: STRUCT
       run_priority:

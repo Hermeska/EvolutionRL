@@ -16,7 +16,7 @@ repository, TeamCity and a Jira key are not required for this path.
 5. It publishes checkpoints and logs as a `Model` artifact and final values as
    Aviflow metrics.
 
-Tinker Cloud is not used. Qwen3-0.6B is loaded once by the trainer and once by
+Tinker Cloud is not used. Qwen3-4B is loaded once by the trainer and once by
 vLLM. The trainer saves a fresh PEFT adapter before every rollout step; vLLM
 loads that immutable step adapter and batches nearby sampling requests.
 
@@ -47,20 +47,25 @@ python pipelines/aviflow_espl.py
 Default configuration:
 
 ```text
-model                 Qwen/Qwen3-0.6B
+model                 Qwen/Qwen3-4B
 GPU                   2 (GPU 0 training, GPU 1 vLLM sampling)
 CPU / RAM             8 CPU / 32 GB
-dataset               20 train / 10 test
+dataset               90 train / 20 test (seed 42)
 epochs                3
 LoRA rank             32
 RL loss               CISPO
-learning rate         1e-5
-max completion tokens 8192
+learning rate         5e-6
+max completion tokens 4096
 training microbatch    1
 shared memory          disabled
 crossover              disabled
-full eval              every 4 steps
+full eval              every 18 steps and at the final step
 ```
+
+After completion, Aviflow publishes two interactive Plotly charts and a step
+metrics table: learning curves, step time versus useful RL datums, and the
+underlying per-step values. Scalar summary metrics use full evaluation runs;
+quick one-question evaluations no longer overwrite `final_eval_reward`.
 
 The source is pinned by the `source_sha` pipeline parameter. Use a full commit
 SHA for any later source version; do not replace it with a moving branch name.
