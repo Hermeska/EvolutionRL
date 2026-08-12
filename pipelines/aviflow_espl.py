@@ -6,7 +6,20 @@ import os
 from typing import Any, Dict
 
 import aviflow
-from aviflow import Chart, Metrics, Model, Output, Table, pipeline, remote
+from aviflow import Metrics, Model, Output, pipeline, remote
+from kfp.dsl import Dataset
+
+
+class ChartArtifact(Dataset):
+    """Aviflow-compatible Plotly chart without a runtime aviflow dependency."""
+
+    schema_title = "system.Chart"
+
+
+class TableArtifact(Dataset):
+    """Aviflow-compatible CSV table without a runtime aviflow dependency."""
+
+    schema_title = "system.Table"
 
 # Aviflow 0.2.x defaults to an insecure PyPI fallback. Use the official
 # CUDA 12.8 wheel index so the runtime stays compatible with CUDA 12.x workers.
@@ -106,9 +119,9 @@ def make_pipeline():
         params: Dict[str, Any],
         trained_model: Output[Model],
         metrics: Output[Metrics],
-        performance_chart: Output[Chart],
-        efficiency_chart: Output[Chart],
-        step_metrics: Output[Table],
+        performance_chart: Output[ChartArtifact],
+        efficiency_chart: Output[ChartArtifact],
+        step_metrics: Output[TableArtifact],
     ) -> int:
         import json
         import os
@@ -341,7 +354,10 @@ def make_pipeline():
                 yaxis={"range": [0, 1]},
                 hovermode="x unified",
             )
-            performance_chart.write_plotly(performance)
+            performance_path = pathlib.Path(performance_chart.path)
+            performance_path.parent.mkdir(parents=True, exist_ok=True)
+            performance.write_json(performance_path)
+            performance_chart.metadata["title"] = "E-SPL learning curves"
 
             efficiency = make_subplots(specs=[[{"secondary_y": True}]])
             efficiency.add_trace(go.Bar(
@@ -362,7 +378,10 @@ def make_pipeline():
             )
             efficiency.update_yaxes(title_text="Seconds", secondary_y=False)
             efficiency.update_yaxes(title_text="Training datums", secondary_y=True)
-            efficiency_chart.write_plotly(efficiency)
+            efficiency_path = pathlib.Path(efficiency_chart.path)
+            efficiency_path.parent.mkdir(parents=True, exist_ok=True)
+            efficiency.write_json(efficiency_path)
+            efficiency_chart.metadata["title"] = "Step time and useful RL signal"
 
             columns = [
                 "step", "epoch", "batch", "train_reward", "train_pass_at_4",
@@ -381,7 +400,16 @@ def make_pipeline():
                     int(row.get("rl/training_datums", 0)),
                     float(row.get("time/total", 0.0)),
                 ])
-            step_metrics.write_table(table_rows, columns=columns)
+            import csv
+
+            table_path = pathlib.Path(step_metrics.path)
+            table_path.parent.mkdir(parents=True, exist_ok=True)
+            with table_path.open("w", encoding="utf-8", newline="") as table_file:
+                writer = csv.writer(table_file, quoting=csv.QUOTE_ALL)
+                writer.writerow(columns)
+                writer.writerows(table_rows)
+            step_metrics.metadata["cols"] = len(columns)
+            step_metrics.metadata["rows"] = len(table_rows) + 1
 
         artifact_path = pathlib.Path(trained_model.path)
         artifact_path.parent.mkdir(parents=True, exist_ok=True)
