@@ -91,6 +91,7 @@ class Config:
     local_lora_rank: int = 32
     local_checkpoint_dir: str = "/tmp/espl_checkpoints"
     local_max_tokens: int = 8192
+    solution_token_budget: int = 0  # 0 = derive a conservative budget from max_tokens
     local_batch_size: int = 10
     local_group_size: int = 5
     local_training_microbatch_size: int = 2
@@ -268,12 +269,16 @@ def get_operations_from_json(llm_response):
 PROBLEM_WITH_PRINCIPLE_TEMPLATE = """Please solve the following problem:
 {problem}
 
+Your complete response, including reasoning and the final answer, MUST fit within approximately {solution_token_budget} tokens. Be concise, avoid repeating calculations, and reserve enough space to finish. The final line must be exactly: Answer: \\boxed{{your_answer}}
+
 When solving problems, you MUST first carefully read and understand the helpful instructions and principles below:
 {principles}"""
 
 
 PROBLEM_WITH_PRINCIPLE_AND_MEMORY_TEMPLATE = """Please solve the following problem:
 {problem}
+
+Your complete response, including reasoning and the final answer, MUST fit within approximately {solution_token_budget} tokens. Be concise, avoid repeating calculations, and reserve enough space to finish. The final line must be exactly: Answer: \\boxed{{your_answer}}
 
 When solving problems, you MUST first carefully read and understand the helpful instructions and principles below:
 {principles}
@@ -1204,6 +1209,20 @@ def main(config: Config):
         logger.info("Using CLOUD Tinker backend")
         effective_max_tokens = config.max_tokens
 
+    solution_token_budget = config.solution_token_budget
+    if solution_token_budget <= 0:
+        solution_token_budget = max(1, int(effective_max_tokens * 0.85))
+    if solution_token_budget >= effective_max_tokens:
+        raise ValueError(
+            "solution_token_budget must be smaller than the hard max token limit"
+        )
+    logger.info(
+        "Generation token limits: soft_budget=%s hard_max=%s reserve=%s",
+        solution_token_budget,
+        effective_max_tokens,
+        effective_max_tokens - solution_token_budget,
+    )
+
     # Reference policy sampling
     effective_model_name = config.local_model_name if config.use_local_backend else config.model_name
     ref_model_sample_client = service_client.create_sampling_client(base_model=effective_model_name)
@@ -1411,6 +1430,7 @@ def main(config: Config):
                         problem=each["problem"],
                         principles=test_time_principles if test_time_principles else "None",
                         shared_memory=shared_memory.get_context_string(),
+                        solution_token_budget=solution_token_budget,
                     ),
                     **each
                 } for each in step_test_data]
@@ -1419,6 +1439,7 @@ def main(config: Config):
                     "prompt": PROBLEM_WITH_PRINCIPLE_TEMPLATE.format(
                         problem=each["problem"],
                         principles=test_time_principles if test_time_principles else "None",
+                        solution_token_budget=solution_token_budget,
                     ),
                     **each
                 } for each in step_test_data]
@@ -1494,6 +1515,7 @@ def main(config: Config):
                             principles=formatted_principles_i,
                             problem=each["problem"],
                             shared_memory=shared_memory.get_context_string(),
+                            solution_token_budget=solution_token_budget,
                         ),
                         **each
                     } for each in batch_data]
@@ -1502,7 +1524,8 @@ def main(config: Config):
                         "prompt": PROBLEM_WITH_PRINCIPLE_TEMPLATE.format(
                             principles=formatted_principles_i if formatted_principles_i else "None",
                             problem=each["problem"],
-                        ) if principles else each["problem"],
+                            solution_token_budget=solution_token_budget,
+                        ),
                         **each
                     } for each in batch_data]
 
@@ -1516,6 +1539,8 @@ def main(config: Config):
             batch_logprobs_all_programs = []
             batch_completions_all_programs = []
             batch_rewards_all_programs = []
+            train_generated_count = 0
+            train_truncated_count = 0
 
             # Sending the futures
             for batch_data_for_program in batch_data_all_programs:
@@ -1571,6 +1596,9 @@ def main(config: Config):
                     for future in sample_futures:
                         sample_result = future.result()
                         for sampled_sequence in sample_result.sequences:
+                            train_generated_count += 1
+                            if str(sampled_sequence.stop_reason).lower() in {"length", "max_tokens"}:
+                                train_truncated_count += 1
                             sampled_tokens = sampled_sequence.tokens
                             sampled_logprobs = sampled_sequence.logprobs
                             assert sampled_logprobs is not None
@@ -1663,6 +1691,8 @@ def main(config: Config):
             print("Getting test eval results ...")
             test_completions = []
             test_rewards = []
+            eval_generated_count = 0
+            eval_truncated_count = 0
             for sample_futures, test_item in zip(test_futures, test_batch_data):
                 answer = test_item["groundtruth"]
                 group_rewards = []
@@ -1671,6 +1701,9 @@ def main(config: Config):
                 for future in sample_futures:
                     sample_result = future.result()
                     for sampled_sequence in sample_result.sequences:
+                        eval_generated_count += 1
+                        if str(sampled_sequence.stop_reason).lower() in {"length", "max_tokens"}:
+                            eval_truncated_count += 1
                         sampled_tokens = sampled_sequence.tokens
                         parsed_message, _ = renderer.parse_response(sampled_tokens)
                         msg_text = parsed_message["content"]
@@ -1683,7 +1716,11 @@ def main(config: Config):
                 test_rewards.append(group_rewards)
             
             this_test_acc = np.mean(test_rewards)
-            eval_stats = {"eval_avg_reward": this_test_acc, "full_eval": run_full_eval}
+            eval_stats = {
+                "eval_avg_reward": this_test_acc,
+                "full_eval": run_full_eval,
+                "truncation_rate": eval_truncated_count / max(eval_generated_count, 1),
+            }
             
             eval_correct_counts = torch.Tensor(test_rewards).sum(dim=-1).tolist()
             eval_pass_at_k_list = []
@@ -1773,7 +1810,8 @@ def main(config: Config):
             reshaped_all_rewards = reshaped_all_rewards.tolist()
             rollout_stats = {
                 "Agg_avg_reward": all_rewards_torch.mean().item(),
-                f"Agg_Pass@{max_K}": sum(max(reward_list) > 0 for reward_list in reshaped_all_rewards) / len(reshaped_all_rewards)
+                f"Agg_Pass@{max_K}": sum(max(reward_list) > 0 for reward_list in reshaped_all_rewards) / len(reshaped_all_rewards),
+                "truncation_rate": train_truncated_count / max(train_generated_count, 1),
             }
 
             all_correct_counts = all_rewards_torch.sum(dim=-1).tolist()
