@@ -3,7 +3,7 @@
 # Inputs:
 #    custom_priority_queue: str [Default: '']
 #    notifications: list [Default: []]
-#    params: dict [Default: {'dataset_seed': 42.0, 'test_dataset_size': 20.0, 'enable_shared_memory': False, 'training_microbatch_size': 1.0, 'rl_loss_fn': 'cispo', 'lora_rank': 32.0, 'group_size': 4.0, 'run_name': 'qwen3-4b-vllm-3ep-4k', 'dataset_pair': 'aimo_beyondaime', 'source_sha': '05074825fec8e06577ec63746083de1f2cf89f05', 'max_tokens': 4096.0, 'eval_every': 18.0, 'hf_home': '', 'dataset_size': 90.0, 'model_name': 'Qwen/Qwen3-4B', 'crossover_prob': 0.0, 'batch_size': 5.0, 'n_epochs': 3.0, 'save_every': 1.0, 'checkpoint_root': '', 'num_parallel_programs': 2.0, 'learning_rate': 5e-06}]
+#    params: dict [Default: {'solution_token_budget': 3500.0, 'dataset_seed': 42.0, 'dataset_size': 90.0, 'dataset_pair': 'aimo_beyondaime', 'group_size': 4.0, 'lora_rank': 32.0, 'batch_size': 5.0, 'max_tokens': 4096.0, 'source_sha': 'c9f0b6d00ea9e6f625f23e58cc8986dade04d55c', 'num_parallel_programs': 2.0, 'hf_home': '', 'crossover_prob': 0.0, 'test_dataset_size': 20.0, 'eval_every': 18.0, 'n_epochs': 3.0, 'rl_loss_fn': 'cispo', 'model_name': 'Qwen/Qwen3-4B', 'training_microbatch_size': 1.0, 'checkpoint_root': '', 'run_name': 'qwen3-4b-vllm-3ep-4k-budget3500', 'learning_rate': 5e-06, 'enable_shared_memory': False, 'save_every': 1.0}]
 #    run_priority: str [Default: '']
 components:
   comp-train-espl:
@@ -138,7 +138,8 @@ deploymentSpec:
           ,\n        \"local_vllm_gpu_memory_utilization=0.9\",\n        f\"local_vllm_max_lora_rank={cfg['lora_rank']}\"\
           ,\n        f\"local_training_microbatch_size={cfg['training_microbatch_size']}\"\
           ,\n        f\"local_lora_rank={cfg['lora_rank']}\",\n        f\"local_max_tokens={cfg['max_tokens']}\"\
-          ,\n        f\"learning_rate={cfg['learning_rate']}\",\n        f\"batch_size={cfg['batch_size']}\"\
+          ,\n        f\"solution_token_budget={cfg['solution_token_budget']}\",\n\
+          \        f\"learning_rate={cfg['learning_rate']}\",\n        f\"batch_size={cfg['batch_size']}\"\
           ,\n        f\"group_size={cfg['group_size']}\",\n        f\"num_parallel_programs={cfg['num_parallel_programs']}\"\
           ,\n        f\"n_epochs={cfg['n_epochs']}\",\n        f\"dataset_size={cfg['dataset_size']}\"\
           ,\n        f\"dataset_seed={cfg['dataset_seed']}\",\n        f\"test_dataset_size={cfg['test_dataset_size']}\"\
@@ -199,40 +200,46 @@ deploymentSpec:
           Step time (s)\",\n        ), secondary_y=False)\n        efficiency.add_trace(go.Scatter(\n\
           \            x=steps,\n            y=[row.get(\"rl/training_datums\", 0)\
           \ for row in metric_rows],\n            mode=\"lines+markers\",\n      \
-          \      name=\"RL datums\",\n        ), secondary_y=True)\n        efficiency.update_layout(\n\
-          \            title=\"Step time and useful RL signal\",\n            xaxis_title=\"\
-          Global training step\",\n            hovermode=\"x unified\",\n        )\n\
-          \        efficiency.update_yaxes(title_text=\"Seconds\", secondary_y=False)\n\
-          \        efficiency.update_yaxes(title_text=\"Training datums\", secondary_y=True)\n\
-          \        efficiency_path = pathlib.Path(efficiency_chart.path)\n       \
-          \ efficiency_path.parent.mkdir(parents=True, exist_ok=True)\n        efficiency.write_json(efficiency_path)\n\
-          \        efficiency_chart.metadata[\"title\"] = \"Step time and useful RL\
-          \ signal\"\n\n        columns = [\n            \"step\", \"epoch\", \"batch\"\
-          , \"train_reward\", \"train_pass_at_4\",\n            \"eval_reward\", \"\
-          full_eval\", \"rl_datums\", \"step_seconds\",\n        ]\n        table_rows\
-          \ = []\n        for row, stats_step in zip(metric_rows, completed_steps):\n\
-          \            table_rows.append([\n                row[\"global_step\"],\n\
-          \                stats_step.get(\"epoch\", -1),\n                stats_step.get(\"\
-          batch\", -1),\n                float(row.get(\"rollout/Agg_avg_reward\"\
-          , 0.0)),\n                float(row.get(\"rollout/Agg_Pass@4\", 0.0)),\n\
-          \                float(row.get(\"testing/eval_avg_reward\", 0.0)),\n   \
-          \             str(bool(row.get(\"testing/full_eval\", False))),\n      \
-          \          int(row.get(\"rl/training_datums\", 0)),\n                float(row.get(\"\
-          time/total\", 0.0)),\n            ])\n        import csv\n\n        table_path\
-          \ = pathlib.Path(step_metrics.path)\n        table_path.parent.mkdir(parents=True,\
-          \ exist_ok=True)\n        with table_path.open(\"w\", encoding=\"utf-8\"\
-          , newline=\"\") as table_file:\n            writer = csv.writer(table_file,\
-          \ quoting=csv.QUOTE_ALL)\n            writer.writerow(columns)\n       \
-          \     writer.writerows(table_rows)\n        step_metrics.metadata[\"cols\"\
-          ] = len(columns)\n        step_metrics.metadata[\"rows\"] = len(table_rows)\
-          \ + 1\n\n    artifact_path = pathlib.Path(trained_model.path)\n    artifact_path.parent.mkdir(parents=True,\
-          \ exist_ok=True)\n    if artifact_path.exists():\n        if artifact_path.is_dir():\n\
-          \            shutil.rmtree(artifact_path)\n        else:\n            artifact_path.unlink()\n\
-          \    with tarfile.open(artifact_path, \"w:gz\") as archive:\n        archive.add(run_root,\
-          \ arcname=run_name)\n    trained_model.framework = \"peft\"\n    trained_model.metadata[\"\
-          base_model\"] = model_name\n    trained_model.metadata[\"source_sha\"] =\
-          \ source_sha\n    trained_model.metadata[\"lora_rank\"] = int(cfg[\"lora_rank\"\
-          ])\n\n    return len(completed_steps)\n\n"
+          \      name=\"RL datums\",\n        ), secondary_y=True)\n        efficiency.add_trace(go.Scatter(\n\
+          \            x=steps,\n            y=[row.get(\"rollout/truncation_rate\"\
+          , 0) for row in metric_rows],\n            mode=\"lines+markers\",\n   \
+          \         name=\"Train truncation rate\",\n        ), secondary_y=True)\n\
+          \        efficiency.update_layout(\n            title=\"Step time and useful\
+          \ RL signal\",\n            xaxis_title=\"Global training step\",\n    \
+          \        hovermode=\"x unified\",\n        )\n        efficiency.update_yaxes(title_text=\"\
+          Seconds\", secondary_y=False)\n        efficiency.update_yaxes(title_text=\"\
+          Training datums\", secondary_y=True)\n        efficiency_path = pathlib.Path(efficiency_chart.path)\n\
+          \        efficiency_path.parent.mkdir(parents=True, exist_ok=True)\n   \
+          \     efficiency.write_json(efficiency_path)\n        efficiency_chart.metadata[\"\
+          title\"] = \"Step time and useful RL signal\"\n\n        columns = [\n \
+          \           \"step\", \"epoch\", \"batch\", \"train_reward\", \"train_pass_at_4\"\
+          ,\n            \"eval_reward\", \"full_eval\", \"rl_datums\", \"step_seconds\"\
+          ,\n            \"train_truncation_rate\", \"eval_truncation_rate\",\n  \
+          \      ]\n        table_rows = []\n        for row, stats_step in zip(metric_rows,\
+          \ completed_steps):\n            table_rows.append([\n                row[\"\
+          global_step\"],\n                stats_step.get(\"epoch\", -1),\n      \
+          \          stats_step.get(\"batch\", -1),\n                float(row.get(\"\
+          rollout/Agg_avg_reward\", 0.0)),\n                float(row.get(\"rollout/Agg_Pass@4\"\
+          , 0.0)),\n                float(row.get(\"testing/eval_avg_reward\", 0.0)),\n\
+          \                str(bool(row.get(\"testing/full_eval\", False))),\n   \
+          \             int(row.get(\"rl/training_datums\", 0)),\n               \
+          \ float(row.get(\"time/total\", 0.0)),\n                float(row.get(\"\
+          rollout/truncation_rate\", 0.0)),\n                float(row.get(\"testing/truncation_rate\"\
+          , 0.0)),\n            ])\n        import csv\n\n        table_path = pathlib.Path(step_metrics.path)\n\
+          \        table_path.parent.mkdir(parents=True, exist_ok=True)\n        with\
+          \ table_path.open(\"w\", encoding=\"utf-8\", newline=\"\") as table_file:\n\
+          \            writer = csv.writer(table_file, quoting=csv.QUOTE_ALL)\n  \
+          \          writer.writerow(columns)\n            writer.writerows(table_rows)\n\
+          \        step_metrics.metadata[\"cols\"] = len(columns)\n        step_metrics.metadata[\"\
+          rows\"] = len(table_rows) + 1\n\n    artifact_path = pathlib.Path(trained_model.path)\n\
+          \    artifact_path.parent.mkdir(parents=True, exist_ok=True)\n    if artifact_path.exists():\n\
+          \        if artifact_path.is_dir():\n            shutil.rmtree(artifact_path)\n\
+          \        else:\n            artifact_path.unlink()\n    with tarfile.open(artifact_path,\
+          \ \"w:gz\") as archive:\n        archive.add(run_root, arcname=run_name)\n\
+          \    trained_model.framework = \"peft\"\n    trained_model.metadata[\"base_model\"\
+          ] = model_name\n    trained_model.metadata[\"source_sha\"] = source_sha\n\
+          \    trained_model.metadata[\"lora_rank\"] = int(cfg[\"lora_rank\"])\n\n\
+          \    return len(completed_steps)\n\n"
         image: registry.k.avito.ru/ml-platform/components-lib-pytorch-dl:20260116131214-643fd4
         resources:
           accelerator:
@@ -292,9 +299,10 @@ root:
           n_epochs: 3.0
           num_parallel_programs: 2.0
           rl_loss_fn: cispo
-          run_name: qwen3-4b-vllm-3ep-4k
+          run_name: qwen3-4b-vllm-3ep-4k-budget3500
           save_every: 1.0
-          source_sha: 05074825fec8e06577ec63746083de1f2cf89f05
+          solution_token_budget: 3500.0
+          source_sha: c9f0b6d00ea9e6f625f23e58cc8986dade04d55c
           test_dataset_size: 20.0
           training_microbatch_size: 1.0
         parameterType: STRUCT

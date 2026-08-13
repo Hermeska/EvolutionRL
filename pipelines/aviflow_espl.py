@@ -23,7 +23,7 @@ BASE_COMPONENT = os.environ.get(
     "pytorch-dl/pytorch-train-dl:0.2.4",
 )
 SOURCE_REPOSITORY = "https://github.com/Hermeska/EvolutionRL"
-SOURCE_SHA = "05074825fec8e06577ec63746083de1f2cf89f05"
+SOURCE_SHA = "c9f0b6d00ea9e6f625f23e58cc8986dade04d55c"
 
 RUNTIME_PACKAGES = [
     "torch==2.8.0",
@@ -48,7 +48,7 @@ RUNTIME_PACKAGES = [
 
 DEFAULT_PARAMS: Dict[str, Any] = {
     "source_sha": SOURCE_SHA,
-    "run_name": "qwen3-4b-vllm-3ep-4k",
+    "run_name": "qwen3-4b-vllm-3ep-4k-budget3500",
     "model_name": "Qwen/Qwen3-4B",
     "dataset_pair": "aimo_beyondaime",
     "dataset_size": 90,
@@ -59,6 +59,7 @@ DEFAULT_PARAMS: Dict[str, Any] = {
     "group_size": 4,
     "num_parallel_programs": 2,
     "max_tokens": 4096,
+    "solution_token_budget": 3500,
     "lora_rank": 32,
     "learning_rate": 5e-6,
     "rl_loss_fn": "cispo",
@@ -261,6 +262,7 @@ def make_pipeline():
             f"local_training_microbatch_size={cfg['training_microbatch_size']}",
             f"local_lora_rank={cfg['lora_rank']}",
             f"local_max_tokens={cfg['max_tokens']}",
+            f"solution_token_budget={cfg['solution_token_budget']}",
             f"learning_rate={cfg['learning_rate']}",
             f"batch_size={cfg['batch_size']}",
             f"group_size={cfg['group_size']}",
@@ -382,6 +384,12 @@ def make_pipeline():
                 mode="lines+markers",
                 name="RL datums",
             ), secondary_y=True)
+            efficiency.add_trace(go.Scatter(
+                x=steps,
+                y=[row.get("rollout/truncation_rate", 0) for row in metric_rows],
+                mode="lines+markers",
+                name="Train truncation rate",
+            ), secondary_y=True)
             efficiency.update_layout(
                 title="Step time and useful RL signal",
                 xaxis_title="Global training step",
@@ -397,6 +405,7 @@ def make_pipeline():
             columns = [
                 "step", "epoch", "batch", "train_reward", "train_pass_at_4",
                 "eval_reward", "full_eval", "rl_datums", "step_seconds",
+                "train_truncation_rate", "eval_truncation_rate",
             ]
             table_rows = []
             for row, stats_step in zip(metric_rows, completed_steps):
@@ -410,6 +419,8 @@ def make_pipeline():
                     str(bool(row.get("testing/full_eval", False))),
                     int(row.get("rl/training_datums", 0)),
                     float(row.get("time/total", 0.0)),
+                    float(row.get("rollout/truncation_rate", 0.0)),
+                    float(row.get("testing/truncation_rate", 0.0)),
                 ])
             import csv
 
@@ -438,7 +449,7 @@ def make_pipeline():
 
         return len(completed_steps)
 
-    @pipeline(experiment_name="espl-training", run_name="qwen3-4b-vllm-3ep-4k")
+    @pipeline(experiment_name="espl-training", run_name="qwen3-4b-vllm-3ep-4k-budget3500")
     def espl_training_pipeline(params: Dict[str, Any]):
         train_espl(params=params)
 

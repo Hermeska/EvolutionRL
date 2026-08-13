@@ -10,7 +10,7 @@ repository, TeamCity and a Jira key are not required for this path.
    `pytorch-dl/pytorch-train-dl:0.2.4`.
 2. The lightweight task installs the Python runtime dependencies.
 3. On the GPU worker it downloads the archive for the pinned public commit:
-   `Hermeska/EvolutionRL@05074825fec8e06577ec63746083de1f2cf89f05`.
+   `Hermeska/EvolutionRL@c9f0b6d00ea9e6f625f23e58cc8986dade04d55c`.
 4. It starts Hugging Face + PEFT training on GPU 0 and a dedicated vLLM
    sampling worker on GPU 1.
 5. It publishes checkpoints and logs as a `Model` artifact and final values as
@@ -56,6 +56,7 @@ LoRA rank             32
 RL loss               CISPO
 learning rate         5e-6
 max completion tokens 4096
+soft response budget  3500 (596-token completion reserve)
 training microbatch    1
 shared memory          disabled
 crossover              disabled
@@ -66,6 +67,8 @@ After completion, Aviflow publishes two interactive Plotly charts and a step
 metrics table: learning curves, step time versus useful RL datums, and the
 underlying per-step values. Scalar summary metrics use full evaluation runs;
 quick one-question evaluations no longer overwrite `final_eval_reward`.
+The efficiency report also includes train and eval truncation rates, measured
+as the fraction of generations stopped by the hard token limit.
 
 The source is pinned by the `source_sha` pipeline parameter. Use a full commit
 SHA for any later source version; do not replace it with a moving branch name.
