@@ -3,7 +3,7 @@
 # Inputs:
 #    custom_priority_queue: str [Default: '']
 #    notifications: list [Default: []]
-#    params: dict [Default: {'batch_size': 5.0, 'dataset_seed': 42.0, 'hf_home': '', 'rl_loss_fn': 'cispo', 'eval_every': 18.0, 'num_parallel_programs': 2.0, 'source_sha': '05074825fec8e06577ec63746083de1f2cf89f05', 'learning_rate': 5e-06, 'max_tokens': 4096.0, 'n_epochs': 3.0, 'dataset_size': 90.0, 'training_microbatch_size': 1.0, 'model_name': 'Qwen/Qwen3-4B', 'checkpoint_root': '', 'save_every': 1.0, 'dataset_pair': 'aimo_beyondaime', 'run_name': 'qwen3-4b-vllm-3ep-4k', 'enable_shared_memory': False, 'group_size': 4.0, 'crossover_prob': 0.0, 'lora_rank': 32.0, 'test_dataset_size': 20.0}]
+#    params: dict [Default: {'dataset_seed': 42.0, 'test_dataset_size': 20.0, 'enable_shared_memory': False, 'training_microbatch_size': 1.0, 'rl_loss_fn': 'cispo', 'lora_rank': 32.0, 'group_size': 4.0, 'run_name': 'qwen3-4b-vllm-3ep-4k', 'dataset_pair': 'aimo_beyondaime', 'source_sha': '05074825fec8e06577ec63746083de1f2cf89f05', 'max_tokens': 4096.0, 'eval_every': 18.0, 'hf_home': '', 'dataset_size': 90.0, 'model_name': 'Qwen/Qwen3-4B', 'crossover_prob': 0.0, 'batch_size': 5.0, 'n_epochs': 3.0, 'save_every': 1.0, 'checkpoint_root': '', 'num_parallel_programs': 2.0, 'learning_rate': 5e-06}]
 #    run_priority: str [Default: '']
 components:
   comp-train-espl:
@@ -72,15 +72,14 @@ deploymentSpec:
 
           '
         - "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import\
-          \ *\nfrom __main__ import ChartArtifact\nfrom __main__ import TableArtifact\n\
-          \ndef train_espl(\n    params: Dict[str, Any],\n    trained_model: Output[Model],\n\
-          \    metrics: Output[Metrics],\n    performance_chart: Output[ChartArtifact],\n\
-          \    efficiency_chart: Output[ChartArtifact],\n    step_metrics: Output[TableArtifact],\n\
-          ) -> int:\n    import json\n    import os\n    import pathlib\n    import\
-          \ shutil\n    import subprocess\n    import sys\n    import tarfile\n  \
-          \  import urllib.request\n    import zipfile\n\n    import torch\n\n   \
-          \ cfg = dict(params)\n    print(\n        \"PyTorch runtime:\",\n      \
-          \  f\"torch={torch.__version__}\",\n        f\"cuda_build={torch.version.cuda}\"\
+          \ *\n\ndef train_espl(\n    params: Dict[str, Any],\n    trained_model:\
+          \ Output[Model],\n    metrics: Output[Metrics],\n    performance_chart:\
+          \ Output[Dataset],\n    efficiency_chart: Output[Dataset],\n    step_metrics:\
+          \ Output[Dataset],\n) -> int:\n    import json\n    import os\n    import\
+          \ pathlib\n    import shutil\n    import subprocess\n    import sys\n  \
+          \  import tarfile\n    import urllib.request\n    import zipfile\n\n   \
+          \ import torch\n\n    cfg = dict(params)\n    print(\n        \"PyTorch\
+          \ runtime:\",\n        f\"torch={torch.__version__}\",\n        f\"cuda_build={torch.version.cuda}\"\
           ,\n        f\"cuda_available={torch.cuda.is_available()}\",\n    )\n   \
           \ if not torch.cuda.is_available():\n        raise RuntimeError(\"Aviflow\
           \ task started without a visible CUDA GPU\")\n\n    source_sha = str(cfg[\"\

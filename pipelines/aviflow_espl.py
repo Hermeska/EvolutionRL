@@ -3,23 +3,12 @@
 import argparse
 import importlib
 import os
+import re
 from typing import Any, Dict
 
 import aviflow
 from aviflow import Metrics, Model, Output, pipeline, remote
 from kfp.dsl import Dataset
-
-
-class ChartArtifact(Dataset):
-    """Aviflow-compatible Plotly chart without a runtime aviflow dependency."""
-
-    schema_title = "system.Chart"
-
-
-class TableArtifact(Dataset):
-    """Aviflow-compatible CSV table without a runtime aviflow dependency."""
-
-    schema_title = "system.Table"
 
 # Aviflow 0.2.x defaults to an insecure PyPI fallback. Use the official
 # CUDA 12.8 wheel index so the runtime stays compatible with CUDA 12.x workers.
@@ -84,7 +73,7 @@ DEFAULT_PARAMS: Dict[str, Any] = {
 
 
 def sanitize_pip_sources(pipeline_path: str) -> None:
-    """Fix trusted-host values emitted as full URLs by the KFP compiler."""
+    """Fix pip hosts and promote built-in Dataset outputs to Aviflow reports."""
     with open(pipeline_path, encoding="utf-8") as pipeline_file:
         pipeline_yaml = pipeline_file.read()
 
@@ -97,6 +86,28 @@ def sanitize_pip_sources(pipeline_path: str) -> None:
     }
     for invalid_value, valid_value in replacements.items():
         pipeline_yaml = pipeline_yaml.replace(invalid_value, valid_value)
+
+    report_schemas = {
+        "efficiency_chart": "system.Chart",
+        "performance_chart": "system.Chart",
+        "step_metrics": "system.Table",
+    }
+    for artifact_name, schema_title in report_schemas.items():
+        pattern = (
+            rf"({artifact_name}:\n"
+            rf"\s+artifactType:\n"
+            rf"\s+schemaTitle:) system\.Dataset"
+        )
+        pipeline_yaml, replacement_count = re.subn(
+            pattern,
+            rf"\1 {schema_title}",
+            pipeline_yaml,
+        )
+        if replacement_count != 1:
+            raise RuntimeError(
+                f"Expected one {artifact_name} schema in compiled YAML, "
+                f"found {replacement_count}"
+            )
 
     with open(pipeline_path, "w", encoding="utf-8") as pipeline_file:
         pipeline_file.write(pipeline_yaml)
@@ -119,9 +130,9 @@ def make_pipeline():
         params: Dict[str, Any],
         trained_model: Output[Model],
         metrics: Output[Metrics],
-        performance_chart: Output[ChartArtifact],
-        efficiency_chart: Output[ChartArtifact],
-        step_metrics: Output[TableArtifact],
+        performance_chart: Output[Dataset],
+        efficiency_chart: Output[Dataset],
+        step_metrics: Output[Dataset],
     ) -> int:
         import json
         import os
