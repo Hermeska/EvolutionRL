@@ -10,7 +10,7 @@ repository, TeamCity and a Jira key are not required for this path.
    `pytorch-dl/pytorch-train-dl:0.2.4`.
 2. The lightweight task installs the Python runtime dependencies.
 3. On the GPU worker it downloads the archive for the pinned public commit:
-   `Hermeska/EvolutionRL@c9f0b6d00ea9e6f625f23e58cc8986dade04d55c`.
+   `Hermeska/EvolutionRL@5b98de127889b442d176104921f60a4968a19e89`.
 4. It starts Hugging Face + PEFT training on GPU 0 and a dedicated vLLM
    sampling worker on GPU 1.
 5. It publishes checkpoints and logs as a `Model` artifact and final values as
@@ -38,7 +38,7 @@ The compile step needs access to Aviflow Component Registry so it can resolve
 the base component image. It does not need access to the custom
 `evolutionrl-components` library.
 
-## Start the smoke run
+## Start the evolution-only run
 
 ```bash
 python pipelines/aviflow_espl.py
@@ -55,11 +55,12 @@ epochs                3
 LoRA rank             32
 RL loss               CISPO
 learning rate         5e-6
-max completion tokens 4096
-soft response budget  3500 (596-token completion reserve)
+train mode             evolution only (no RL optimizer updates)
+max completion tokens 8192
+soft response budget  7000 (1192-token completion reserve)
 training microbatch    1
 shared memory          disabled
-crossover              disabled
+crossover              probability 0.5
 full eval              every 18 steps and at the final step
 ```
 
@@ -69,6 +70,10 @@ underlying per-step values. Scalar summary metrics use full evaluation runs;
 quick one-question evaluations no longer overwrite `final_eval_reward`.
 The efficiency report also includes train and eval truncation rates, measured
 as the fraction of generations stopped by the hard token limit.
+Additional Aviflow outputs expose every rollout's query, response, principles,
+reward and program id, plus the full mutation/crossover program history. A
+dedicated convergence chart shows success rate, its 5-step moving average and
+the recent slope.
 
 The source is pinned by the `source_sha` pipeline parameter. Use a full commit
 SHA for any later source version; do not replace it with a moving branch name.

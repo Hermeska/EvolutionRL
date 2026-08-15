@@ -3,7 +3,7 @@
 # Inputs:
 #    custom_priority_queue: str [Default: '']
 #    notifications: list [Default: []]
-#    params: dict [Default: {'solution_token_budget': 3500.0, 'dataset_seed': 42.0, 'dataset_size': 90.0, 'dataset_pair': 'aimo_beyondaime', 'group_size': 4.0, 'lora_rank': 32.0, 'batch_size': 5.0, 'max_tokens': 4096.0, 'source_sha': 'c9f0b6d00ea9e6f625f23e58cc8986dade04d55c', 'num_parallel_programs': 2.0, 'hf_home': '', 'crossover_prob': 0.0, 'test_dataset_size': 20.0, 'eval_every': 18.0, 'n_epochs': 3.0, 'rl_loss_fn': 'cispo', 'model_name': 'Qwen/Qwen3-4B', 'training_microbatch_size': 1.0, 'checkpoint_root': '', 'run_name': 'qwen3-4b-vllm-3ep-4k-budget3500', 'learning_rate': 5e-06, 'enable_shared_memory': False, 'save_every': 1.0}]
+#    params: dict [Default: {'max_tokens': 8192.0, 'test_dataset_size': 20.0, 'learning_rate': 5e-06, 'train_mode': 'evolution', 'source_sha': '5b98de127889b442d176104921f60a4968a19e89', 'training_microbatch_size': 1.0, 'n_epochs': 3.0, 'crossover_prob': 0.5, 'dataset_seed': 42.0, 'model_name': 'Qwen/Qwen3-4B', 'run_name': 'qwen3-4b-vllm-evolution-3ep-8k', 'eval_every': 18.0, 'dataset_pair': 'aimo_beyondaime', 'save_every': 1.0, 'solution_token_budget': 7000.0, 'num_parallel_programs': 2.0, 'group_size': 4.0, 'batch_size': 5.0, 'rl_loss_fn': 'cispo', 'enable_shared_memory': False, 'hf_home': '', 'lora_rank': 32.0, 'checkpoint_root': '', 'dataset_size': 90.0}]
 #    run_priority: str [Default: '']
 components:
   comp-train-espl:
@@ -14,9 +14,17 @@ components:
           parameterType: STRUCT
     outputDefinitions:
       artifacts:
+        convergence_chart:
+          artifactType:
+            schemaTitle: system.Chart
+            schemaVersion: 0.0.1
         efficiency_chart:
           artifactType:
             schemaTitle: system.Chart
+            schemaVersion: 0.0.1
+        evolution_history:
+          artifactType:
+            schemaTitle: system.Table
             schemaVersion: 0.0.1
         metrics:
           artifactType:
@@ -25,6 +33,10 @@ components:
         performance_chart:
           artifactType:
             schemaTitle: system.Chart
+            schemaVersion: 0.0.1
+        rollout_samples:
+          artifactType:
+            schemaTitle: system.Table
             schemaVersion: 0.0.1
         step_metrics:
           artifactType:
@@ -74,15 +86,16 @@ deploymentSpec:
         - "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import\
           \ *\n\ndef train_espl(\n    params: Dict[str, Any],\n    trained_model:\
           \ Output[Model],\n    metrics: Output[Metrics],\n    performance_chart:\
-          \ Output[Dataset],\n    efficiency_chart: Output[Dataset],\n    step_metrics:\
-          \ Output[Dataset],\n) -> int:\n    import json\n    import os\n    import\
-          \ pathlib\n    import shutil\n    import subprocess\n    import sys\n  \
-          \  import tarfile\n    import urllib.request\n    import zipfile\n\n   \
-          \ import torch\n\n    cfg = dict(params)\n    print(\n        \"PyTorch\
-          \ runtime:\",\n        f\"torch={torch.__version__}\",\n        f\"cuda_build={torch.version.cuda}\"\
-          ,\n        f\"cuda_available={torch.cuda.is_available()}\",\n    )\n   \
-          \ if not torch.cuda.is_available():\n        raise RuntimeError(\"Aviflow\
-          \ task started without a visible CUDA GPU\")\n\n    source_sha = str(cfg[\"\
+          \ Output[Dataset],\n    convergence_chart: Output[Dataset],\n    efficiency_chart:\
+          \ Output[Dataset],\n    step_metrics: Output[Dataset],\n    rollout_samples:\
+          \ Output[Dataset],\n    evolution_history: Output[Dataset],\n) -> int:\n\
+          \    import json\n    import os\n    import pathlib\n    import shutil\n\
+          \    import subprocess\n    import sys\n    import tarfile\n    import urllib.request\n\
+          \    import zipfile\n\n    import torch\n\n    cfg = dict(params)\n    print(\n\
+          \        \"PyTorch runtime:\",\n        f\"torch={torch.__version__}\",\n\
+          \        f\"cuda_build={torch.version.cuda}\",\n        f\"cuda_available={torch.cuda.is_available()}\"\
+          ,\n    )\n    if not torch.cuda.is_available():\n        raise RuntimeError(\"\
+          Aviflow task started without a visible CUDA GPU\")\n\n    source_sha = str(cfg[\"\
           source_sha\"]).strip()\n    if len(source_sha) != 40 or any(char not in\
           \ \"0123456789abcdef\" for char in source_sha):\n        raise ValueError(\"\
           source_sha must be a full lowercase 40-character Git SHA\")\n\n    source_dir\
@@ -144,13 +157,14 @@ deploymentSpec:
           ,\n        f\"n_epochs={cfg['n_epochs']}\",\n        f\"dataset_size={cfg['dataset_size']}\"\
           ,\n        f\"dataset_seed={cfg['dataset_seed']}\",\n        f\"test_dataset_size={cfg['test_dataset_size']}\"\
           ,\n        f\"dataset_pair={cfg['dataset_pair']}\",\n        f\"enable_shared_memory={cfg['enable_shared_memory']}\"\
-          ,\n        f\"rl_loss_fn={cfg['rl_loss_fn']}\",\n        f\"crossover_prob={cfg['crossover_prob']}\"\
-          ,\n        \"resume_strategy=last\",\n        f\"save_every={cfg['save_every']}\"\
-          ,\n        f\"eval_every={cfg['eval_every']}\",\n        f\"experiment_name={run_name}\"\
-          ,\n        f\"log_path={log_dir}\",\n        f\"local_checkpoint_dir={checkpoint_dir}\"\
-          ,\n    ]\n    subprocess.run(command, cwd=run_root, env=env, check=True)\n\
-          \n    stats_path = (\n        run_root / \"data\" / \"math\" / \"train\"\
-          \ / run_name / \"stats.json\"\n    )\n    completed_steps = []\n    if stats_path.exists():\n\
+          ,\n        f\"train_mode={cfg['train_mode']}\",\n        f\"rl_loss_fn={cfg['rl_loss_fn']}\"\
+          ,\n        f\"crossover_prob={cfg['crossover_prob']}\",\n        \"resume_strategy=last\"\
+          ,\n        f\"save_every={cfg['save_every']}\",\n        f\"eval_every={cfg['eval_every']}\"\
+          ,\n        f\"experiment_name={run_name}\",\n        f\"log_path={log_dir}\"\
+          ,\n        f\"local_checkpoint_dir={checkpoint_dir}\",\n    ]\n    subprocess.run(command,\
+          \ cwd=run_root, env=env, check=True)\n\n    stats_path = (\n        run_root\
+          \ / \"data\" / \"math\" / \"train\" / run_name / \"stats.json\"\n    )\n\
+          \    completed_steps = []\n    stats = {}\n    if stats_path.exists():\n\
           \        stats = json.loads(stats_path.read_text(encoding=\"utf-8\"))\n\
           \        completed_steps = [\n            value\n            for _, value\
           \ in sorted(\n                stats.items(),\n                key=lambda\
@@ -176,10 +190,18 @@ deploymentSpec:
           global_step\": global_step, **row})\n\n    if metric_rows:\n        import\
           \ plotly.graph_objects as go\n        from plotly.subplots import make_subplots\n\
           \n        steps = [row[\"global_step\"] for row in metric_rows]\n      \
-          \  performance = go.Figure()\n        for key, label in [\n            (\"\
-          rollout/Agg_avg_reward\", \"Train reward\"),\n            (\"rollout/Agg_Pass@4\"\
-          , \"Train Pass@4\"),\n        ]:\n            performance.add_trace(go.Scatter(\n\
-          \                x=steps,\n                y=[row.get(key) for row in metric_rows],\n\
+          \  success_rates = [\n            float(row.get(\"rollout/success_rate\"\
+          , 0.0)) for row in metric_rows\n        ]\n        metrics.log_metric(\"\
+          best_success_rate\", max(success_rates))\n        metrics.log_metric(\"\
+          final_success_rate\", success_rates[-1])\n        metrics.log_metric(\n\
+          \            \"final_success_rate_ma5\",\n            float(metric_rows[-1].get(\"\
+          convergence/success_rate_ma5\", 0.0)),\n        )\n        metrics.log_metric(\n\
+          \            \"final_convergence_slope5\",\n            float(metric_rows[-1].get(\"\
+          convergence/success_rate_slope5\", 0.0)),\n        )\n        performance\
+          \ = go.Figure()\n        for key, label in [\n            (\"rollout/Agg_avg_reward\"\
+          , \"Train reward\"),\n            (\"rollout/Agg_Pass@4\", \"Train Pass@4\"\
+          ),\n        ]:\n            performance.add_trace(go.Scatter(\n        \
+          \        x=steps,\n                y=[row.get(key) for row in metric_rows],\n\
           \                mode=\"lines+markers\",\n                name=label,\n\
           \            ))\n        full_eval_rows = [\n            row for row in\
           \ metric_rows if row.get(\"testing/full_eval\") is True\n        ]\n   \
@@ -194,13 +216,33 @@ deploymentSpec:
           \     performance_path = pathlib.Path(performance_chart.path)\n        performance_path.parent.mkdir(parents=True,\
           \ exist_ok=True)\n        performance.write_json(performance_path)\n   \
           \     performance_chart.metadata[\"title\"] = \"E-SPL learning curves\"\n\
-          \n        efficiency = make_subplots(specs=[[{\"secondary_y\": True}]])\n\
-          \        efficiency.add_trace(go.Bar(\n            x=steps,\n          \
-          \  y=[row.get(\"time/total\") for row in metric_rows],\n            name=\"\
-          Step time (s)\",\n        ), secondary_y=False)\n        efficiency.add_trace(go.Scatter(\n\
-          \            x=steps,\n            y=[row.get(\"rl/training_datums\", 0)\
-          \ for row in metric_rows],\n            mode=\"lines+markers\",\n      \
-          \      name=\"RL datums\",\n        ), secondary_y=True)\n        efficiency.add_trace(go.Scatter(\n\
+          \n        convergence = make_subplots(specs=[[{\"secondary_y\": True}]])\n\
+          \        convergence.add_trace(go.Scatter(\n            x=steps,\n     \
+          \       y=[row.get(\"rollout/success_rate\", 0) for row in metric_rows],\n\
+          \            mode=\"lines+markers\",\n            name=\"Success rate\"\
+          ,\n        ), secondary_y=False)\n        convergence.add_trace(go.Scatter(\n\
+          \            x=steps,\n            y=[row.get(\"convergence/success_rate_ma5\"\
+          , 0) for row in metric_rows],\n            mode=\"lines\",\n           \
+          \ name=\"Success rate MA(5)\",\n            line={\"width\": 4},\n     \
+          \   ), secondary_y=False)\n        convergence.add_trace(go.Scatter(\n \
+          \           x=steps,\n            y=[row.get(\"convergence/success_rate_slope5\"\
+          , 0) for row in metric_rows],\n            mode=\"lines+markers\",\n   \
+          \         name=\"Convergence slope (5 steps)\",\n        ), secondary_y=True)\n\
+          \        convergence.update_layout(\n            title=\"Evolution convergence\
+          \ and success rate\",\n            xaxis_title=\"Global training step\"\
+          ,\n            hovermode=\"x unified\",\n        )\n        convergence.update_yaxes(title_text=\"\
+          Success rate\", range=[0, 1], secondary_y=False)\n        convergence.update_yaxes(title_text=\"\
+          Slope\", secondary_y=True)\n        convergence_path = pathlib.Path(convergence_chart.path)\n\
+          \        convergence_path.parent.mkdir(parents=True, exist_ok=True)\n  \
+          \      convergence.write_json(convergence_path)\n        convergence_chart.metadata[\"\
+          title\"] = \"Evolution convergence and success rate\"\n\n        efficiency\
+          \ = make_subplots(specs=[[{\"secondary_y\": True}]])\n        efficiency.add_trace(go.Bar(\n\
+          \            x=steps,\n            y=[row.get(\"time/total\") for row in\
+          \ metric_rows],\n            name=\"Step time (s)\",\n        ), secondary_y=False)\n\
+          \        efficiency.add_trace(go.Scatter(\n            x=steps,\n      \
+          \      y=[row.get(\"rl/training_datums\", 0) for row in metric_rows],\n\
+          \            mode=\"lines+markers\",\n            name=\"RL datums\",\n\
+          \        ), secondary_y=True)\n        efficiency.add_trace(go.Scatter(\n\
           \            x=steps,\n            y=[row.get(\"rollout/truncation_rate\"\
           , 0) for row in metric_rows],\n            mode=\"lines+markers\",\n   \
           \         name=\"Train truncation rate\",\n        ), secondary_y=True)\n\
@@ -215,7 +257,8 @@ deploymentSpec:
           \           \"step\", \"epoch\", \"batch\", \"train_reward\", \"train_pass_at_4\"\
           ,\n            \"eval_reward\", \"full_eval\", \"rl_datums\", \"step_seconds\"\
           ,\n            \"train_truncation_rate\", \"eval_truncation_rate\",\n  \
-          \      ]\n        table_rows = []\n        for row, stats_step in zip(metric_rows,\
+          \          \"success_rate_ma5\", \"success_rate_slope5\",\n        ]\n \
+          \       table_rows = []\n        for row, stats_step in zip(metric_rows,\
           \ completed_steps):\n            table_rows.append([\n                row[\"\
           global_step\"],\n                stats_step.get(\"epoch\", -1),\n      \
           \          stats_step.get(\"batch\", -1),\n                float(row.get(\"\
@@ -225,21 +268,87 @@ deploymentSpec:
           \             int(row.get(\"rl/training_datums\", 0)),\n               \
           \ float(row.get(\"time/total\", 0.0)),\n                float(row.get(\"\
           rollout/truncation_rate\", 0.0)),\n                float(row.get(\"testing/truncation_rate\"\
+          , 0.0)),\n                float(row.get(\"convergence/success_rate_ma5\"\
+          , 0.0)),\n                float(row.get(\"convergence/success_rate_slope5\"\
           , 0.0)),\n            ])\n        import csv\n\n        table_path = pathlib.Path(step_metrics.path)\n\
           \        table_path.parent.mkdir(parents=True, exist_ok=True)\n        with\
           \ table_path.open(\"w\", encoding=\"utf-8\", newline=\"\") as table_file:\n\
           \            writer = csv.writer(table_file, quoting=csv.QUOTE_ALL)\n  \
           \          writer.writerow(columns)\n            writer.writerows(table_rows)\n\
           \        step_metrics.metadata[\"cols\"] = len(columns)\n        step_metrics.metadata[\"\
-          rows\"] = len(table_rows) + 1\n\n    artifact_path = pathlib.Path(trained_model.path)\n\
-          \    artifact_path.parent.mkdir(parents=True, exist_ok=True)\n    if artifact_path.exists():\n\
-          \        if artifact_path.is_dir():\n            shutil.rmtree(artifact_path)\n\
-          \        else:\n            artifact_path.unlink()\n    with tarfile.open(artifact_path,\
-          \ \"w:gz\") as archive:\n        archive.add(run_root, arcname=run_name)\n\
-          \    trained_model.framework = \"peft\"\n    trained_model.metadata[\"base_model\"\
-          ] = model_name\n    trained_model.metadata[\"source_sha\"] = source_sha\n\
-          \    trained_model.metadata[\"lora_rank\"] = int(cfg[\"lora_rank\"])\n\n\
-          \    return len(completed_steps)\n\n"
+          rows\"] = len(table_rows) + 1\n\n    import csv\n\n    experiment_dir =\
+          \ run_root / \"data\" / \"math\" / \"train\" / run_name\n    rollout_columns\
+          \ = [\n        \"step\", \"program_slot\", \"program_id\", \"reward\", \"\
+          problem\",\n        \"query_prompt\", \"llm_response\", \"principles\",\
+          \ \"groundtruth\",\n    ]\n    rollout_rows = []\n    for step_dir in sorted(\n\
+          \        experiment_dir.glob(\"step_*\"),\n        key=lambda path: int(path.name.removeprefix(\"\
+          step_\")),\n    ):\n        step_number = int(step_dir.name.removeprefix(\"\
+          step_\"))\n        step_stats = stats.get(f\"step_{step_number}\", {}) if\
+          \ stats_path.exists() else {}\n        program_ids = step_stats.get(\"sampled_program_ids\"\
+          , [])\n        for program_dir in sorted(step_dir.glob(\"sampled_program_*\"\
+          )):\n            program_slot = int(program_dir.name.removeprefix(\"sampled_program_\"\
+          ))\n            principles_path = program_dir / \"principles_to_mutate.json\"\
+          \n            principles = (\n                principles_path.read_text(encoding=\"\
+          utf-8\")\n                if principles_path.exists() else \"{}\"\n    \
+          \        )\n            rollout_path = program_dir / \"rollout.jsonl\"\n\
+          \            if not rollout_path.exists():\n                continue\n \
+          \           with rollout_path.open(encoding=\"utf-8\") as rollout_stream:\n\
+          \                for line in rollout_stream:\n                    sample\
+          \ = json.loads(line)\n                    trajectory = sample.get(\"trajectories\"\
+          , [{}])[0].get(\"trajectory\", [])\n                    query_prompt = next(\n\
+          \                        (message.get(\"content\", \"\") for message in\
+          \ trajectory if message.get(\"role\") == \"user\"),\n                  \
+          \      \"\",\n                    )\n                    response = next(\n\
+          \                        (message.get(\"content\", \"\") for message in\
+          \ trajectory if message.get(\"role\") == \"assistant\"),\n             \
+          \           \"\",\n                    )\n                    rollout_rows.append([\n\
+          \                        step_number,\n                        program_slot,\n\
+          \                        program_ids[program_slot] if program_slot < len(program_ids)\
+          \ else -1,\n                        float(sample.get(\"reward\", 0.0)),\n\
+          \                        sample.get(\"problem\", \"\"),\n              \
+          \          query_prompt,\n                        response,\n          \
+          \              principles,\n                        str(sample.get(\"groundtruth\"\
+          , \"\")),\n                    ])\n\n    rollout_path = pathlib.Path(rollout_samples.path)\n\
+          \    rollout_path.parent.mkdir(parents=True, exist_ok=True)\n    with rollout_path.open(\"\
+          w\", encoding=\"utf-8\", newline=\"\") as rollout_file:\n        writer\
+          \ = csv.writer(rollout_file, quoting=csv.QUOTE_ALL)\n        writer.writerow(rollout_columns)\n\
+          \        writer.writerows(rollout_rows)\n    rollout_samples.metadata[\"\
+          cols\"] = len(rollout_columns)\n    rollout_samples.metadata[\"rows\"] =\
+          \ len(rollout_rows) + 1\n\n    programs_by_id = {}\n    for pool_path in\
+          \ sorted(experiment_dir.glob(\"step_*/evolution_pool.json\")):\n       \
+          \ pool_state = json.loads(pool_path.read_text(encoding=\"utf-8\"))\n   \
+          \     for program in pool_state.get(\"evolution_pool\", []):\n         \
+          \   programs_by_id[int(program[\"program_id\"])] = program\n    evolution_columns\
+          \ = [\n        \"program_id\", \"created_step\", \"kind\", \"mutation_parent\"\
+          ,\n        \"crossover_parents\", \"rating_mu\", \"rating_sigma\", \"past_scores\"\
+          ,\n        \"principles\", \"children\",\n    ]\n    evolution_rows = []\n\
+          \    for program_id, program in sorted(programs_by_id.items()):\n      \
+          \  crossover_parents = program.get(\"parents_list\") or []\n        mutation_parent\
+          \ = int(program.get(\"self_modified_from\", -1))\n        kind = \"crossover\"\
+          \ if crossover_parents else (\n            \"mutation\" if mutation_parent\
+          \ >= 0 else \"root\"\n        )\n        rating = program.get(\"rating\"\
+          , {})\n        evolution_rows.append([\n            program_id,\n      \
+          \      int(program.get(\"timestep\") if program.get(\"timestep\") is not\
+          \ None else -1),\n            kind,\n            mutation_parent,\n    \
+          \        json.dumps(crossover_parents),\n            float(rating.get(\"\
+          mu\", 0.0)),\n            float(rating.get(\"sigma\", 0.0)),\n         \
+          \   json.dumps(program.get(\"past_score_history\", [])),\n            json.dumps(program.get(\"\
+          principles\", {}), ensure_ascii=False),\n            json.dumps(program.get(\"\
+          children_list\", [])),\n        ])\n    evolution_path = pathlib.Path(evolution_history.path)\n\
+          \    evolution_path.parent.mkdir(parents=True, exist_ok=True)\n    with\
+          \ evolution_path.open(\"w\", encoding=\"utf-8\", newline=\"\") as evolution_file:\n\
+          \        writer = csv.writer(evolution_file, quoting=csv.QUOTE_ALL)\n  \
+          \      writer.writerow(evolution_columns)\n        writer.writerows(evolution_rows)\n\
+          \    evolution_history.metadata[\"cols\"] = len(evolution_columns)\n   \
+          \ evolution_history.metadata[\"rows\"] = len(evolution_rows) + 1\n\n   \
+          \ artifact_path = pathlib.Path(trained_model.path)\n    artifact_path.parent.mkdir(parents=True,\
+          \ exist_ok=True)\n    if artifact_path.exists():\n        if artifact_path.is_dir():\n\
+          \            shutil.rmtree(artifact_path)\n        else:\n            artifact_path.unlink()\n\
+          \    with tarfile.open(artifact_path, \"w:gz\") as archive:\n        archive.add(run_root,\
+          \ arcname=run_name)\n    trained_model.framework = \"peft\"\n    trained_model.metadata[\"\
+          base_model\"] = model_name\n    trained_model.metadata[\"source_sha\"] =\
+          \ source_sha\n    trained_model.metadata[\"lora_rank\"] = int(cfg[\"lora_rank\"\
+          ])\n\n    return len(completed_steps)\n\n"
         image: registry.k.avito.ru/ml-platform/components-lib-pytorch-dl:20260116131214-643fd4
         resources:
           accelerator:
@@ -284,7 +393,7 @@ root:
         defaultValue:
           batch_size: 5.0
           checkpoint_root: ''
-          crossover_prob: 0.0
+          crossover_prob: 0.5
           dataset_pair: aimo_beyondaime
           dataset_seed: 42.0
           dataset_size: 90.0
@@ -294,16 +403,17 @@ root:
           hf_home: ''
           learning_rate: 5.0e-06
           lora_rank: 32.0
-          max_tokens: 4096.0
+          max_tokens: 8192.0
           model_name: Qwen/Qwen3-4B
           n_epochs: 3.0
           num_parallel_programs: 2.0
           rl_loss_fn: cispo
-          run_name: qwen3-4b-vllm-3ep-4k-budget3500
+          run_name: qwen3-4b-vllm-evolution-3ep-8k
           save_every: 1.0
-          solution_token_budget: 3500.0
-          source_sha: c9f0b6d00ea9e6f625f23e58cc8986dade04d55c
+          solution_token_budget: 7000.0
+          source_sha: 5b98de127889b442d176104921f60a4968a19e89
           test_dataset_size: 20.0
+          train_mode: evolution
           training_microbatch_size: 1.0
         parameterType: STRUCT
       run_priority:

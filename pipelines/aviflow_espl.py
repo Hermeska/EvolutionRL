@@ -1,4 +1,4 @@
-"""Compile or run E-SPL on one Aviflow GPU from a public GitHub commit."""
+"""Compile or run E-SPL on Aviflow GPUs from a public GitHub commit."""
 
 import argparse
 import importlib
@@ -23,7 +23,7 @@ BASE_COMPONENT = os.environ.get(
     "pytorch-dl/pytorch-train-dl:0.2.4",
 )
 SOURCE_REPOSITORY = "https://github.com/Hermeska/EvolutionRL"
-SOURCE_SHA = "c9f0b6d00ea9e6f625f23e58cc8986dade04d55c"
+SOURCE_SHA = "5b98de127889b442d176104921f60a4968a19e89"
 
 RUNTIME_PACKAGES = [
     "torch==2.8.0",
@@ -48,7 +48,7 @@ RUNTIME_PACKAGES = [
 
 DEFAULT_PARAMS: Dict[str, Any] = {
     "source_sha": SOURCE_SHA,
-    "run_name": "qwen3-4b-vllm-3ep-4k-budget3500",
+    "run_name": "qwen3-4b-vllm-evolution-3ep-8k",
     "model_name": "Qwen/Qwen3-4B",
     "dataset_pair": "aimo_beyondaime",
     "dataset_size": 90,
@@ -58,16 +58,17 @@ DEFAULT_PARAMS: Dict[str, Any] = {
     "batch_size": 5,
     "group_size": 4,
     "num_parallel_programs": 2,
-    "max_tokens": 4096,
-    "solution_token_budget": 3500,
+    "max_tokens": 8192,
+    "solution_token_budget": 7000,
     "lora_rank": 32,
     "learning_rate": 5e-6,
+    "train_mode": "evolution",
     "rl_loss_fn": "cispo",
     "training_microbatch_size": 1,
     "save_every": 1,
     "eval_every": 18,
     "enable_shared_memory": False,
-    "crossover_prob": 0.0,
+    "crossover_prob": 0.5,
     "checkpoint_root": "",
     "hf_home": "",
 }
@@ -89,8 +90,11 @@ def sanitize_pip_sources(pipeline_path: str) -> None:
         pipeline_yaml = pipeline_yaml.replace(invalid_value, valid_value)
 
     report_schemas = {
+        "convergence_chart": "system.Chart",
         "efficiency_chart": "system.Chart",
+        "evolution_history": "system.Table",
         "performance_chart": "system.Chart",
+        "rollout_samples": "system.Table",
         "step_metrics": "system.Table",
     }
     for artifact_name, schema_title in report_schemas.items():
@@ -132,8 +136,11 @@ def make_pipeline():
         trained_model: Output[Model],
         metrics: Output[Metrics],
         performance_chart: Output[Dataset],
+        convergence_chart: Output[Dataset],
         efficiency_chart: Output[Dataset],
         step_metrics: Output[Dataset],
+        rollout_samples: Output[Dataset],
+        evolution_history: Output[Dataset],
     ) -> int:
         import json
         import os
@@ -273,6 +280,7 @@ def make_pipeline():
             f"test_dataset_size={cfg['test_dataset_size']}",
             f"dataset_pair={cfg['dataset_pair']}",
             f"enable_shared_memory={cfg['enable_shared_memory']}",
+            f"train_mode={cfg['train_mode']}",
             f"rl_loss_fn={cfg['rl_loss_fn']}",
             f"crossover_prob={cfg['crossover_prob']}",
             "resume_strategy=last",
@@ -288,6 +296,7 @@ def make_pipeline():
             run_root / "data" / "math" / "train" / run_name / "stats.json"
         )
         completed_steps = []
+        stats = {}
         if stats_path.exists():
             stats = json.loads(stats_path.read_text(encoding="utf-8"))
             completed_steps = [
@@ -339,6 +348,19 @@ def make_pipeline():
             from plotly.subplots import make_subplots
 
             steps = [row["global_step"] for row in metric_rows]
+            success_rates = [
+                float(row.get("rollout/success_rate", 0.0)) for row in metric_rows
+            ]
+            metrics.log_metric("best_success_rate", max(success_rates))
+            metrics.log_metric("final_success_rate", success_rates[-1])
+            metrics.log_metric(
+                "final_success_rate_ma5",
+                float(metric_rows[-1].get("convergence/success_rate_ma5", 0.0)),
+            )
+            metrics.log_metric(
+                "final_convergence_slope5",
+                float(metric_rows[-1].get("convergence/success_rate_slope5", 0.0)),
+            )
             performance = go.Figure()
             for key, label in [
                 ("rollout/Agg_avg_reward", "Train reward"),
@@ -371,6 +393,38 @@ def make_pipeline():
             performance_path.parent.mkdir(parents=True, exist_ok=True)
             performance.write_json(performance_path)
             performance_chart.metadata["title"] = "E-SPL learning curves"
+
+            convergence = make_subplots(specs=[[{"secondary_y": True}]])
+            convergence.add_trace(go.Scatter(
+                x=steps,
+                y=[row.get("rollout/success_rate", 0) for row in metric_rows],
+                mode="lines+markers",
+                name="Success rate",
+            ), secondary_y=False)
+            convergence.add_trace(go.Scatter(
+                x=steps,
+                y=[row.get("convergence/success_rate_ma5", 0) for row in metric_rows],
+                mode="lines",
+                name="Success rate MA(5)",
+                line={"width": 4},
+            ), secondary_y=False)
+            convergence.add_trace(go.Scatter(
+                x=steps,
+                y=[row.get("convergence/success_rate_slope5", 0) for row in metric_rows],
+                mode="lines+markers",
+                name="Convergence slope (5 steps)",
+            ), secondary_y=True)
+            convergence.update_layout(
+                title="Evolution convergence and success rate",
+                xaxis_title="Global training step",
+                hovermode="x unified",
+            )
+            convergence.update_yaxes(title_text="Success rate", range=[0, 1], secondary_y=False)
+            convergence.update_yaxes(title_text="Slope", secondary_y=True)
+            convergence_path = pathlib.Path(convergence_chart.path)
+            convergence_path.parent.mkdir(parents=True, exist_ok=True)
+            convergence.write_json(convergence_path)
+            convergence_chart.metadata["title"] = "Evolution convergence and success rate"
 
             efficiency = make_subplots(specs=[[{"secondary_y": True}]])
             efficiency.add_trace(go.Bar(
@@ -406,6 +460,7 @@ def make_pipeline():
                 "step", "epoch", "batch", "train_reward", "train_pass_at_4",
                 "eval_reward", "full_eval", "rl_datums", "step_seconds",
                 "train_truncation_rate", "eval_truncation_rate",
+                "success_rate_ma5", "success_rate_slope5",
             ]
             table_rows = []
             for row, stats_step in zip(metric_rows, completed_steps):
@@ -421,6 +476,8 @@ def make_pipeline():
                     float(row.get("time/total", 0.0)),
                     float(row.get("rollout/truncation_rate", 0.0)),
                     float(row.get("testing/truncation_rate", 0.0)),
+                    float(row.get("convergence/success_rate_ma5", 0.0)),
+                    float(row.get("convergence/success_rate_slope5", 0.0)),
                 ])
             import csv
 
@@ -432,6 +489,103 @@ def make_pipeline():
                 writer.writerows(table_rows)
             step_metrics.metadata["cols"] = len(columns)
             step_metrics.metadata["rows"] = len(table_rows) + 1
+
+        import csv
+
+        experiment_dir = run_root / "data" / "math" / "train" / run_name
+        rollout_columns = [
+            "step", "program_slot", "program_id", "reward", "problem",
+            "query_prompt", "llm_response", "principles", "groundtruth",
+        ]
+        rollout_rows = []
+        for step_dir in sorted(
+            experiment_dir.glob("step_*"),
+            key=lambda path: int(path.name.removeprefix("step_")),
+        ):
+            step_number = int(step_dir.name.removeprefix("step_"))
+            step_stats = stats.get(f"step_{step_number}", {}) if stats_path.exists() else {}
+            program_ids = step_stats.get("sampled_program_ids", [])
+            for program_dir in sorted(step_dir.glob("sampled_program_*")):
+                program_slot = int(program_dir.name.removeprefix("sampled_program_"))
+                principles_path = program_dir / "principles_to_mutate.json"
+                principles = (
+                    principles_path.read_text(encoding="utf-8")
+                    if principles_path.exists() else "{}"
+                )
+                rollout_path = program_dir / "rollout.jsonl"
+                if not rollout_path.exists():
+                    continue
+                with rollout_path.open(encoding="utf-8") as rollout_stream:
+                    for line in rollout_stream:
+                        sample = json.loads(line)
+                        trajectory = sample.get("trajectories", [{}])[0].get("trajectory", [])
+                        query_prompt = next(
+                            (message.get("content", "") for message in trajectory if message.get("role") == "user"),
+                            "",
+                        )
+                        response = next(
+                            (message.get("content", "") for message in trajectory if message.get("role") == "assistant"),
+                            "",
+                        )
+                        rollout_rows.append([
+                            step_number,
+                            program_slot,
+                            program_ids[program_slot] if program_slot < len(program_ids) else -1,
+                            float(sample.get("reward", 0.0)),
+                            sample.get("problem", ""),
+                            query_prompt,
+                            response,
+                            principles,
+                            str(sample.get("groundtruth", "")),
+                        ])
+
+        rollout_path = pathlib.Path(rollout_samples.path)
+        rollout_path.parent.mkdir(parents=True, exist_ok=True)
+        with rollout_path.open("w", encoding="utf-8", newline="") as rollout_file:
+            writer = csv.writer(rollout_file, quoting=csv.QUOTE_ALL)
+            writer.writerow(rollout_columns)
+            writer.writerows(rollout_rows)
+        rollout_samples.metadata["cols"] = len(rollout_columns)
+        rollout_samples.metadata["rows"] = len(rollout_rows) + 1
+
+        programs_by_id = {}
+        for pool_path in sorted(experiment_dir.glob("step_*/evolution_pool.json")):
+            pool_state = json.loads(pool_path.read_text(encoding="utf-8"))
+            for program in pool_state.get("evolution_pool", []):
+                programs_by_id[int(program["program_id"])] = program
+        evolution_columns = [
+            "program_id", "created_step", "kind", "mutation_parent",
+            "crossover_parents", "rating_mu", "rating_sigma", "past_scores",
+            "principles", "children",
+        ]
+        evolution_rows = []
+        for program_id, program in sorted(programs_by_id.items()):
+            crossover_parents = program.get("parents_list") or []
+            mutation_parent = int(program.get("self_modified_from", -1))
+            kind = "crossover" if crossover_parents else (
+                "mutation" if mutation_parent >= 0 else "root"
+            )
+            rating = program.get("rating", {})
+            evolution_rows.append([
+                program_id,
+                int(program.get("timestep") if program.get("timestep") is not None else -1),
+                kind,
+                mutation_parent,
+                json.dumps(crossover_parents),
+                float(rating.get("mu", 0.0)),
+                float(rating.get("sigma", 0.0)),
+                json.dumps(program.get("past_score_history", [])),
+                json.dumps(program.get("principles", {}), ensure_ascii=False),
+                json.dumps(program.get("children_list", [])),
+            ])
+        evolution_path = pathlib.Path(evolution_history.path)
+        evolution_path.parent.mkdir(parents=True, exist_ok=True)
+        with evolution_path.open("w", encoding="utf-8", newline="") as evolution_file:
+            writer = csv.writer(evolution_file, quoting=csv.QUOTE_ALL)
+            writer.writerow(evolution_columns)
+            writer.writerows(evolution_rows)
+        evolution_history.metadata["cols"] = len(evolution_columns)
+        evolution_history.metadata["rows"] = len(evolution_rows) + 1
 
         artifact_path = pathlib.Path(trained_model.path)
         artifact_path.parent.mkdir(parents=True, exist_ok=True)
@@ -449,7 +603,7 @@ def make_pipeline():
 
         return len(completed_steps)
 
-    @pipeline(experiment_name="espl-training", run_name="qwen3-4b-vllm-3ep-4k-budget3500")
+    @pipeline(experiment_name="espl-training", run_name="qwen3-4b-vllm-evolution-3ep-8k")
     def espl_training_pipeline(params: Dict[str, Any]):
         train_espl(params=params)
 
