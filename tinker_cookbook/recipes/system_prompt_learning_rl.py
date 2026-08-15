@@ -1495,6 +1495,9 @@ def main(config: Config):
                 raise ValueError(f"Unknown program_selection_strategy: {config.program_selection_strategy}")
             for program in program_lists:
                 print("     - Program ID:", program.program_id)
+            stats[f"step_{step}"]["sampled_program_ids"] = [
+                program.program_id for program in program_lists
+            ]
 
             batch_data_all_programs = []
 
@@ -1718,6 +1721,7 @@ def main(config: Config):
             this_test_acc = np.mean(test_rewards)
             eval_stats = {
                 "eval_avg_reward": this_test_acc,
+                "success_rate": this_test_acc,
                 "full_eval": run_full_eval,
                 "truncation_rate": eval_truncated_count / max(eval_generated_count, 1),
             }
@@ -1813,6 +1817,8 @@ def main(config: Config):
                 f"Agg_Pass@{max_K}": sum(max(reward_list) > 0 for reward_list in reshaped_all_rewards) / len(reshaped_all_rewards),
                 "truncation_rate": train_truncated_count / max(train_generated_count, 1),
             }
+            rollout_stats["success_rate"] = rollout_stats["Agg_avg_reward"]
+            rollout_stats["question_success_rate"] = rollout_stats[f"Agg_Pass@{max_K}"]
 
             all_correct_counts = all_rewards_torch.sum(dim=-1).tolist()
             all_pass_at_k_list = []
@@ -1863,6 +1869,9 @@ def main(config: Config):
             # Running evolutionary procedure
             # start with the simplest score: pass@1
             program_scores = program_pass_at_k_tensor[:, 0].tolist()
+            rollout_stats["best_program_success_rate"] = max(program_scores)
+            rollout_stats["program_score_spread"] = max(program_scores) - min(program_scores)
+            rollout_stats["unique_programs"] = len({program.program_id for program in program_lists})
             # update program scores in Program instances
             for program, program_score in zip(program_lists, program_scores):
                 program.add_eval_score(program_score)
@@ -2104,6 +2113,24 @@ def main(config: Config):
             metrics["time/total"] = time.time() - t_start
             metrics.update({f"rollout/{_key}": _val for _key, _val in rollout_stats.items()})
             metrics.update({f"testing/{_key}": _val for _key, _val in eval_stats.items()})
+            reward_history = [
+                float(step_stats["rollout"]["success_rate"])
+                for _, step_stats in sorted(
+                    stats.items(),
+                    key=lambda item: int(item[0].removeprefix("step_")),
+                )
+                if "success_rate" in step_stats.get("rollout", {})
+            ]
+            convergence_window = reward_history[-5:]
+            metrics["convergence/success_rate_ma5"] = float(np.mean(convergence_window))
+            metrics["convergence/success_rate_slope5"] = (
+                (convergence_window[-1] - convergence_window[0])
+                / max(len(convergence_window) - 1, 1)
+            )
+            metrics["convergence/success_rate_delta"] = (
+                convergence_window[-1] - convergence_window[-2]
+                if len(convergence_window) >= 2 else 0.0
+            )
             ml_logger.log_metrics(metrics, step=batch_idx)
 
     # Save final checkpoint
