@@ -44,6 +44,19 @@ the base component image. It does not need access to the custom
 python pipelines/aviflow_espl.py
 ```
 
+## Start the frozen Qwen baseline
+
+```bash
+python pipelines/aviflow_espl.py --preset baseline --namespace students
+```
+
+The baseline uses the same Qwen3-4B model, dataset pair, seed, renderer,
+sampling temperature, top-p, group size, token limits and vLLM backend. It runs
+one pass over all 90 train questions with one unchanged root prompt and performs
+full evaluation on the same 20 BeyondAIME questions. It does not run optimizer
+updates, mutation or crossover. The zero-initialized LoRA adapter is only the
+local backend's transport format and does not change the base-model outputs.
+
 Default configuration:
 
 ```text

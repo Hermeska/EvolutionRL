@@ -73,6 +73,20 @@ DEFAULT_PARAMS: Dict[str, Any] = {
     "hf_home": "",
 }
 
+BASELINE_PARAMS: Dict[str, Any] = {
+    **DEFAULT_PARAMS,
+    "run_name": "qwen3-4b-vllm-baseline-1ep-8k",
+    "n_epochs": 1,
+    "num_parallel_programs": 1,
+    "train_mode": "baseline",
+    "crossover_prob": 0.0,
+}
+
+PRESETS = {
+    "evolution": DEFAULT_PARAMS,
+    "baseline": BASELINE_PARAMS,
+}
+
 
 def sanitize_pip_sources(pipeline_path: str) -> None:
     """Fix pip hosts and promote built-in Dataset outputs to Aviflow reports."""
@@ -118,7 +132,7 @@ def sanitize_pip_sources(pipeline_path: str) -> None:
         pipeline_file.write(pipeline_yaml)
 
 
-def make_pipeline():
+def make_pipeline(run_name: str = DEFAULT_PARAMS["run_name"]):
     """Resolve the GPU base image and construct the lightweight component."""
 
     @remote(
@@ -603,7 +617,7 @@ def make_pipeline():
 
         return len(completed_steps)
 
-    @pipeline(experiment_name="espl-training", run_name="qwen3-4b-vllm-evolution-3ep-8k")
+    @pipeline(experiment_name="espl-training", run_name=run_name)
     def espl_training_pipeline(params: Dict[str, Any]):
         train_espl(params=params)
 
@@ -618,11 +632,18 @@ def main() -> None:
         help="Compile to YAML instead of starting a remote run.",
     )
     parser.add_argument("--namespace", default="students")
+    parser.add_argument(
+        "--preset",
+        choices=sorted(PRESETS),
+        default="evolution",
+        help="Run the evolution experiment or the frozen Qwen baseline.",
+    )
     args = parser.parse_args()
 
     aviflow.init(args.namespace)
-    training_pipeline = make_pipeline()
-    parameters = {"params": dict(DEFAULT_PARAMS)}
+    preset_params = dict(PRESETS[args.preset])
+    training_pipeline = make_pipeline(run_name=str(preset_params["run_name"]))
+    parameters = {"params": preset_params}
     if args.compile:
         training_pipeline.compile(path=args.compile, parameters=parameters)
         sanitize_pip_sources(args.compile)
