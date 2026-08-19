@@ -57,6 +57,20 @@ full evaluation on the same 20 BeyondAIME questions. It does not run optimizer
 updates, mutation or crossover. The zero-initialized LoRA adapter is only the
 local backend's transport format and does not change the base-model outputs.
 
+## Compare evolved programs with the root baseline
+
+```bash
+python pipelines/aviflow_program_eval.py --namespace students
+```
+
+This inference-only run evaluates root and Programs 30, 44, 46 and 47 on the
+same first 20 BeyondAIME questions. Each program receives ten samples per
+question with identical request-level seeds. Aviflow publishes all 1,000
+responses, per-question results, aggregate Pass@K and success rates, bootstrap
+confidence intervals against root, and generation-length/truncation charts.
+Only one GPU is requested because vLLM loads the unchanged Qwen3-4B model once;
+there is no trainer replica, optimizer, LoRA update, mutation or crossover.
+
 Default configuration:
 
 ```text
