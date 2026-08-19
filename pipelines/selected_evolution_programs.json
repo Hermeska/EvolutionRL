@@ -1,0 +1,92 @@
+[
+  {
+    "program_id": 0,
+    "label": "root",
+    "kind": "root",
+    "rating_mu": 27.94458833720792,
+    "rating_sigma": 5.408816784534891,
+    "principles": {}
+  },
+  {
+    "program_id": 30,
+    "label": "stable_train",
+    "kind": "mutation",
+    "rating_mu": 32.072638694594204,
+    "rating_sigma": 2.094076294675566,
+    "principles": {
+      "G0": "In symmetric systems, apply modular arithmetic strategically to simplify complexity, ensuring that all valid solutions modulo p are considered to avoid missing minimal or optimal lifts.",
+      "G1": "In symmetric systems, apply segment-length-based decomposition using recurring patterns to ensure accurate subset counts and maintain symmetry. Always verify partial segments when extrapolating.",
+      "G2": "When applying Hensel's lemma to lift solutions, ensure all valid solutions modulo p are considered to avoid missing minimal or optimal lifts.",
+      "G3": "In symmetric systems, identify strategic decision points via geometric intuition or recurring patterns to guide decomposition, ensuring symmetry, simplifying complexity, and verifying segment validity when solving for unique solutions or decomposing via geometric intuition.",
+      "G4": "For problems requiring exact pair counting, explicitly define the formula: for each consecutive pair (i, i+1), calculate the number of valid subsets as F(left_length + 2) * F(right_length + 2), where left_length is the number of elements before the pair and right_length is the number after, ensuring no overlap or adjacency.",
+      "G5": "When constraints are tight and solutions are unique, systematically explore all possible configurations for smaller list lengths, ensuring the median and mode conditions are met through exhaustive checks.",
+      "G6": "When decomposing symmetric systems, explicitly verify coefficients in recurring patterns to ensure that all valid solutions are accounted for, preventing errors from misapplied simplifications.",
+      "G7": "In modular systems, exhaustively consider all valid combinations of remainders and verify solutions against constraints to ensure completeness and correctness."
+    }
+  },
+  {
+    "program_id": 44,
+    "label": "best_observed",
+    "kind": "mutation",
+    "rating_mu": 34.92181093973173,
+    "rating_sigma": 2.396662161306618,
+    "principles": {
+      "G0": "When solving symmetric problems, prioritize considering all modular cases and strategic symmetry-breaking to avoid overcounting.",
+      "G1": "When computing the inradius of a tetrahedron with symmetric edge lengths, use the Cayley-Menger determinant to calculate the volume and Heron's formula for the surface area.",
+      "G2": "For symmetric tetrahedrons with equal opposite edges, decompose the problem into coordinate geometry or box embedding to simplify volume calculations.",
+      "G3": "When ensuring even spacing between identical elements, enforce parity constraints on their positions and validate with small cases to confirm the logic.",
+      "G4": "In arithmetic operations, validate edge cases by checking boundary conditions and ensuring recurrence aligns with problem constraints.",
+      "G5": "For consecutive pair problems, decompose into non-overlapping blocks and apply Fibonacci logic to prevent overcounting.",
+      "G6": "In symmetric systems, explore smaller cases for constraints, check even-length lists and median conditions, and ensure all roots are considered in modular solutions.",
+      "G7": "To ensure the median is an integer not in the list, verify that the two middle numbers (when sorted) average to a value not present in the list, and adjust the list structure accordingly.",
+      "G8": "When dealing with angle bisectors in coordinate geometry, use vector direction analysis to derive parametric equations for the bisectors and enforce their intersection with midpoint constraints.",
+      "G9": "When applying Hensel's lemma, systematically check all roots modulo p to ensure no smaller solution is overlooked in the lifting process."
+    }
+  },
+  {
+    "program_id": 46,
+    "label": "max_rating",
+    "kind": "mutation",
+    "rating_mu": 36.376218221762436,
+    "rating_sigma": 2.551397219748978,
+    "principles": {
+      "G0": "When solving symmetric problems, decompose into modular cases for floor functions and check all combinations for minimal differences to ensure comprehensive coverage.",
+      "G1": "When computing the inradius of a tetrahedron with symmetric edge lengths, use the Cayley-Menger determinant to calculate the volume and Heron's formula for the surface area.",
+      "G2": "For symmetric tetrahedrons with equal opposite edges, decompose the problem into coordinate geometry or box embedding to simplify volume calculations.",
+      "G3": "When ensuring even spacing between identical elements, enforce parity constraints on their positions and validate with small cases to confirm the logic.",
+      "G4": "In arithmetic operations, validate edge cases by checking boundary conditions and ensuring recurrence aligns with problem constraints.",
+      "G5": "For consecutive pair problems, decompose into non-overlapping blocks and apply Fibonacci logic to prevent overcounting.",
+      "G6": "In symmetric systems, explore smaller cases for constraints, check even-length lists and median conditions, and ensure all roots are considered in modular solutions.",
+      "G7": "To ensure the median is an integer not in the list, verify that the two middle numbers (when sorted) average to a value not present in the list, and adjust the list structure accordingly.",
+      "G8": "When dealing with angle bisectors in coordinate geometry, use vector direction analysis to derive parametric equations for the bisectors and enforce their intersection with midpoint constraints.",
+      "G9": "When applying Hensel's lemma, systematically check all roots modulo p to ensure no smaller solution is overlooked in the lifting process.",
+      "G10": "In symmetric problems involving geometric configurations (e.g., rectangles in polygons), explicitly verify all possible configurations and their overlaps to ensure comprehensive coverage.",
+      "G11": "For sums with floor functions, use residue analysis modulo the denominator to determine fractional contributions and simplify the total sum.",
+      "G12": "For symmetric configurations requiring minimal differences, systematically verify all possible triplet splits to avoid overlooking critical cases."
+    }
+  },
+  {
+    "program_id": 47,
+    "label": "latest",
+    "kind": "mutation",
+    "rating_mu": 36.376218221762436,
+    "rating_sigma": 2.740370006576268,
+    "principles": {
+      "G0": "When solving symmetric problems, decompose into modular cases for floor functions and check all combinations for minimal differences to ensure comprehensive coverage.",
+      "G1": "When computing the inradius of a tetrahedron with symmetric edge lengths, use the Cayley-Menger determinant to calculate the volume and Heron's formula for the surface area.",
+      "G2": "For symmetric tetrahedrons with equal opposite edges, decompose the problem into coordinate geometry or box embedding to simplify volume calculations.",
+      "G3": "When ensuring even spacing between identical elements, enforce parity constraints on their positions and validate with small cases to confirm the logic.",
+      "G4": "In arithmetic operations, validate edge cases by checking boundary conditions and ensuring recurrence aligns with problem constraints.",
+      "G5": "For consecutive pair problems, decompose into non-overlapping blocks and apply Fibonacci logic to prevent overcounting.",
+      "G6": "In symmetric systems, explore smaller cases for constraints, check even-length lists and median conditions, and ensure all roots are considered in modular solutions.",
+      "G7": "To ensure the median is an integer not in the list, verify that the two middle numbers (when sorted) average to a value not present in the list, and adjust the list structure accordingly.",
+      "G8": "When dealing with angle bisectors in coordinate geometry, use vector direction analysis to derive parametric equations for the bisectors and enforce their intersection with midpoint constraints.",
+      "G9": "When applying Hensel's lemma, systematically check all roots modulo p to ensure no smaller solution is overlooked in the lifting process.",
+      "G10": "In symmetric problems involving geometric configurations (e.g., rectangles in polygons), explicitly verify all possible configurations and their overlaps to ensure comprehensive coverage.",
+      "G11": "For sums with floor functions, use residue analysis modulo the denominator to determine fractional contributions and simplify the total sum.",
+      "G12": "For symmetric configurations requiring minimal differences, systematically verify all possible triplet splits to avoid overlooking critical cases.",
+      "G13": "Validate edge cases by explicitly checking boundary conditions and ensuring all derived configurations meet the problem's constraints.",
+      "G14": "For symmetric configurations requiring minimal differences, systematically verify all possible triplet splits to avoid overlooking critical cases."
+    }
+  }
+]

@@ -27,6 +27,7 @@ class _Request:
     num_samples: int
     sampling_params: types.SamplingParams
     result: Future
+    seed: Optional[int] = None
 
 
 class VLLMEngine:
@@ -89,17 +90,18 @@ class VLLMEngine:
             source = request.sampling_params
             stop_strings = [item for item in (source.stop or []) if isinstance(item, str)]
             stop_token_ids = [item for item in (source.stop or []) if isinstance(item, int)]
-            params.append(
-                {
-                    "n": max(int(request.num_samples), 1),
-                    "max_tokens": int(source.max_tokens),
-                    "temperature": float(source.temperature),
-                    "top_p": float(source.top_p),
-                    "stop": stop_strings or None,
-                    "stop_token_ids": stop_token_ids or None,
-                    "logprobs": 1,
-                }
-            )
+            raw_params = {
+                "n": max(int(request.num_samples), 1),
+                "max_tokens": int(source.max_tokens),
+                "temperature": float(source.temperature),
+                "top_p": float(source.top_p),
+                "stop": stop_strings or None,
+                "stop_token_ids": stop_token_ids or None,
+                "logprobs": 1,
+            }
+            if request.seed is not None:
+                raw_params["seed"] = int(request.seed)
+            params.append(raw_params)
 
         started = time.monotonic()
         with self._lock:
@@ -173,6 +175,26 @@ class VLLMSamplingClient:
                 num_samples=num_samples,
                 sampling_params=params,
                 result=result,
+            )
+        )
+        return LocalFuture(result)
+
+    def sample_seeded(
+        self,
+        prompt: types.ModelInput,
+        num_samples: int,
+        sampling_params: types.SamplingParams,
+        seed: int,
+    ) -> LocalFuture:
+        """Sample deterministically for paired prompt comparisons."""
+        result = Future()
+        self._queue.put(
+            _Request(
+                prompt_ids=prompt.to_ints(),
+                num_samples=num_samples,
+                sampling_params=sampling_params,
+                result=result,
+                seed=int(seed),
             )
         )
         return LocalFuture(result)
