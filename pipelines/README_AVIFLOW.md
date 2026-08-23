@@ -10,7 +10,7 @@ repository, TeamCity and a Jira key are not required for this path.
    `pytorch-dl/pytorch-train-dl:0.2.4`.
 2. The lightweight task installs the Python runtime dependencies.
 3. On the GPU worker it downloads the archive for the pinned public commit:
-   `Hermeska/EvolutionRL@5b98de127889b442d176104921f60a4968a19e89`.
+   `Hermeska/EvolutionRL@5ab4c866bc722092d8437df8f1cc468df006a4a4`.
 4. It starts Hugging Face + PEFT training on GPU 0 and a dedicated vLLM
    sampling worker on GPU 1.
 5. It publishes checkpoints and logs as a `Model` artifact and final values as
