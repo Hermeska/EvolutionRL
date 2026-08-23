@@ -50,6 +50,60 @@ python pipelines/aviflow_espl.py
 python pipelines/aviflow_espl.py --preset baseline --namespace students
 ```
 
+## Start the smaller-model, longer-reasoning experiment
+
+```bash
+python pipelines/aviflow_espl.py --preset small-long --namespace students
+```
+
+This preset runs evolution-only training for three epochs with Qwen3-1.7B,
+16,384 maximum completion tokens, a 14,000-token soft solution budget and a
+24,576-token vLLM context window. The dataset, seed, batch/group sizes, LoRA
+rank, evaluation schedule and crossover probability match the main evolution
+experiment so its results can be compared with Qwen3-4B at 8K.
+
+## Start the frozen Qwen3-1.7B 16K baseline
+
+```bash
+python pipelines/aviflow_espl.py --preset small-long-baseline --namespace students
+```
+
+This preset performs one frozen-model pass over the same 90/20 task split with
+Qwen3-1.7B and a 16,384-token completion limit. It runs no optimizer updates,
+mutation or crossover, making it directly comparable with the 1.7B/16K
+evolution experiment.
+
+## Start the balanced Qwen3-4B three-epoch experiment
+
+```bash
+python pipelines/aviflow_espl.py --preset balanced-long --namespace students
+```
+
+This preset keeps Qwen3-4B and runs three evolution epochs. It raises the hard
+completion limit to 12,288 tokens while keeping an 8,000-token soft solution
+budget and a 20,480-token vLLM context window. This gives truncated answers
+room to finish without encouraging every solution to consume a full 16K
+completion.
+
+## Start the SGLang Qwen3-4B three-epoch experiment
+
+```bash
+python pipelines/aviflow_espl.py --preset balanced-long-sglang --namespace students
+```
+
+This preset matches `balanced-long` (Qwen3-4B, three evolution-only epochs,
+12,288 hard completion tokens, 8,000-token soft budget, 20,480-token context)
+but replaces the dedicated vLLM sampler on GPU 1 with SGLang. It uses SGLang's
+continuous batching and prefix/radix cache. Dynamic LoRA updates are intentionally
+disabled for this backend; use vLLM for `evolution_rl` runs until SGLang adapter
+hot-reloading is implemented.
+
+DFlash2 is not enabled by this preset. It requires a draft checkpoint trained
+for the exact target model, and no public DFlash2 checkpoint is currently wired
+for `Qwen/Qwen3-4B`. Plain SGLang keeps this comparison valid: the model,
+sampling distribution and experiment parameters remain unchanged, so the run
+measures the serving backend rather than a second model.
+
 The baseline uses the same Qwen3-4B model, dataset pair, seed, renderer,
 sampling temperature, top-p, group size, token limits and vLLM backend. It runs
 one pass over all 90 train questions with one unchanged root prompt and performs

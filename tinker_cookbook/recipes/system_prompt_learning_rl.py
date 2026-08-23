@@ -103,6 +103,9 @@ class Config:
     local_vllm_max_model_len: int = 16384
     local_vllm_gpu_memory_utilization: float = 0.9
     local_vllm_max_lora_rank: int = 32
+    local_sglang_device: str = "cuda:1"
+    local_sglang_max_model_len: int = 16384
+    local_sglang_gpu_memory_utilization: float = 0.88
 
     # Shared Memory (ACE-inspired long-term reflection, arXiv:2510.04618)
     enable_shared_memory: bool = False
@@ -1201,6 +1204,9 @@ def main(config: Config):
             vllm_max_model_len=config.local_vllm_max_model_len,
             vllm_gpu_memory_utilization=config.local_vllm_gpu_memory_utilization,
             vllm_max_lora_rank=config.local_vllm_max_lora_rank,
+            sglang_device=config.local_sglang_device,
+            sglang_max_model_len=config.local_sglang_max_model_len,
+            sglang_gpu_memory_utilization=config.local_sglang_gpu_memory_utilization,
         )
         logger.info("Using LOCAL backend (no Tinker API)")
         effective_max_tokens = config.local_max_tokens

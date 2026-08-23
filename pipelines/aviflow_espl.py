@@ -25,7 +25,7 @@ BASE_COMPONENT = os.environ.get(
 SOURCE_REPOSITORY = "https://github.com/Hermeska/EvolutionRL"
 SOURCE_SHA = "5b98de127889b442d176104921f60a4968a19e89"
 
-RUNTIME_PACKAGES = [
+COMMON_RUNTIME_PACKAGES = [
     "torch==2.8.0",
     "torchvision==0.23.0",
     "urllib3>=1.26.4,<2",
@@ -42,8 +42,26 @@ RUNTIME_PACKAGES = [
     "datasets",
     "rich",
     "math-verify",
-    "vllm==0.10.2",
     "plotly==6.3.0",
+]
+VLLM_RUNTIME_PACKAGES = [*COMMON_RUNTIME_PACKAGES, "vllm==0.10.2"]
+SGLANG_RUNTIME_PACKAGES = [
+    *COMMON_RUNTIME_PACKAGES,
+    # SGLang 0.5.4 is compatible with the task image's Torch 2.8/CUDA 12.8
+    # stack. These two direct wheels avoid pip ignoring FlashInfer's historical
+    # pre-release TVM dependency and trying to build it from source.
+    (
+        "https://files.pythonhosted.org/packages/23/75/"
+        "6e1fb0ed64a459945bfb1bfe5afe11aed8a6710379873c36470735477000/"
+        "apache_tvm_ffi-0.1.0b15-cp312-abi3-manylinux_2_24_x86_64."
+        "manylinux_2_28_x86_64.whl"
+    ),
+    (
+        "https://github.com/flashinfer-ai/flashinfer/releases/download/"
+        "v0.4.1/flashinfer_python-0.4.1-py3-none-any.whl"
+    ),
+    "cuda-python>=12.8,<13",
+    "sglang==0.5.4",
 ]
 
 DEFAULT_PARAMS: Dict[str, Any] = {
@@ -59,6 +77,8 @@ DEFAULT_PARAMS: Dict[str, Any] = {
     "group_size": 4,
     "num_parallel_programs": 2,
     "max_tokens": 8192,
+    "vllm_max_model_len": 16384,
+    "sampling_backend": "vllm",
     "solution_token_budget": 7000,
     "lora_rank": 32,
     "learning_rate": 5e-6,
@@ -82,9 +102,45 @@ BASELINE_PARAMS: Dict[str, Any] = {
     "crossover_prob": 0.0,
 }
 
+SMALL_LONG_CONTEXT_PARAMS: Dict[str, Any] = {
+    **DEFAULT_PARAMS,
+    "run_name": "qwen3-1.7b-vllm-evolution-3ep-16k",
+    "model_name": "Qwen/Qwen3-1.7B",
+    "max_tokens": 16384,
+    "vllm_max_model_len": 24576,
+    "solution_token_budget": 14000,
+}
+
+SMALL_LONG_BASELINE_PARAMS: Dict[str, Any] = {
+    **SMALL_LONG_CONTEXT_PARAMS,
+    "run_name": "qwen3-1.7b-vllm-baseline-1ep-16k",
+    "n_epochs": 1,
+    "num_parallel_programs": 1,
+    "train_mode": "baseline",
+    "crossover_prob": 0.0,
+}
+
+BALANCED_LONG_CONTEXT_PARAMS: Dict[str, Any] = {
+    **DEFAULT_PARAMS,
+    "run_name": "qwen3-4b-vllm-evolution-3ep-12k",
+    "max_tokens": 12288,
+    "vllm_max_model_len": 20480,
+    "solution_token_budget": 8000,
+}
+
+SGLANG_BALANCED_LONG_CONTEXT_PARAMS: Dict[str, Any] = {
+    **BALANCED_LONG_CONTEXT_PARAMS,
+    "run_name": "qwen3-4b-sglang-evolution-3ep-12k",
+    "sampling_backend": "sglang",
+}
+
 PRESETS = {
     "evolution": DEFAULT_PARAMS,
     "baseline": BASELINE_PARAMS,
+    "small-long": SMALL_LONG_CONTEXT_PARAMS,
+    "small-long-baseline": SMALL_LONG_BASELINE_PARAMS,
+    "balanced-long": BALANCED_LONG_CONTEXT_PARAMS,
+    "balanced-long-sglang": SGLANG_BALANCED_LONG_CONTEXT_PARAMS,
 }
 
 
@@ -132,13 +188,23 @@ def sanitize_pip_sources(pipeline_path: str) -> None:
         pipeline_file.write(pipeline_yaml)
 
 
-def make_pipeline(run_name: str = DEFAULT_PARAMS["run_name"]):
+def make_pipeline(
+    run_name: str = DEFAULT_PARAMS["run_name"],
+    sampling_backend: str = DEFAULT_PARAMS["sampling_backend"],
+):
     """Resolve the GPU base image and construct the lightweight component."""
+
+    if sampling_backend == "vllm":
+        runtime_packages = VLLM_RUNTIME_PACKAGES
+    elif sampling_backend == "sglang":
+        runtime_packages = SGLANG_RUNTIME_PACKAGES
+    else:
+        raise ValueError(f"Unsupported pipeline sampling backend: {sampling_backend}")
 
     @remote(
         runtime_env={
             "base_component": BASE_COMPONENT,
-            "pip": RUNTIME_PACKAGES,
+            "pip": runtime_packages,
         },
         cpus=8,
         memory_mb=32768,
@@ -265,6 +331,7 @@ def make_pipeline(run_name: str = DEFAULT_PARAMS["run_name"]):
             env["HF_HOME"] = str(cfg["hf_home"]).strip()
 
         model_name = str(cfg["model_name"])
+        selected_sampling_backend = str(cfg.get("sampling_backend", "vllm"))
         command = [
             sys.executable,
             "-u",
@@ -275,11 +342,7 @@ def make_pipeline(run_name: str = DEFAULT_PARAMS["run_name"]):
             "local_num_gpus=1",
             "local_dtype=bfloat16",
             "local_attention_backend=sdpa",
-            "local_sampling_backend=vllm",
-            "local_vllm_device=cuda:1",
-            "local_vllm_max_model_len=16384",
-            "local_vllm_gpu_memory_utilization=0.9",
-            f"local_vllm_max_lora_rank={cfg['lora_rank']}",
+            f"local_sampling_backend={selected_sampling_backend}",
             f"local_training_microbatch_size={cfg['training_microbatch_size']}",
             f"local_lora_rank={cfg['lora_rank']}",
             f"local_max_tokens={cfg['max_tokens']}",
@@ -304,6 +367,28 @@ def make_pipeline(run_name: str = DEFAULT_PARAMS["run_name"]):
             f"log_path={log_dir}",
             f"local_checkpoint_dir={checkpoint_dir}",
         ]
+        if selected_sampling_backend == "vllm":
+            command.extend([
+                "local_vllm_device=cuda:1",
+                f"local_vllm_max_model_len={cfg['vllm_max_model_len']}",
+                "local_vllm_gpu_memory_utilization=0.9",
+                f"local_vllm_max_lora_rank={cfg['lora_rank']}",
+            ])
+        elif selected_sampling_backend == "sglang":
+            if "rl" in str(cfg["train_mode"]):
+                raise ValueError(
+                    "The SGLang preset currently supports baseline/evolution-only "
+                    "runs, not dynamic LoRA updates"
+                )
+            command.extend([
+                "local_sglang_device=cuda:1",
+                f"local_sglang_max_model_len={cfg['vllm_max_model_len']}",
+                "local_sglang_gpu_memory_utilization=0.88",
+            ])
+        else:
+            raise ValueError(
+                f"Unsupported sampling backend: {selected_sampling_backend}"
+            )
         subprocess.run(command, cwd=run_root, env=env, check=True)
 
         stats_path = (
@@ -642,7 +727,10 @@ def main() -> None:
 
     aviflow.init(args.namespace)
     preset_params = dict(PRESETS[args.preset])
-    training_pipeline = make_pipeline(run_name=str(preset_params["run_name"]))
+    training_pipeline = make_pipeline(
+        run_name=str(preset_params["run_name"]),
+        sampling_backend=str(preset_params["sampling_backend"]),
+    )
     parameters = {"params": preset_params}
     if args.compile:
         training_pipeline.compile(path=args.compile, parameters=parameters)

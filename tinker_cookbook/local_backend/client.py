@@ -491,6 +491,9 @@ class LocalServiceClient:
         vllm_max_model_len: int = 16384,
         vllm_gpu_memory_utilization: float = 0.9,
         vllm_max_lora_rank: int = 32,
+        sglang_device: str = "cuda:1",
+        sglang_max_model_len: int = 16384,
+        sglang_gpu_memory_utilization: float = 0.88,
     ):
         # base_url is ignored (compatibility shim)
         if device is None:
@@ -507,8 +510,10 @@ class LocalServiceClient:
         self.training_microbatch_size = max(int(training_microbatch_size), 1)
         self.dtype = dtype
         self.attention_backend = attention_backend
-        if sampling_backend not in {"transformers", "vllm"}:
-            raise ValueError("sampling_backend must be 'transformers' or 'vllm'")
+        if sampling_backend not in {"transformers", "vllm", "sglang"}:
+            raise ValueError(
+                "sampling_backend must be 'transformers', 'vllm', or 'sglang'"
+            )
         self.sampling_backend = sampling_backend
         self.vllm_device = vllm_device
         self.vllm_max_model_len = int(vllm_max_model_len)
@@ -516,6 +521,10 @@ class LocalServiceClient:
         self.vllm_max_lora_rank = int(vllm_max_lora_rank)
         self._vllm_engine = None
         self._vllm_adapter_id = 0
+        self.sglang_device = sglang_device
+        self.sglang_max_model_len = int(sglang_max_model_len)
+        self.sglang_gpu_memory_utilization = float(sglang_gpu_memory_utilization)
+        self._sglang_engine = None
         self._model_name: Optional[str] = None
         self._shared_models: list[_SharedLocalModel] = []
         self._executor = ThreadPoolExecutor(
@@ -587,6 +596,30 @@ class LocalServiceClient:
         base_model: Optional[str] = None,
         model_path: Optional[str] = None,
     ) -> LocalSamplingClient:
+        if self.sampling_backend == "sglang":
+            from .sglang_sampling import SGLangEngine, SGLangSamplingClient
+
+            model_name = base_model or (
+                self._shared_models[0].model_name if self._shared_models else None
+            )
+            if model_name is None:
+                raise ValueError("A base model is required to initialize SGLang")
+            if self._sglang_engine is None:
+                self._model_name = model_name
+                self._sglang_engine = SGLangEngine(
+                    model_name=model_name,
+                    device=self.sglang_device,
+                    dtype=self.dtype,
+                    max_model_len=self.sglang_max_model_len,
+                    gpu_memory_utilization=self.sglang_gpu_memory_utilization,
+                )
+            if model_path is not None and not model_path.startswith("local:"):
+                raise NotImplementedError(
+                    "The local SGLang backend currently supports frozen/base-model "
+                    "sampling only; dynamic LoRA adapters require the vLLM backend"
+                )
+            return SGLangSamplingClient(self._sglang_engine)
+
         if self.sampling_backend == "vllm":
             from .vllm_sampling import VLLMEngine, VLLMSamplingClient
 
