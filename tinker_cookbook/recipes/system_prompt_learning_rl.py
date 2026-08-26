@@ -179,6 +179,48 @@ def load_data(name: str) -> List[Dict[str, Any]]:
         dataset = datasets.load_dataset("MathArena/hmmt_nov_2025", split="train")
         data = [{"problem": each["problem"], "groundtruth": each["answer"]} for each in dataset.to_list()]
         return data
+    elif name in {"ace_formula_train", "ace_formula_test"}:
+        # Pin the public ACE snapshot so train/test data cannot silently change
+        # between Aviflow runs.
+        ace_revision = "82709de050e1db6e6ef2f07bcb0393560b94992a"
+        filename = (
+            "formula_train_subset_500.jsonl"
+            if name == "ace_formula_train"
+            else "formula_test.jsonl"
+        )
+        data_url = (
+            "https://raw.githubusercontent.com/ace-agent/ace/"
+            f"{ace_revision}/eval/finance/data/{filename}"
+        )
+        dataset = datasets.load_dataset(
+            "json",
+            data_files={"train": data_url},
+            split="train",
+        )
+
+        def formula_problem(context: str) -> str:
+            # Match ACE's Formula processor: the benchmark question is shown
+            # without the leading formula/instruction, so the evolving context
+            # has to learn reusable financial rules instead of copying them.
+            if "Question: " in context and ". Answer:" in context:
+                question = context.split("Question: ", 1)[1].split(". Answer:", 1)[0].strip()
+                if question.startswith('"') and question.endswith('"'):
+                    question = question[1:-1]
+            else:
+                question = context.strip()
+            return (
+                question
+                + " Your answer must be a plain number. Round to the nearest "
+                + "hundredth if necessary and expand units such as million."
+            )
+
+        return [
+            {
+                "problem": formula_problem(str(each["context"])),
+                "groundtruth": str(each["target"]),
+            }
+            for each in dataset.to_list()
+        ]
     else:
         raise NotImplementedError(f"Dataset {name} not supported")
 
@@ -192,13 +234,40 @@ def get_dataset_pair(pair_name: str) -> tuple[str, str]:
         "aimo_beyondaime": ("aimo-validation-aime", "BeyondAIME"),
         "aime_and_amc_to_beyondaime": ("aime_and_amc", "BeyondAIME"),
         "hmmt": ("hmmt_train", "hmmt_nov_2025"),
+        "ace_formula": ("ace_formula_train", "ace_formula_test"),
     }
     if pair_name not in pairs:
         raise ValueError(f"Unknown dataset_pair: {pair_name}. Available: {list(pairs.keys())}")
     return pairs[pair_name]
 
 
-def verify_func(model_output, ground_truth) -> float:
+def _extract_formula_answer(model_output: str) -> str | None:
+    boxed_answers = re.findall(r"\\boxed\{([^{}]+)\}", model_output)
+    if boxed_answers:
+        candidate = boxed_answers[-1]
+    else:
+        answer_lines = re.findall(r"(?im)^\s*Answer\s*:\s*(.+?)\s*$", model_output)
+        if not answer_lines:
+            return None
+        candidate = answer_lines[-1]
+    candidate = candidate.strip().strip("$").replace(",", "")
+    # Reject units and prose. This keeps the check equivalent to ACE's strict
+    # float conversion while still accepting our required boxed-answer format.
+    if not re.fullmatch(r"[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?", candidate):
+        return None
+    return candidate
+
+
+def verify_func(model_output, ground_truth, domain: str = "math") -> float:
+    if domain == "finance_formula":
+        predicted = _extract_formula_answer(str(model_output))
+        if predicted is None:
+            return 0.0
+        try:
+            return float(float(predicted) == float(str(ground_truth).replace(",", "")))
+        except (TypeError, ValueError):
+            return float(predicted == str(ground_truth).strip().replace(",", ""))
+
     verify_function = math_metric(
         gold_extraction_target=(LatexExtractionConfig(),),
         pred_extraction_target=(ExprExtractionConfig(), LatexExtractionConfig()),
@@ -1621,7 +1690,7 @@ def main(config: Config):
                             msg_text = parsed_message["content"]
                             group_completions.append(msg_text)
 
-                            reward = verify_func(msg_text, answer)
+                            reward = verify_func(msg_text, answer, domain=config.domain)
                             group_rewards.append(reward)
                     assert len(group_rewards) == config.group_size
                     
@@ -1717,7 +1786,7 @@ def main(config: Config):
                         parsed_message, _ = renderer.parse_response(sampled_tokens)
                         msg_text = parsed_message["content"]
                         group_texts.append(msg_text)
-                        reward = verify_func(msg_text, answer)
+                        reward = verify_func(msg_text, answer, domain=config.domain)
                         group_rewards.append(reward)
                 assert len(group_rewards) == step_test_group_size
                 
