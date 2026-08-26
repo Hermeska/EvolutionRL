@@ -29,7 +29,6 @@ COMMON_RUNTIME_PACKAGES = [
     "torch==2.8.0",
     "torchvision==0.23.0",
     "urllib3>=1.26.4,<2",
-    "transformers==4.57.6",
     "peft==0.19.1",
     "accelerate==1.14.0",
     "tinker==0.6.3",
@@ -44,7 +43,11 @@ COMMON_RUNTIME_PACKAGES = [
     "math-verify",
     "plotly==6.3.0",
 ]
-VLLM_RUNTIME_PACKAGES = [*COMMON_RUNTIME_PACKAGES, "vllm==0.10.2"]
+VLLM_RUNTIME_PACKAGES = [
+    *COMMON_RUNTIME_PACKAGES,
+    "transformers==4.57.6",
+    "vllm==0.10.2",
+]
 SGLANG_RUNTIME_PACKAGES = [
     *COMMON_RUNTIME_PACKAGES,
     # SGLang 0.5.4 is compatible with the task image's Torch 2.8/CUDA 12.8
@@ -61,6 +64,8 @@ SGLANG_RUNTIME_PACKAGES = [
         "v0.4.1/flashinfer_python-0.4.1-py3-none-any.whl"
     ),
     "cuda-python>=12.8,<13",
+    # SGLang 0.5.4 pins this exact Transformers release.
+    "transformers==4.57.1",
     "sglang==0.5.4",
 ]
 
