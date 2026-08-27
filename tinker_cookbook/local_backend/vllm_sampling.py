@@ -30,6 +30,15 @@ class _Request:
     seed: Optional[int] = None
 
 
+def _group_request_indices_by_sample_count(
+    raw_params: list[dict],
+) -> dict[int, list[int]]:
+    groups: dict[int, list[int]] = {}
+    for request_index, raw_param in enumerate(raw_params):
+        groups.setdefault(int(raw_param.get("n", 1)), []).append(request_index)
+    return groups
+
+
 class VLLMEngine:
     """Own a vLLM subprocess restricted to the dedicated sampling GPU."""
 
@@ -274,14 +283,35 @@ def _engine_worker_main(connection, device_index: str, engine_kwargs: dict):
                     lora_path=adapter_path,
                 )
             prompts = [{"prompt_token_ids": ids} for ids in prompt_ids]
-            raw_outputs = llm.generate(
-                prompts,
-                sampling_params=params,
-                lora_request=lora_request,
-                use_tqdm=False,
-            )
+
+            # Do not mix eval requests (usually n=1) with rollout requests
+            # (usually n>1) in the same offline vLLM call. vLLM 0.10.2 can
+            # return an extra parent/child RequestOutput for heterogeneous n,
+            # which breaks the one-future-per-prompt contract of this client.
+            groups = _group_request_indices_by_sample_count(raw_params)
+
+            ordered_raw_outputs = [None] * len(prompts)
+            for sample_count, indices in groups.items():
+                group_outputs = llm.generate(
+                    [prompts[index] for index in indices],
+                    sampling_params=[params[index] for index in indices],
+                    lora_request=lora_request,
+                    use_tqdm=False,
+                )
+                if len(group_outputs) != len(indices):
+                    raise RuntimeError(
+                        "vLLM returned "
+                        f"{len(group_outputs)} results for {len(indices)} prompts "
+                        f"in homogeneous n={sample_count} batch"
+                    )
+                for request_index, request_output in zip(indices, group_outputs):
+                    ordered_raw_outputs[request_index] = request_output
+
+            if any(output is None for output in ordered_raw_outputs):
+                raise RuntimeError("vLLM did not return every queued prompt")
+
             outputs = []
-            for request_output in raw_outputs:
+            for request_output in ordered_raw_outputs:
                 completions = []
                 for completion in request_output.outputs:
                     token_ids = list(completion.token_ids)
