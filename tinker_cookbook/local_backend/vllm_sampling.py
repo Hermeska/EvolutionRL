@@ -57,6 +57,39 @@ def _expand_multi_sample_requests(
     return expanded_prompts, expanded_params, owners
 
 
+def _select_current_request_outputs(
+    raw_outputs: list,
+    first_request_id: int,
+    request_count: int,
+) -> tuple[list, list[str]]:
+    """Select only outputs created by the current ``LLM.generate`` call."""
+    expected_ids = [str(first_request_id + index) for index in range(request_count)]
+    expected_set = set(expected_ids)
+    current_outputs = {}
+    ignored_ids = []
+    for output in raw_outputs:
+        request_id = str(output.request_id)
+        if request_id not in expected_set:
+            ignored_ids.append(request_id)
+            continue
+        if request_id in current_outputs:
+            raise RuntimeError(
+                f"vLLM returned duplicate output for request_id={request_id}"
+            )
+        current_outputs[request_id] = output
+
+    missing_ids = [
+        request_id
+        for request_id in expected_ids
+        if request_id not in current_outputs
+    ]
+    if missing_ids:
+        raise RuntimeError(
+            "vLLM did not return current request IDs: " + ", ".join(missing_ids)
+        )
+    return [current_outputs[request_id] for request_id in expected_ids], ignored_ids
+
+
 class VLLMEngine:
     """Own a vLLM subprocess restricted to the dedicated sampling GPU."""
 
@@ -303,7 +336,8 @@ def _engine_worker_main(connection, device_index: str, engine_kwargs: dict):
             expanded_prompts, expanded_raw_params, owners = (
                 _expand_multi_sample_requests(prompts, raw_params)
             )
-            expanded_outputs = llm.generate(
+            first_request_id = int(llm.request_counter.counter)
+            raw_outputs = llm.generate(
                 expanded_prompts,
                 sampling_params=[
                     SamplingParams(**item) for item in expanded_raw_params
@@ -311,11 +345,16 @@ def _engine_worker_main(connection, device_index: str, engine_kwargs: dict):
                 lora_request=lora_request,
                 use_tqdm=False,
             )
-            if len(expanded_outputs) != len(expanded_prompts):
-                raise RuntimeError(
-                    "vLLM returned "
-                    f"{len(expanded_outputs)} results for "
-                    f"{len(expanded_prompts)} independent n=1 prompts"
+            expanded_outputs, ignored_ids = _select_current_request_outputs(
+                raw_outputs,
+                first_request_id=first_request_id,
+                request_count=len(expanded_prompts),
+            )
+            if ignored_ids:
+                logger.warning(
+                    "Ignored %s stale vLLM outputs from earlier calls: %s",
+                    len(ignored_ids),
+                    ", ".join(ignored_ids[:10]),
                 )
 
             outputs = [[] for _ in prompts]
