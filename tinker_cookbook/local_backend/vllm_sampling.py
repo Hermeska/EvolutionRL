@@ -61,21 +61,29 @@ def _select_current_request_outputs(
     raw_outputs: list,
     first_request_id: int,
     request_count: int,
-) -> tuple[list, list[str]]:
+) -> tuple[list, list[str], list[str]]:
     """Select only outputs created by the current ``LLM.generate`` call."""
     expected_ids = [str(first_request_id + index) for index in range(request_count)]
     expected_set = set(expected_ids)
     current_outputs = {}
     ignored_ids = []
+    duplicate_ids = []
     for output in raw_outputs:
         request_id = str(output.request_id)
         if request_id not in expected_set:
             ignored_ids.append(request_id)
             continue
         if request_id in current_outputs:
-            raise RuntimeError(
-                f"vLLM returned duplicate output for request_id={request_id}"
+            duplicate_ids.append(request_id)
+            previous = current_outputs[request_id]
+            previous_tokens = sum(
+                len(completion.token_ids) for completion in previous.outputs
             )
+            current_tokens = sum(
+                len(completion.token_ids) for completion in output.outputs
+            )
+            if current_tokens <= previous_tokens:
+                continue
         current_outputs[request_id] = output
 
     missing_ids = [
@@ -87,7 +95,11 @@ def _select_current_request_outputs(
         raise RuntimeError(
             "vLLM did not return current request IDs: " + ", ".join(missing_ids)
         )
-    return [current_outputs[request_id] for request_id in expected_ids], ignored_ids
+    return (
+        [current_outputs[request_id] for request_id in expected_ids],
+        ignored_ids,
+        duplicate_ids,
+    )
 
 
 class VLLMEngine:
@@ -345,16 +357,24 @@ def _engine_worker_main(connection, device_index: str, engine_kwargs: dict):
                 lora_request=lora_request,
                 use_tqdm=False,
             )
-            expanded_outputs, ignored_ids = _select_current_request_outputs(
-                raw_outputs,
-                first_request_id=first_request_id,
-                request_count=len(expanded_prompts),
+            expanded_outputs, ignored_ids, duplicate_ids = (
+                _select_current_request_outputs(
+                    raw_outputs,
+                    first_request_id=first_request_id,
+                    request_count=len(expanded_prompts),
+                )
             )
             if ignored_ids:
                 logger.warning(
                     "Ignored %s stale vLLM outputs from earlier calls: %s",
                     len(ignored_ids),
                     ", ".join(ignored_ids[:10]),
+                )
+            if duplicate_ids:
+                logger.warning(
+                    "Deduplicated %s repeated current vLLM outputs: %s",
+                    len(duplicate_ids),
+                    ", ".join(duplicate_ids[:10]),
                 )
 
             outputs = [[] for _ in prompts]
