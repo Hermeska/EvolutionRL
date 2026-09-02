@@ -30,13 +30,31 @@ class _Request:
     seed: Optional[int] = None
 
 
-def _group_request_indices_by_sample_count(
+def _expand_multi_sample_requests(
+    prompts: list[dict],
     raw_params: list[dict],
-) -> dict[int, list[int]]:
-    groups: dict[int, list[int]] = {}
-    for request_index, raw_param in enumerate(raw_params):
-        groups.setdefault(int(raw_param.get("n", 1)), []).append(request_index)
-    return groups
+) -> tuple[list[dict], list[dict], list[int]]:
+    """Turn vLLM ``n>1`` requests into independent ``n=1`` requests.
+
+    vLLM 0.10.x can leak an extra parent ``RequestOutput`` from multi-sample
+    requests into a later offline ``generate`` call.  Keeping every engine
+    request at ``n=1`` avoids that parent/child path while preserving the
+    public one-request/many-completions contract of this module.
+    """
+    expanded_prompts: list[dict] = []
+    expanded_params: list[dict] = []
+    owners: list[int] = []
+    for request_index, (prompt, raw_param) in enumerate(zip(prompts, raw_params)):
+        num_samples = max(int(raw_param.get("n", 1)), 1)
+        for sample_index in range(num_samples):
+            child_params = dict(raw_param)
+            child_params["n"] = 1
+            if child_params.get("seed") is not None:
+                child_params["seed"] = int(child_params["seed"]) + sample_index
+            expanded_prompts.append(prompt)
+            expanded_params.append(child_params)
+            owners.append(request_index)
+    return expanded_prompts, expanded_params, owners
 
 
 class VLLMEngine:
@@ -274,7 +292,6 @@ def _engine_worker_main(connection, device_index: str, engine_kwargs: dict):
             if message[0] == "close":
                 return
             _, prompt_ids, raw_params, adapter_path, adapter_id = message
-            params = [SamplingParams(**item) for item in raw_params]
             lora_request = None
             if adapter_path is not None:
                 lora_request = LoRARequest(
@@ -283,36 +300,26 @@ def _engine_worker_main(connection, device_index: str, engine_kwargs: dict):
                     lora_path=adapter_path,
                 )
             prompts = [{"prompt_token_ids": ids} for ids in prompt_ids]
-
-            # Do not mix eval requests (usually n=1) with rollout requests
-            # (usually n>1) in the same offline vLLM call. vLLM 0.10.2 can
-            # return an extra parent/child RequestOutput for heterogeneous n,
-            # which breaks the one-future-per-prompt contract of this client.
-            groups = _group_request_indices_by_sample_count(raw_params)
-
-            ordered_raw_outputs = [None] * len(prompts)
-            for sample_count, indices in groups.items():
-                group_outputs = llm.generate(
-                    [prompts[index] for index in indices],
-                    sampling_params=[params[index] for index in indices],
-                    lora_request=lora_request,
-                    use_tqdm=False,
+            expanded_prompts, expanded_raw_params, owners = (
+                _expand_multi_sample_requests(prompts, raw_params)
+            )
+            expanded_outputs = llm.generate(
+                expanded_prompts,
+                sampling_params=[
+                    SamplingParams(**item) for item in expanded_raw_params
+                ],
+                lora_request=lora_request,
+                use_tqdm=False,
+            )
+            if len(expanded_outputs) != len(expanded_prompts):
+                raise RuntimeError(
+                    "vLLM returned "
+                    f"{len(expanded_outputs)} results for "
+                    f"{len(expanded_prompts)} independent n=1 prompts"
                 )
-                if len(group_outputs) != len(indices):
-                    raise RuntimeError(
-                        "vLLM returned "
-                        f"{len(group_outputs)} results for {len(indices)} prompts "
-                        f"in homogeneous n={sample_count} batch"
-                    )
-                for request_index, request_output in zip(indices, group_outputs):
-                    ordered_raw_outputs[request_index] = request_output
 
-            if any(output is None for output in ordered_raw_outputs):
-                raise RuntimeError("vLLM did not return every queued prompt")
-
-            outputs = []
-            for request_output in ordered_raw_outputs:
-                completions = []
+            outputs = [[] for _ in prompts]
+            for owner, request_output in zip(owners, expanded_outputs):
                 for completion in request_output.outputs:
                     token_ids = list(completion.token_ids)
                     logprobs = []
@@ -325,14 +332,22 @@ def _engine_worker_main(connection, device_index: str, engine_kwargs: dict):
                                 f"Missing vLLM logprob for sampled token {token_id}"
                             )
                         logprobs.append(float(selected.logprob))
-                    completions.append(
+                    outputs[owner].append(
                         {
                             "token_ids": token_ids,
                             "logprobs": logprobs,
                             "finish_reason": completion.finish_reason,
                         }
                     )
-                outputs.append(completions)
+            for request_index, (request_output, raw_param) in enumerate(
+                zip(outputs, raw_params)
+            ):
+                expected = max(int(raw_param.get("n", 1)), 1)
+                if len(request_output) != expected:
+                    raise RuntimeError(
+                        f"vLLM produced {len(request_output)} completions for "
+                        f"request {request_index}; expected {expected}"
+                    )
             connection.send(("ok", outputs))
         except EOFError:
             return
