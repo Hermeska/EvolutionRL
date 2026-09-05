@@ -491,6 +491,9 @@ class LocalServiceClient:
         vllm_max_model_len: int = 16384,
         vllm_gpu_memory_utilization: float = 0.9,
         vllm_max_lora_rank: int = 32,
+        vllm_speculative_model: Optional[str] = None,
+        vllm_num_speculative_tokens: int = 15,
+        vllm_attention_backend: Optional[str] = None,
         sglang_device: str = "cuda:1",
         sglang_max_model_len: int = 16384,
         sglang_gpu_memory_utilization: float = 0.88,
@@ -519,6 +522,9 @@ class LocalServiceClient:
         self.vllm_max_model_len = int(vllm_max_model_len)
         self.vllm_gpu_memory_utilization = float(vllm_gpu_memory_utilization)
         self.vllm_max_lora_rank = int(vllm_max_lora_rank)
+        self.vllm_speculative_model = vllm_speculative_model
+        self.vllm_num_speculative_tokens = int(vllm_num_speculative_tokens)
+        self.vllm_attention_backend = vllm_attention_backend
         self._vllm_engine = None
         self._vllm_adapter_id = 0
         self.sglang_device = sglang_device
@@ -637,6 +643,9 @@ class LocalServiceClient:
                     max_model_len=self.vllm_max_model_len,
                     gpu_memory_utilization=self.vllm_gpu_memory_utilization,
                     max_lora_rank=self.vllm_max_lora_rank,
+                    speculative_model=self.vllm_speculative_model,
+                    num_speculative_tokens=self.vllm_num_speculative_tokens,
+                    attention_backend=self.vllm_attention_backend,
                 )
             adapter_path = None
             adapter_id = 0

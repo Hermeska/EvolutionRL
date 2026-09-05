@@ -63,6 +63,8 @@ class Config:
     max_tokens: int = 15000
     sampling_temperature: float = 0.7
     top_p: float = 0.95
+    eval_sampling_temperature: float = 0.0
+    eval_top_p: float = 1.0
     max_update_operations: int = 2
     rl_loss_fn: str = "importance_sampling"
 
@@ -103,6 +105,10 @@ class Config:
     local_vllm_max_model_len: int = 16384
     local_vllm_gpu_memory_utilization: float = 0.9
     local_vllm_max_lora_rank: int = 32
+    local_vllm_speculative_model: str = ""
+    local_vllm_num_speculative_tokens: int = 15
+    local_vllm_attention_backend: str = ""
+    renderer_name: str = ""
     local_sglang_device: str = "cuda:1"
     local_sglang_max_model_len: int = 16384
     local_sglang_gpu_memory_utilization: float = 0.88
@@ -1221,7 +1227,10 @@ def main(config: Config):
 
     # Get tokenizer and renderer
     tokenizer = get_tokenizer(config.model_name)
-    renderer_name = model_info.get_recommended_renderer_name(config.model_name)
+    renderer_name = (
+        config.renderer_name
+        or model_info.get_recommended_renderer_name(config.model_name)
+    )
     renderer = renderers.get_renderer(renderer_name, tokenizer)
     logger.info(f"Using renderer: {renderer_name}")
 
@@ -1273,6 +1282,9 @@ def main(config: Config):
             vllm_max_model_len=config.local_vllm_max_model_len,
             vllm_gpu_memory_utilization=config.local_vllm_gpu_memory_utilization,
             vllm_max_lora_rank=config.local_vllm_max_lora_rank,
+            vllm_speculative_model=config.local_vllm_speculative_model or None,
+            vllm_num_speculative_tokens=config.local_vllm_num_speculative_tokens,
+            vllm_attention_backend=config.local_vllm_attention_backend or None,
             sglang_device=config.local_sglang_device,
             sglang_max_model_len=config.local_sglang_max_model_len,
             sglang_gpu_memory_utilization=config.local_sglang_gpu_memory_utilization,
@@ -1307,6 +1319,19 @@ def main(config: Config):
         temperature=config.sampling_temperature,
         top_p=config.top_p,
         stop=renderer.get_stop_sequences(),
+    )
+    eval_sampling_params = tinker.types.SamplingParams(
+        max_tokens=effective_max_tokens,
+        temperature=config.eval_sampling_temperature,
+        top_p=config.eval_top_p,
+        stop=renderer.get_stop_sequences(),
+    )
+    logger.info(
+        "Sampling: train temperature=%s top_p=%s; eval temperature=%s top_p=%s",
+        config.sampling_temperature,
+        config.top_p,
+        config.eval_sampling_temperature,
+        config.eval_top_p,
     )
     # Optimizer step
     adam_params = types.AdamParams(
@@ -1530,7 +1555,7 @@ def main(config: Config):
                     sampling_client.sample(
                         prompt=model_input,
                         num_samples=step_test_group_size,
-                        sampling_params=sampling_params,
+                        sampling_params=eval_sampling_params,
                     )
                 )
                 test_prompts.append(prompt_tokens)

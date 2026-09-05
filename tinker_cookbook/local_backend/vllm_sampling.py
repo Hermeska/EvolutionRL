@@ -114,6 +114,9 @@ class VLLMEngine:
         gpu_memory_utilization: float = 0.9,
         max_lora_rank: int = 32,
         max_num_seqs: int = 64,
+        speculative_model: Optional[str] = None,
+        num_speculative_tokens: int = 15,
+        attention_backend: Optional[str] = None,
     ):
         logger.info(
             "Loading vLLM sampler for %s on %s (max_model_len=%s, gpu_memory_utilization=%.2f)",
@@ -125,21 +128,37 @@ class VLLMEngine:
         device_index = device.split(":", 1)[1] if ":" in device else device
         context = multiprocessing.get_context("spawn")
         self._parent_connection, child_connection = context.Pipe()
+        engine_kwargs = {
+            "model": model_name,
+            "dtype": dtype,
+            "trust_remote_code": True,
+            "enable_lora": True,
+            "max_lora_rank": max_lora_rank,
+            "max_model_len": max_model_len,
+            "max_num_seqs": max_num_seqs,
+            "gpu_memory_utilization": gpu_memory_utilization,
+        }
+        if attention_backend:
+            engine_kwargs["attention_backend"] = attention_backend
+        if speculative_model:
+            engine_kwargs["speculative_config"] = {
+                "method": "dflash",
+                "model": speculative_model,
+                "num_speculative_tokens": max(int(num_speculative_tokens), 1),
+                "attention_backend": attention_backend or "FLASH_ATTN",
+            }
+            logger.info(
+                "Enabling DFlash draft %s (%s speculative tokens)",
+                speculative_model,
+                num_speculative_tokens,
+            )
+
         self._process = context.Process(
             target=_engine_worker_main,
             args=(
                 child_connection,
                 device_index,
-                {
-                    "model": model_name,
-                    "dtype": dtype,
-                    "trust_remote_code": True,
-                    "enable_lora": True,
-                    "max_lora_rank": max_lora_rank,
-                    "max_model_len": max_model_len,
-                    "max_num_seqs": max_num_seqs,
-                    "gpu_memory_utilization": gpu_memory_utilization,
-                },
+                engine_kwargs,
             ),
             name="espl-vllm-gpu-worker",
         )
