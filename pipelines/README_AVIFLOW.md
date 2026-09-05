@@ -10,7 +10,7 @@ repository, TeamCity and a Jira key are not required for this path.
    `pytorch-dl/pytorch-train-dl:0.2.4`.
 2. The lightweight task installs the Python runtime dependencies.
 3. On the GPU worker it downloads the archive for the pinned public commit:
-   `Hermeska/EvolutionRL@5ab4c866bc722092d8437df8f1cc468df006a4a4`.
+   the full `SOURCE_SHA` configured in `pipelines/aviflow_espl.py`.
 4. It starts Hugging Face + PEFT training on GPU 0 and a dedicated vLLM
    sampling worker on GPU 1.
 5. It publishes checkpoints and logs as a `Model` artifact and final values as
@@ -103,6 +103,28 @@ for the exact target model, and no public DFlash2 checkpoint is currently wired
 for `Qwen/Qwen3-4B`. Plain SGLang keeps this comparison valid: the model,
 sampling distribution and experiment parameters remain unchanged, so the run
 measures the serving backend rather than a second model.
+
+## Start the experimental Qwen3-4B DFlash run
+
+```bash
+ESPL_BASE_COMPONENT=<modern-cuda-component> \
+python pipelines/aviflow_espl.py \
+  --preset formula-evolution-dflash \
+  --namespace students
+```
+
+This preset adds the public `z-lab/Qwen3-4B-DFlash-b16` draft model to the
+Qwen3-4B verifier and proposes 15 tokens per speculative step. It is the
+original DFlash, not DFlash2: a public DFlash2 checkpoint for Qwen3-4B is not
+currently available. The preset uses the same three-epoch XBRL Formula evolution
+configuration as `formula-evolution`, but switches to the thinking-disabled
+Qwen3 renderer required by this draft checkpoint. Its quality metrics therefore
+must not be compared directly with thinking-enabled runs.
+
+DFlash needs vLLM 0.20.1 and its Torch 2.11 runtime. Its Linux wheel requires a
+newer glibc than `pytorch-dl/pytorch-train-dl:0.2.4`, so select a current Aviflow
+CUDA component with `ESPL_BASE_COMPONENT` before launching it. Keep the regular
+vLLM presets on the existing component and dependency stack.
 
 The baseline uses the same Qwen3-4B model, dataset pair, seed, renderer,
 sampling temperature, top-p, group size, token limits and vLLM backend. It runs
